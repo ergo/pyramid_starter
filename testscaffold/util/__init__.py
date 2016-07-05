@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
+
 from pyramid.httpexceptions import HTTPBadRequest
 
 
@@ -10,5 +13,4 @@ def safe_integer(integer):
 
 def session_provider(request):
     """ provides sqlalchemy session for ziggurat_foundations """
-    print(request.dbsession)
     return request.dbsession

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 import structlog
 from pyramid.view import view_config, view_defaults
 from testscaffold.models.resource import Resource

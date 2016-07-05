@@ -75,7 +75,7 @@ def add_globals(event):
     flash_messages = request.session.pop_flash()
     event['flash_messages'] = flash_messages
     event['base_url'] = request.registry.settings['base_url']
-    request.response.headers['x-flash-messages'] = json.dumps(flash_messages)
+    request.response.headers[str('x-flash-messages')] = json.dumps(flash_messages)
     # we only need to instantiate the form if user is unlogged
     if hasattr(request, 'user') and not request.user:
         event['layout_login_form'] = UserLoginForm(
@@ -87,8 +87,8 @@ def add_globals(event):
 @subscriber(NewRequest)
 def new_request(event):
     environ = event.request.environ
-    event.request.response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    event.request.response.headers['X-XSS-Protection'] = '1; mode=block'
+    event.request.response.headers[str('X-Frame-Options')] = str('SAMEORIGIN')
+    event.request.response.headers[str('X-XSS-Protection')] = str('1; mode=block')
     if environ['wsgi.url_scheme'] == 'https':
         event.request.response.set_cookie(
             'XSRF-TOKEN', event.request.session.get_csrf_token(), secure=True)
@@ -96,4 +96,4 @@ def new_request(event):
         event.request.response.set_cookie(
             'XSRF-TOKEN', event.request.session.get_csrf_token())
     if event.request.user:
-        event.request.response.headers['x-uid'] = '%s' % event.request.user.id
+        event.request.response.headers[str('x-uid')] = str(event.request.user.id)

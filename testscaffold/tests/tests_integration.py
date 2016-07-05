@@ -49,7 +49,8 @@ class TestFixtureCleanup(object):
             user.persist(flush=True, db_session=session)
 
 
-@pytest.mark.usefixtures('with_migrations', 'clean_tables_once', 'minimal_setup')
+@pytest.mark.usefixtures('with_migrations', 'clean_tables_once',
+                         'minimal_setup')
 class TestUsersAPI(object):
     def test_wrong_post(self, sqla_session):
         from testscaffold.views.api.users import UserAPIView

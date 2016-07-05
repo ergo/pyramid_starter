@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
 import logging
 from testscaffold.models.auth_token import AuthToken
 from ziggurat_foundations.models.base import get_db_session

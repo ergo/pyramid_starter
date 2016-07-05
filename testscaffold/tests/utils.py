@@ -24,9 +24,6 @@ def session_context(session):
     except:
         session.rollback()
         raise
-    finally:
-        print('CLOSING')
-        session.close()
 
 
 @contextmanager
@@ -38,6 +35,3 @@ def tmp_session_context(session):
     except:
         session.rollback()
         raise
-    finally:
-        print('CLOSING')
-        session.close()

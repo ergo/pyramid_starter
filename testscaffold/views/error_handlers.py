@@ -15,3 +15,11 @@ def invalid_json(context, request):
 def marshmallow_invalid_data(context, request):
     request.response.status = 422
     return context.messages
+
+
+@view_config(context='passlib.exc.MissingBackendError',
+             permission=NO_PERMISSION_REQUIRED,
+             renderer='string')
+def no_bcrypt_found(context, request):
+    request.response.status = 500
+    return str(context)

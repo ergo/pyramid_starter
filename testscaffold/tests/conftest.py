@@ -5,7 +5,7 @@ import logging
 import os
 import pytest
 from pyramid import testing
-import time
+
 
 @pytest.fixture(scope='session')
 def app_settings():
@@ -26,7 +26,9 @@ def sqla_session(request, app_settings):
 
     def teardown():
         session.rollback()
-        session.close()
+        # FIXME: needs to be close_all() because close() makes test hang
+        # if test fails for some reason
+        session.close_all()
 
     request.addfinalizer(teardown)
 
@@ -79,12 +81,6 @@ def full_app(request, app_settings):
     from webtest import TestApp
     from testscaffold import main
     app = main({}, **app_settings)
-
-    def teardown():
-        testing.tearDown()
-
-    request.addfinalizer(teardown)
-
     return TestApp(app)
 
 
@@ -116,17 +112,18 @@ def _clean_tables(session):
             session.execute('truncate %s cascade' % t)
     session.commit()
 
+
 @pytest.fixture()
 def clean_tables(app_settings):
     """ Used to truncate tables per test """
-    logging.warning('clean_tables')
+    logging.info('clean_tables')
     session = _get_session(app_settings)
     _clean_tables(session)
 
 
 @pytest.fixture(scope='class')
 def clean_tables_once(app_settings):
-    logging.warning('clean_tables_once')
-    """ Used to truncate tables once per module """
+    logging.info('clean_tables_once')
+    """ Used to truncate tables once per class """
     session = _get_session(app_settings)
     _clean_tables(session)

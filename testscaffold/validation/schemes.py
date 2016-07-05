@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, unicode_literals
+
 from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
 
@@ -10,7 +13,7 @@ class UserRegisterSchema(Schema):
         ordered = True
 
     user_name = fields.Str(required=True, validate=(validate.Length(3)))
-    password = fields.Str(required=False, validate=(validate.Length(3)))
+    password = fields.Str(required=True, validate=(validate.Length(3)))
     email = fields.Str(required=True, validate=(validate.Email()))
 
     @validates('user_name')

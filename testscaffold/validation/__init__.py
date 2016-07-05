@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 from pyramid.threadlocal import get_current_request
 from wtforms.ext.csrf.form import SecureForm
 

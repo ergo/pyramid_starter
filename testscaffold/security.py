@@ -31,7 +31,9 @@ class AuthTokenAuthenticationPolicy(CallbackAuthenticationPolicy):
         return []
 
     def unauthenticated_userid(self, request):
-        token = request.headers.get('x-testscaffold-auth-token')
+        token = u'{}'.format(
+            request.headers.get('x-testscaffold-auth-token', '')
+        )
         if token:
             auth_token = AuthTokenService.by_token(
                 token, db_session=request.dbsession)
