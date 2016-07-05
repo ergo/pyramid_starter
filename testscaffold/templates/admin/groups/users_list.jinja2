@@ -1,0 +1,37 @@
+{% extends "testscaffold:templates/admin/layout.jinja2" %}
+
+{% block content %}
+<script src="{{request.static_url('testscaffold:static/js/admin/users_list.js')}}"></script>
+
+<div class="col-md-9">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Add a new user to <strong>{{group}}</strong></h3>
+        </div>
+        <div class="panel-body" data-ng-controller="UserListController as userCtrl">
+            <form data-ng-submit="userCtrl.assignUserToGroup({{group.id}})">
+                <input type="text" data-ng-model="userCtrl.selectedUser" placeholder="Users loaded via angularJS"
+                       data-uib-typeahead="user as user.user_name for user in userCtrl.getUsers($viewValue)"
+                       data-typeahead-loading="userCtrl.loadingUsers"
+                       data-typeahead-no-results="userCtrl.noResults" class="form-control">
+                <button type="submit" class="btn btn-info">Assign user</button>
+                <i data-ng-show="userCtrl.loadingUsers"> Loading </i>
+
+                <div data-ng-show="userCtrl.noResults"><i>No Results Found</i></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Members of <strong>{{group}}</strong></h3>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                {{user_grid}}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

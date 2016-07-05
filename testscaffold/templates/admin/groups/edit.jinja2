@@ -1,0 +1,69 @@
+{% extends "testscaffold:templates/admin/layout.jinja2" %}
+{% import 'testscaffold:templates/partials/common.jinja2' as common_widgets %}
+{% import 'testscaffold:templates/partials/ziggurat_form.jinja2' as form %}
+
+{% block content %}
+<div class="col-md-9">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% if request.matchdict.get('verb') == 'POST' %}
+                    Create a new group
+                {% else %}
+                    Editing <strong>{{group}}</strong>
+                {% endif %}
+            </h3>
+        </div>
+        <div class="panel-body">
+
+            {% if request.matchdict.get('verb') == 'POST' %}
+                <form action="{{request.route_url('admin_objects', object='groups', verb='POST' )}}" method="POST">
+            {% else %}
+                <form action="{{request.route_url('admin_object', object='groups', object_id=group.id, verb='PATCH')}}" method="POST">
+            {% endif %}
+
+            {{form.render_form(group_form)}}
+            <button type="submit" class="btn btn-default">
+                {% if request.matchdict.get('verb') == 'POST' %}
+                    Create group
+                {% else %}
+                    Update group
+                {% endif %}
+            </button>
+        </form>
+        </div>
+    </div>
+
+
+    {% if request.matchdict.get('verb') == 'GET' %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                Group Members: <strong>{{group.users_dynamic.count()}}</strong>
+                <a href="{{request.route_url('admin_object_relation', object='groups', object_id=group.id, relation='users', verb='GET')}}"
+                   class="btn btn-info">Add/remove members</a>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Permissions
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form action="{{request.route_url('admin_object_relation', object='groups', object_id=group.id, relation='permissions', verb='POST' )}}" method="POST">
+                    {{form.render_form(permission_form)}}
+                    <button type="submit" class="btn btn-default">Add Permission</button>
+                </form>
+
+                <table class="table">
+                    {{permissions_grid}}
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock content %}

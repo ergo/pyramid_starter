@@ -1,0 +1,4 @@
+[run]
+source = testscaffold
+omit = testscaffold/test*
+branch = true

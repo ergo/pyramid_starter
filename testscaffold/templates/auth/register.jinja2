@@ -1,0 +1,35 @@
+{% extends "testscaffold:templates/layout.jinja2" %}
+{% import 'testscaffold:templates/partials/ziggurat_form.jinja2' as form %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+
+        <h2>Login</h2>
+
+        <form action="{{request.route_url('ziggurat.routes.sign_in')}}"
+              method="POST">
+            {{form.render_form(login_form)}}
+            <button type="submit" class="btn btn-default">Log In</button>
+
+            <a href="{{request.route_url('/')}}">Return to index page</a>
+
+        </form>
+
+        <h2>Login via social account</h2>
+        <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-default">Facebook</a>
+        <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-default">Google</a>
+        <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-default">Twitter</a>
+
+    </div>
+
+    <div class="col-md-6">
+        <h2>Register</h2>
+
+        <form action="{{request.route_url('register')}}" method="POST">
+            {{form.render_form(registration_form)}}
+            <button type="submit" class="btn btn-default">Register</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

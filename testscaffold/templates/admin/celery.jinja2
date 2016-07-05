@@ -1,0 +1,16 @@
+{% extends "testscaffold:templates/admin/layout.jinja2" %}
+
+{% block content %}
+<div class="col-md-9">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Celery test</h3>
+        </div>
+        <div class="panel-body">
+            <p>You can test celery integration here</p>
+            <p><a href="{{request.route_url('admin_objects', object='celery', verb='POST')}}" class="btn btn-primary">Send task</a></p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

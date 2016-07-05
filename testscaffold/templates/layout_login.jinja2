@@ -1,0 +1,48 @@
+{% import 'testscaffold:templates/partials/ziggurat_form.jinja2' as form %}
+
+<div id="layout-login">
+    {% if request.user %}
+
+        <div class="row">
+            <div class="col-md-12">
+                <p>You are logged as: <strong>{{request.user.user_name}}</strong></p>
+
+                <p>
+                    {% if request.has_permission('admin_panel') %}
+                        <a href="{{request.route_url('admin_index')}}">Administration panel</a>
+                    {% endif %}
+
+                    <a href="{{request.route_url('ziggurat.routes.sign_out')}}">Sign out</a>
+
+                </p>
+            </div>
+        </div>
+
+    {% elif request.matched_route.name not in ('register', 'lost_password', 'lost_password_generate') %}
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Login via social account</h2>
+                <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-default">Facebook</a>
+                <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-default">Google</a>
+                <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-default">Twitter</a>
+
+            </div>
+            <div class="col-md-6">
+                <h2>Login</h2>
+
+                <form action="{{request.route_url('ziggurat.routes.sign_in')}}" method="POST">
+                    <div class="form-inline form-group">
+                        {{form.render_form(layout_login_form)}}
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default">Log In</button>
+                        <a href="{{request.route_url('register')}}" class="btn btn-default">Register Here</a>
+                        <a href="{{request.route_url('lost_password')}}">Forgot password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    {% endif %}
+</div>

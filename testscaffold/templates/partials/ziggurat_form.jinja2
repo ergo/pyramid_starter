@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+
+{% macro render_form(form) -%}
+    {% for field in form %}
+        {% if field.type in ['HiddenField','CSRFTokenField'] %}
+            <div id="field-{{field.name}}" style="display:none">
+                {{render_field(form, field)}}
+            </div>
+        {% else %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-warning form-error">{{error}}</div>
+                {% endfor %}
+            {% endif %}
+
+            {% if field.type == 'FormField' %}
+                <div class="form-group subform" id="field-{{field.name}}">
+                    {{render_form(field)}}
+                </div>
+{#                {% continue %}#}
+            {% endif %}
+
+            <div class="form-group" id="field-{{field.name}}">
+
+                <label for="{{field.name}}" id="label-{{field.name}}" class="control-label">
+                    {{field.label.text}}
+                    {% if field.flags.required and field.label.text %}
+                        <span class="required">*</span>
+                    {% endif %}
+                </label>
+                {{render_field(form, field)}}
+                {% if field.description %}
+                <p class="description">{{field.description|safe}}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{%- endmacro %}
+
+{% macro render_field(form, field) -%}
+
+    {{field(class_='form-control %{}'.format(field.type))}}
+
+{%- endmacro %}

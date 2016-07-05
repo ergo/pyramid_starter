@@ -1,0 +1,33 @@
+{% extends "testscaffold:templates/layout.jinja2" %}
+
+{% block outer_content %}
+    <div class="row">
+
+        {% block header %}
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Menu</div>
+                    <div class="list-group">
+                        <a href="{{ request.route_url('/') }}"
+                           class="list-group-item">Back to front page</a>
+                        <a href="{{ request.route_url('admin_index') }}"
+                           class="list-group-item {{ 'active' if request.matched_route.name.startswith('admin_index') else '' }}">
+                            Admin panel</a>
+                        <a href="{{ request.route_url('admin_objects', object='users', verb='GET') }}"
+                           class="list-group-item {{ 'active' if 'users' in request.matchdict.get('object','') else '' }}">
+                            List users</a>
+                        <a href="{{ request.route_url('admin_objects', object='groups', verb='GET') }}"
+                           class="list-group-item {{ 'active' if 'groups' in request.matchdict.get('object','') else '' }}">
+                            List groups</a>
+                        <a href="{{ request.route_url('admin_objects', object='celery', verb='GET') }}"
+                           class="list-group-item {{ 'active' if 'celery' in request.matchdict.get('object','') else '' }}">
+                            Celery test</a>
+                    </div>
+                </div>
+            </div>
+        {% endblock header %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+{% endblock outer_content %}

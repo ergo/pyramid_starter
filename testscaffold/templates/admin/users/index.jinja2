@@ -1,0 +1,31 @@
+{% extends "testscaffold:templates/admin/layout.jinja2" %}
+{% import 'testscaffold:templates/partials/common.jinja2' as common_widgets %}
+
+{% block content %}
+<div class="col-md-9">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Browse users</h3>
+        </div>
+        <div class="panel-body">
+
+            <p>
+                <a href="{{request.route_url('admin_objects', object="users", verb='POST')}}" class="btn btn-info">Create a new user</a>
+            </p>
+
+            <div class="text-center">
+                {{common_widgets.render_paginator(user_paginator)}}
+            </div>
+
+            <table class="table">
+            {{user_grid}}
+            </table>
+            <div class="text-center">
+                {{common_widgets.render_paginator(user_paginator)}}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

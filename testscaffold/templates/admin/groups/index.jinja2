@@ -1,0 +1,23 @@
+{% extends "testscaffold:templates/admin/layout.jinja2" %}
+{% import 'testscaffold:templates/partials/common.jinja2' as common_widgets %}
+
+{% block content %}
+<div class="col-md-9">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Groups</h3>
+        </div>
+        <div class="panel-body">
+
+            <p>
+                <a href="{{request.route_url('admin_objects', object="groups", verb='POST')}}" class="btn btn-info">Create a new group</a>
+            </p>
+
+            <table class="table">
+            {{groups_grid}}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
