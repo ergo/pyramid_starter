@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 
 from pyramid.interfaces import IDefaultCSRFOptions
 from pyramid.session import (
@@ -8,7 +8,7 @@ from pyramid.session import (
     check_csrf_token,
 )
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 # taken directly from pyramid 1.7

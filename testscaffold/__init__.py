@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import datetime
-import structlog
 
 from pyramid_authstack import AuthenticationStackPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -13,28 +12,11 @@ import testscaffold.util.cache_regions as cache_regions
 import testscaffold.util.encryption as encryption
 from testscaffold.celery import configure_celery
 from testscaffold.security import groupfinder, AuthTokenAuthenticationPolicy
-from testscaffold.util.structlog import json_with_extra_processor
 
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
-    structlog.configure(
-        processors=[
-            structlog.stdlib.filter_by_level,
-            structlog.stdlib.add_logger_name,
-            structlog.stdlib.add_log_level,
-            structlog.stdlib.PositionalArgumentsFormatter(),
-            structlog.processors.TimeStamper(fmt='iso'),
-            structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
-            json_with_extra_processor()
-        ],
-        context_class=dict,
-        logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.BoundLogger,
-        cache_logger_on_first_use=True,
-    )
 
     stacked_policy = AuthenticationStackPolicy()
     auth_tkt = AuthTktAuthenticationPolicy(settings['auth_tkt.seed'],

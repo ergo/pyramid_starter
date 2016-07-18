@@ -22,7 +22,6 @@ wtforms>=2.1
 alembic>=0.8.6
 authomatic==0.1.0.post1
 six>=1.10.0
-structlog>==16.1.0
 cryptography>=1.4
 webhelpers2_grid>=0.1
 appenlight_client

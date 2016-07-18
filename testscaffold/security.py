@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 
 from pyramid.security import Allow, Authenticated, ALL_PERMISSIONS
 from pyramid.authentication import CallbackAuthenticationPolicy
@@ -9,8 +9,7 @@ from ziggurat_foundations.permissions import permission_to_pyramid_acls
 from testscaffold.services.auth_token import AuthTokenService
 from testscaffold.services.user import UserService
 
-
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def groupfinder(userid, request):
@@ -40,11 +39,10 @@ class AuthTokenAuthenticationPolicy(CallbackAuthenticationPolicy):
             if auth_token:
                 log.info(
                     'AuthTokenAuthenticationPolicy.unauthenticated_userid',
-                    found=True,
-                    owner=auth_token.owner_id)
+                    extra={'found': True, 'owner': auth_token.owner_id})
                 return auth_token.owner_id
             log.info('AuthTokenAuthenticationPolicy.unauthenticated_userid',
-                        found=False, owner=None)
+                     extra={'found': False, 'owner': None})
 
     def authenticated_userid(self, request):
         return self.unauthenticated_userid(request)

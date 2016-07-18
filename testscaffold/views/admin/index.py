@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 from pyramid.view import view_config, view_defaults
 from testscaffold.services.user import UserService
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @view_defaults(route_name='admin_index', permission='admin_panel')

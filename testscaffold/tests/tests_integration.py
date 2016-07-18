@@ -4,25 +4,9 @@ from __future__ import absolute_import, unicode_literals
 import mock
 import pytest
 
-import structlog
+import logging
 from pyramid import testing
 from testscaffold.tests.utils import tmp_session_context, session_context
-
-structlog.configure(
-    processors=[
-        structlog.stdlib.filter_by_level,
-        structlog.stdlib.add_logger_name,
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.PositionalArgumentsFormatter(),
-        structlog.processors.TimeStamper(fmt='iso'),
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info
-    ],
-    context_class=dict,
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    wrapper_class=structlog.stdlib.BoundLogger,
-    cache_logger_on_first_use=True,
-)
 
 
 def dummy_request(dbsession):

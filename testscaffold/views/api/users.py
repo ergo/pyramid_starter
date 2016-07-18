@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-import structlog
+import logging
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
@@ -13,7 +13,7 @@ from testscaffold.validation.schemes import UserSearchSchema
 from testscaffold.validation.schemes import UserRegisterSchema
 from testscaffold.validation.schemes import UserEditSchema
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 USERS_PER_PAGE = 50
 
@@ -53,15 +53,18 @@ class UsersViewBase(object):
     def populate_instance(self, instance, data):
         # this is safe and doesn't overwrite user_password with cleartext
         instance.populate_obj(data)
-        log.info('user_populate_instance', action='updated')
+        import datetime
+        log.info('user_populate_instance', extra={'action': 'updated',
+                                                  'x':datetime.datetime.now(),
+                                                  'y':datetime.datetime.utcnow().date()})
         if data.get('password'):
             # set hashed password
             instance.set_password(data['password'])
-            log.info('user_GET_PATCH', action='password_updated')
+            log.info('user_GET_PATCH', extra={'action': 'password_updated'})
 
     def delete(self, instance):
-        log.info('user_delete', user_id=instance.id,
-                 user_name=instance.user_name)
+        log.info('user_delete', extra={'user_id': instance.id,
+                                       'user_name': instance.user_name})
         instance.delete(self.request.dbsession)
         self.request.session.flash({'msg': 'User removed.',
                                     'level': 'success'})

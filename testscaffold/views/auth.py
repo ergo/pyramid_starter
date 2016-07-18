@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-import structlog
+import logging
 
 from datetime import datetime
 from authomatic.adapters import WebObAdapter
@@ -17,8 +17,7 @@ from ziggurat_foundations.models.services.external_identity import \
 
 from testscaffold.events import SocialAuthEvent
 
-
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 def shared_sign_in(request, user, headers, came_from=None):
@@ -28,7 +27,7 @@ def shared_sign_in(request, user, headers, came_from=None):
     if came_from is None:
         came_from = request.route_url('/')
 
-    log.info('shared_sign_in', user=user)
+    log.info('shared_sign_in', extra={'user': user})
 
     request.session.flash({'msg': 'Signed in', 'level': 'success'})
     # if social data is still present bind the account
@@ -49,7 +48,7 @@ def sign_in(request):
 
 @view_config(context=ZigguratSignInBadAuth, permission=NO_PERMISSION_REQUIRED)
 def bad_auth(request):
-    log.info('bad_auth', user=None)
+    log.info('bad_auth', {'user': None})
     # action like a warning flash message on bad logon
     return HTTPFound(location=request.route_url('register'),
                      headers=request.context.headers)
@@ -81,7 +80,7 @@ def social_auth(request):
 def handle_auth_error(request, result):
     # Login procedure finished with an error.
     request.session.pop('zigg.social_auth', None)
-    log.error('social_auth', error=result.error.message)
+    log.error('social_auth', extra={'error': result.error.message})
     msg = {'msg': 'Something went wrong when accessing third party '
                   'provider - please try again',
            'level': 'danger'}
@@ -112,13 +111,13 @@ def handle_auth_success(request, result):
     request.session['zigg.social_auth'] = social_data
     # user is logged so bind his external identity with account
     if request.user:
-        log.info('social_auth', user_found=True)
+        log.info('social_auth', extra={'user_found': True})
         request.registry.notify(SocialAuthEvent(request, request.user,
                                                 social_data))
         request.session.pop('zigg.social_auth', None)
         return HTTPFound(location=request.route_url('/'))
     else:
-        log.info('social_auth', user_found=False)
+        log.info('social_auth', extra={'user_found': False})
 
         user = ExternalIdentityService.user_by_external_id_and_provider(
             social_data['user']['id'],

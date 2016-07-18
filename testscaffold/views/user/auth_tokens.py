@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import structlog
+import logging
 
 from pyramid.view import view_config, view_defaults
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @view_defaults(route_name='objects', permission='authenticated')

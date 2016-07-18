@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 from datetime import timedelta
 from pyramid.paster import bootstrap
 from pyramid.request import Request
@@ -15,7 +15,7 @@ from kombu.serialization import register
 from pyramid.threadlocal import get_current_request
 from testscaffold.celery.encoders import json_dumps, json_loads
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 register('date_json', json_dumps, json_loads,
          content_type='application/x-date_json',

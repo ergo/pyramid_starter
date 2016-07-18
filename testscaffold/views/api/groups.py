@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
-import structlog
+import logging
 import pyramid.httpexceptions
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations.models.services.group_permission import \
@@ -12,7 +12,7 @@ from testscaffold.services.group import GroupService
 from testscaffold.services.user import UserService
 from testscaffold.validation.schemes import GroupEditSchema
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 GROUPS_PER_PAGE = 50
 
@@ -52,11 +52,11 @@ class GroupsShared(object):
 
     def populate_instance(self, instance, data):
         instance.populate_obj(data)
-        log.info('group_populate_instance', action='updated')
+        log.info('group_populate_instance', extra={'action': 'updated'})
 
     def delete(self, instance):
-        log.info('group_delete', group_id=instance.id,
-                 group_name=instance.group_name)
+        log.info('group_delete', extra={'group_id': instance.id,
+                                        'group_name': instance.group_name})
         instance.delete(self.request.dbsession)
         self.request.session.flash({'msg': 'Group removed.',
                                     'level': 'success'})
@@ -65,8 +65,10 @@ class GroupsShared(object):
         try:
             self.permission_get(group, permission)
         except pyramid.httpexceptions.HTTPNotFound:
-            log.info('group_permission_post', group_id=group.id,
-                     group_name=group.group_name, permission=permission)
+            log.info('group_permission_post',
+                     extra={'group_id': group.id,
+                            'group_name': group.group_name,
+                            'permission': permission})
             permission_inst = GroupPermission(perm_name=permission)
             group.permissions.append(permission_inst)
             self.request.session.flash({'msg': 'Permission granted for group.',
@@ -77,8 +79,10 @@ class GroupsShared(object):
         permission_inst = GroupPermissionService.by_group_and_perm(
             group.id, permission, db_session=self.request.dbsession)
         if permission_inst:
-            log.info('group_permission_delete', group_id=group.id,
-                     group_name=group.group_name, permission=permission)
+            log.info('group_permission_delete',
+                     extra={'group_id': group.id,
+                            'group_name': group.group_name,
+                            'permission': permission})
             group.permissions.remove(permission_inst)
             self.request.session.flash(
                 {'msg': 'Permission withdrawn from group.',
@@ -89,16 +93,20 @@ class GroupsShared(object):
             group.users.append(user)
             self.request.session.flash({'msg': 'User added to group.',
                                         'level': 'success'})
-            log.info('group_user_post', group_id=group.id, user=user.id,
-                     group_name=group.group_name, user_name=user.user_name)
+            log.info('group_user_post',
+                     extra={'group_id': group.id, 'user': user.id,
+                            'group_name': group.group_name,
+                            'user_name': user.user_name})
 
     def user_delete(self, group, user):
         if user in group.users:
             group.users.remove(user)
             self.request.session.flash({'msg': 'User removed from group.',
                                         'level': 'success'})
-            log.info('group_user_delete', group_id=group.id, user_id=user.id,
-                     group_name=group.group_name, user_name=user.user_name)
+            log.info('group_user_delete',
+                     extra={'group_id': group.id, 'user_id': user.id,
+                            'group_name': group.group_name,
+                            'user_name': user.user_name})
 
 
 @view_defaults(route_name='api_object', renderer='json',

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 import uuid
 from datetime import datetime
 from pyramid.httpexceptions import HTTPFound
@@ -14,13 +14,13 @@ from testscaffold.validation.forms import (UserCreateForm,
                                            UserLostPasswordForm,
                                            UserNewPasswordForm)
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @view_config(route_name='/', renderer='testscaffold:templates/index.jinja2')
 def index(request):
     login_form = UserLoginForm(request.POST, context={'request': request})
-    log.warning('index', foo='aaa', bar=5, extra={'foo': 'xxx'})
+    log.warning('index', extra={'foo': 'xxx'})
 
     return {'login_form': login_form}
 
@@ -126,7 +126,7 @@ def register(request):
     # populate form from oAuth session data returned by velruse
     social_data = request.session.get('zigg.social_auth')
     if request.method != 'POST' and social_data:
-        log.info('social_auth', social_data=social_data)
+        log.info('social_auth', extra={'social_data': social_data})
         form_data = {'email': social_data['user'].get('email')}
         form_data['user_password'] = str(uuid.uuid4())
         # repopulate form this time from oauth data
@@ -142,7 +142,7 @@ def register(request):
         new_user.status = 1
         new_user.set_password(new_user.password)
         new_user.registration_ip = request.environ.get('REMOTE_ADDR')
-        log.info('register', new_user=new_user.user_name)
+        log.info('register', extra={'new_user':new_user.user_name})
 
         # bind 3rd party identity
         if social_data:

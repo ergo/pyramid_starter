@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-import structlog
+import logging
 import sqlalchemy as sa
 from testscaffold.models.user import User
 from ziggurat_foundations.models.base import get_db_session
 from ziggurat_foundations.models.services.user import UserService as UService
 from paginate_sqlalchemy import SqlalchemyOrmPage
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class UserService(UService):

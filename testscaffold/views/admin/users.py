@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import structlog
+import logging
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
@@ -12,7 +12,7 @@ from testscaffold.validation.forms import UserAdminCreateForm
 from testscaffold.validation.forms import UserAdminUpdateForm
 from testscaffold.views.api.users import UsersViewBase, USERS_PER_PAGE
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 @view_defaults(route_name='admin_objects', permission='admin_users')
@@ -42,7 +42,8 @@ class AdminUsersViews(object):
             user = User()
             self.base_view.populate_instance(user, user_form.data)
             user.persist(flush=True, db_session=request.dbsession)
-            log.info('users_post', group_id=user.id, group_name=user.user_name)
+            log.info('users_post', extra={'group_id': user.id,
+                                          'group_name': user.user_name})
             request.session.flash({'msg': 'User created.', 'level': 'success'})
             location = request.route_url('admin_objects', object='users',
                                          verb='GET')

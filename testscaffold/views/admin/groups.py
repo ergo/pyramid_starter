@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import structlog
+import logging
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
@@ -14,7 +14,7 @@ from testscaffold.services.group import GroupService
 from testscaffold.validation.forms import GroupUpdateForm, GroupPermissionForm
 from testscaffold.views.api.groups import GroupsShared, GROUPS_PER_PAGE
 
-log = structlog.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 
 class SharedRendererVars(object):
@@ -60,8 +60,8 @@ class AdminGroupsView(object):
         if request.method == "POST" and group_form.validate():
             self.base_view.populate_instance(group, group_form.data)
             group.persist(flush=True, db_session=request.dbsession)
-            log.info('groups_post', group_id=group.id,
-                     group_name=group.group_name)
+            log.info('groups_post', extra={'group_id': group.id,
+                                           'group_name': group.group_name})
             request.session.flash({'msg': 'Group created.',
                                    'level': 'success'})
             location = request.route_url('admin_objects', object='groups',
