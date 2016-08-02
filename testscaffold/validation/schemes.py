@@ -6,21 +6,35 @@ from ziggurat_foundations.models.services.group import GroupService
 
 from marshmallow import (Schema, fields, validate, validates, pre_load)
 
+user_regex_error = 'Username can only consist of ' \
+                   'alphanumerical characters, hypens and underscores'
 
-class UserRegisterSchema(Schema):
+
+class UserCreateSchema(Schema):
     class Meta(object):
         strict = True
         ordered = True
 
-    user_name = fields.Str(required=True, validate=(validate.Length(3)))
+    id = fields.Int(dump_only=True)
+    user_name = fields.Str(required=True,
+                           validate=(validate.Length(3),
+                                     validate.Regexp('^[\w-]*$',
+                                                     error=user_regex_error)))
     password = fields.Str(required=True, validate=(validate.Length(3)))
     email = fields.Str(required=True, validate=(validate.Email()))
+    status = fields.Int(dump_only=True)
+    last_login_date = fields.DateTime(dump_only=True)
+    registered_date = fields.DateTime(dump_only=True)
 
     @validates('user_name')
     def validate_user_name(self, value):
         request = self.context['request']
         modified_obj = self.context.get('modified_obj')
         user = UserService.by_user_name(value, db_session=request.dbsession)
+        by_admin = request.has_permission('root_administrator')
+        if modified_obj and not by_admin:
+            msg = 'Only administrator can change usernames'
+            raise validate.ValidationError(msg)
         if user:
             if not modified_obj or modified_obj.id != user.id:
                 msg = 'User already exists in database'
@@ -37,7 +51,7 @@ class UserRegisterSchema(Schema):
                 raise validate.ValidationError(msg)
 
 
-class UserEditSchema(UserRegisterSchema):
+class UserEditSchema(UserCreateSchema):
     password = fields.Str(required=False, validate=(validate.Length(3)))
 
 

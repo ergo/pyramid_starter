@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import wtforms
 import marshmallow
 from testscaffold.validation import ZigguratForm
-from testscaffold.validation.schemes import (UserRegisterSchema,
+from testscaffold.validation.schemes import (UserCreateSchema,
                                              GroupEditSchema)
 
 from testscaffold.models.group import Group
@@ -34,18 +34,18 @@ class UserCreateForm(ZigguratForm):
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserRegisterSchema)])
+            validate_marshmallow_partial(UserCreateSchema)])
     password = wtforms.PasswordField(
         "Password",
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserRegisterSchema)])
+            validate_marshmallow_partial(UserCreateSchema)])
     email = wtforms.StringField(
         "Email",
         filters=[strip_filter],
         validators=[wtforms.validators.InputRequired(),
-                    validate_marshmallow_partial(UserRegisterSchema)])
+                    validate_marshmallow_partial(UserCreateSchema)])
 
 
 class UserLoginForm(ZigguratForm):

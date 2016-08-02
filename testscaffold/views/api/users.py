@@ -2,6 +2,9 @@
 from __future__ import absolute_import
 
 import logging
+
+from datetime import datetime
+
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
@@ -10,7 +13,7 @@ from testscaffold.util import safe_integer
 from testscaffold.models.user import User
 from testscaffold.services.user import UserService
 from testscaffold.validation.schemes import UserSearchSchema
-from testscaffold.validation.schemes import UserRegisterSchema
+from testscaffold.validation.schemes import UserCreateSchema
 from testscaffold.validation.schemes import UserEditSchema
 
 log = logging.getLogger(__name__)
@@ -53,10 +56,10 @@ class UsersViewBase(object):
     def populate_instance(self, instance, data):
         # this is safe and doesn't overwrite user_password with cleartext
         instance.populate_obj(data)
-        import datetime
-        log.info('user_populate_instance', extra={'action': 'updated',
-                                                  'x':datetime.datetime.now(),
-                                                  'y':datetime.datetime.utcnow().date()})
+        log.info('user_populate_instance',
+                 extra={'action': 'updated',
+                        'x': datetime.now(),
+                        'y': datetime.utcnow().date()})
         if data.get('password'):
             # set hashed password
             instance.set_password(data['password'])
@@ -80,31 +83,33 @@ class UserAPIView(object):
 
     @view_config(route_name='api_objects', request_method='GET')
     def collection_list(self):
+        schema = UserCreateSchema(context={'request': self.request})
         user_paginator = self.base_view.collection_list()
-        return [user for user in user_paginator.items]
+        return schema.dump(user_paginator.items)
 
     @view_config(route_name='api_objects', request_method='POST')
     def post(self):
-        schema = UserRegisterSchema(context={'request': self.request})
+        schema = UserCreateSchema(context={'request': self.request})
         data = schema.load(self.request.unsafe_json_body).data
         user = User()
         self.base_view.populate_instance(user, data)
         user.persist(flush=True, db_session=self.request.dbsession)
-        return user
+        return schema.dump(user).data
 
     @view_config(request_method='GET')
     def get(self):
+        schema = UserCreateSchema(context={'request': self.request})
         user = self.base_view.user_get(self.request.matchdict['object_id'])
-        return user
+        return schema.dump(user).data
 
     @view_config(request_method="PATCH")
     def patch(self):
         user = self.base_view.user_get(self.request.matchdict['object_id'])
         schema = UserEditSchema(context={'request': self.request,
                                          'modified_obj': user})
-        data = schema.load(self.request.unsafe_json_body).data
+        data = schema.load(self.request.unsafe_json_body, partial=True).data
         self.base_view.populate_instance(user, data)
-        return user
+        return schema.dump(user).data
 
     @view_config(request_method="DELETE")
     def delete(self):

@@ -54,12 +54,11 @@ class TestUsersAPI(object):
                 'email': 'foo@bar.baz',
                 'password': 'dupa'
             }
-            result = UserAPIView(request).post()
-            result_json = result.__json__(request)
-            assert result_json['id'] > 0
-            assert result_json['user_name'] == 'new_user'
-            assert result_json['email'] == 'foo@bar.baz'
-            assert 'password' not in result_json
+            result_dict = UserAPIView(request).post()
+            assert result_dict['id'] > 0
+            assert result_dict['user_name'] == 'new_user'
+            assert result_dict['email'] == 'foo@bar.baz'
+            assert 'password' not in result_dict
 
     def test_get_not_found(self, sqla_session):
         from testscaffold.views.api.users import UserAPIView
@@ -79,7 +78,7 @@ class TestUsersAPI(object):
             user.persist(flush=True, db_session=request.dbsession)
             request.matchdict['object_id'] = 5
             result = UserAPIView(request).get()
-            assert result.id == 5
+            assert result['id'] == 5
 
     def test_patch_not_found(self, sqla_session):
         from testscaffold.views.api.users import UserAPIView
@@ -88,19 +87,6 @@ class TestUsersAPI(object):
             request = dummy_request(session)
             request.matchdict['object_id'] = 1
             with pytest.raises(pyramid.httpexceptions.HTTPNotFound):
-                UserAPIView(request).patch()
-
-    def test_patch_found_invalid(self, sqla_session):
-        import marshmallow
-        from testscaffold.views.api.users import UserAPIView
-        from testscaffold.models.user import User
-        with tmp_session_context(sqla_session) as session:
-            request = dummy_request(session)
-            user = User(id=1, email='foo', user_name='bar')
-            user.persist(flush=True, db_session=request.dbsession)
-            request.matchdict['object_id'] = 1
-            request.json_body = {}
-            with pytest.raises(marshmallow.ValidationError):
                 UserAPIView(request).patch()
 
     def test_patch_found_valid(self, sqla_session):
@@ -118,5 +104,5 @@ class TestUsersAPI(object):
             user.persist(flush=True, db_session=request.dbsession)
             request.matchdict['object_id'] = 1
             result = UserAPIView(request).patch()
-            assert result.user_name == 'changed'
-            assert result.email == 'bar@foo.com'
+            assert result['user_name'] == 'changed'
+            assert result['email'] == 'bar@foo.com'

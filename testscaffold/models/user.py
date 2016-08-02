@@ -33,6 +33,3 @@ class User(UserMixin, Base):
             'system_permissions': [p.perm_name for p in self.permissions],
             'resource_permissions': self.resources_with_perms(['owner'])
         }
-
-    def __json__(self, request):
-        return self.get_dict()
