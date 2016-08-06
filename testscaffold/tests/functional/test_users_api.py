@@ -14,7 +14,7 @@ class TestFunctionalAPIUsers(object):
         headers = {str('x-testscaffold-auth-token'): str('test')}
         full_app.post(url_path, {}, status=403, headers=headers)
 
-    def test_list_users(self, full_app, sqla_session):
+    def test_users_list(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_user({'user_name': 'test2', 'email': 'test@test.local2'},
@@ -26,7 +26,7 @@ class TestFunctionalAPIUsers(object):
         items = response.json
         assert len(items) == 2
 
-    def test_create_user_no_json(self, full_app, sqla_session):
+    def test_user_create_no_json(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
 
@@ -34,7 +34,7 @@ class TestFunctionalAPIUsers(object):
         headers = {str('x-testscaffold-auth-token'): str(token)}
         full_app.post_json(url_path, status=422, headers=headers)
 
-    def test_create_user_bad_json(self, full_app, sqla_session):
+    def test_user_create_bad_json(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
 
@@ -46,7 +46,7 @@ class TestFunctionalAPIUsers(object):
         required = ['user_name', 'email', 'password']
         assert sorted(required) == sorted(response.json.keys())
 
-    def test_create_user(self, full_app, sqla_session):
+    def test_user_create(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
 
@@ -67,7 +67,23 @@ class TestFunctionalAPIUsers(object):
         assert 'registered_date' in response.json
         assert response.json['status'] == 1
 
-    def test_patch_user(self, full_app, sqla_session):
+    def test_user_duplicate(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+
+        url_path = '/api/0.1/users'
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        user_dict = {
+            'id': -9999,
+            'user_name': 'test',
+            'password': 'new_password',
+            'email': 'email@foo.bar'
+        }
+        response = full_app.post_json(url_path, user_dict, status=422,
+                                      headers=headers)
+        assert response.json['user_name']
+
+    def test_user_patch(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             user = create_user(
@@ -87,7 +103,7 @@ class TestFunctionalAPIUsers(object):
         assert user_dict['user_name'] == response.json['user_name']
         assert user_dict['email'] == response.json['email']
 
-    def test_delete_user(self, full_app, sqla_session):
+    def test_user_delete(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             user = create_user(

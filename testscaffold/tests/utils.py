@@ -23,7 +23,7 @@ def create_group(group_dict, permissions=None, sqla_session=None):
     if permissions:
         for perm_name in permissions:
             permission_instance = GroupPermission(perm_name=perm_name)
-            group.group_permissions.append(permission_instance)
+            group.permissions.append(permission_instance)
     group.persist(flush=True, db_session=sqla_session)
     return group
 

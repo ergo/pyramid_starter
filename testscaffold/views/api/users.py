@@ -85,7 +85,7 @@ class UserAPIView(object):
     def collection_list(self):
         schema = UserCreateSchema(context={'request': self.request})
         user_paginator = self.base_view.collection_list()
-        return schema.dump(user_paginator.items).data
+        return schema.dump(user_paginator.items, many=True).data
 
     @view_config(route_name='api_objects', request_method='POST')
     def post(self):
@@ -115,4 +115,4 @@ class UserAPIView(object):
     def delete(self):
         user = self.base_view.user_get(self.request.matchdict['object_id'])
         self.base_view.delete(user)
-        return ''
+        return True

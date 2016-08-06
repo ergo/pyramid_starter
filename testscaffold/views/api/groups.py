@@ -77,7 +77,7 @@ class GroupsShared(object):
 
     def permission_delete(self, group, permission):
         permission_inst = GroupPermissionService.by_group_and_perm(
-            group.id, permission, db_session=self.request.dbsession)
+            group.id, permission.perm_name, db_session=self.request.dbsession)
         if permission_inst:
             log.info('group_permission_delete',
                      extra={'group_id': group.id,
@@ -134,8 +134,9 @@ class GroupsAPI(object):
 
     @view_config(request_method='GET')
     def get(self):
+        schema = GroupEditSchema(context={'request': self.request})
         group = self.base_view.group_get(self.request.matchdict['object_id'])
-        return group.get_dict()
+        return schema.dump(group).data
 
     @view_config(request_method="PATCH")
     def patch(self):
@@ -144,13 +145,13 @@ class GroupsAPI(object):
                                           'modified_obj': group})
         data = schema.load(self.request.unsafe_json_body).data
         self.base_view.populate_instance(group, data)
-        return group.get_dict()
+        return schema.dump(group).data
 
     @view_config(request_method="DELETE")
     def delete(self):
         group = self.base_view.group_get(self.request.matchdict['object_id'])
         self.base_view.delete(group)
-        return ''
+        return True
 
 
 @view_defaults(route_name='api_object_relation', renderer='json',
@@ -166,7 +167,7 @@ class GroupsPermissionsAPI(object):
         json_body = self.request.unsafe_json_body
         group = self.base_view.group_get(self.request.matchdict['object_id'])
         self.base_view.permission_post(group, json_body['permission'])
-        return group
+        return True
 
     @view_config(request_method="DELETE")
     def delete(self):
@@ -174,7 +175,7 @@ class GroupsPermissionsAPI(object):
         permission = self.base_view.permission_get(
             group, self.request.GET.get('permission'))
         self.base_view.permission_delete(group, permission)
-        return group
+        return True
 
 
 @view_defaults(route_name='api_object_relation', renderer='json',

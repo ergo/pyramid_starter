@@ -230,7 +230,7 @@ class AdminGroupRelationsView(object):
             verb='GET')
 
         if request.method == "POST":
-            self.base_view.permission_delete(group, permission.perm_name)
+            self.base_view.permission_delete(group, permission)
             return pyramid.httpexceptions.HTTPFound(location=back_url)
 
         return {"parent_obj": group,
