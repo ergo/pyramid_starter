@@ -85,7 +85,7 @@ class UserAPIView(object):
     def collection_list(self):
         schema = UserCreateSchema(context={'request': self.request})
         user_paginator = self.base_view.collection_list()
-        return schema.dump(user_paginator.items)
+        return schema.dump(user_paginator.items).data
 
     @view_config(route_name='api_objects', request_method='POST')
     def post(self):

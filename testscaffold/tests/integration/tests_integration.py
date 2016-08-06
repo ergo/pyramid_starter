@@ -24,15 +24,6 @@ def dummy_request(dbsession):
     return req
 
 
-@pytest.mark.usefixtures('with_migrations', 'clean_tables', 'minimal_setup')
-class TestFixtureCleanup(object):
-    def test_cleanup(self, sqla_session):
-        from testscaffold.models.user import User
-        with session_context(sqla_session) as session:
-            user = User(id=1, email='foasfsfao', user_name='barafsf')
-            user.persist(flush=True, db_session=session)
-
-
 @pytest.mark.usefixtures('with_migrations', 'clean_tables_once',
                          'minimal_setup')
 class TestUsersAPI(object):

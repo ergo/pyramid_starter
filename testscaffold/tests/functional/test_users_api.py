@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import pytest
 
-from testscaffold.tests.utils import create_user, session_context
+from testscaffold.tests.utils import create_user, session_context, create_admin
 
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
@@ -16,13 +16,9 @@ class TestFunctionalAPIUsers(object):
 
     def test_list_users(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
+            admin, token = create_admin(session)
             create_user({'user_name': 'test2', 'email': 'test@test.local2'},
                         sqla_session=session)
-            token = admin.auth_tokens[0].token
 
         url_path = '/api/0.1/users'
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -32,11 +28,7 @@ class TestFunctionalAPIUsers(object):
 
     def test_create_user_no_json(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
-            token = admin.auth_tokens[0].token
+            admin, token = create_admin(session)
 
         url_path = '/api/0.1/users'
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -44,11 +36,7 @@ class TestFunctionalAPIUsers(object):
 
     def test_create_user_bad_json(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
-            token = admin.auth_tokens[0].token
+            admin, token = create_admin(session)
 
         url_path = '/api/0.1/users'
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -60,11 +48,7 @@ class TestFunctionalAPIUsers(object):
 
     def test_create_user(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
-            token = admin.auth_tokens[0].token
+            admin, token = create_admin(session)
 
         url_path = '/api/0.1/users'
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -85,11 +69,7 @@ class TestFunctionalAPIUsers(object):
 
     def test_patch_user(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
-            token = admin.auth_tokens[0].token
+            admin, token = create_admin(session)
             user = create_user(
                 {'user_name': 'testX', 'email': 'testX@test.local'},
                 sqla_session=session)
@@ -109,11 +89,7 @@ class TestFunctionalAPIUsers(object):
 
     def test_delete_user(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
-            admin = create_user(
-                {'user_name': 'test', 'email': 'test@test.local'},
-                permissions=['root_administration'],
-                sqla_session=session)
-            token = admin.auth_tokens[0].token
+            admin, token = create_admin(session)
             user = create_user(
                 {'user_name': 'testX', 'email': 'testX@test.local'},
                 sqla_session=session)

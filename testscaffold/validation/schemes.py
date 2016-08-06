@@ -73,7 +73,10 @@ class GroupEditSchema(Schema):
         strict = True
         ordered = True
 
-    group_name = fields.Str()
+    id = fields.Int(dump_only=True)
+    member_count = fields.Int(dump_only=True)
+    group_name = fields.Str(required=True,
+                            validate=(validate.Length(3)))
     description = fields.Str()
 
     @validates('group_name')

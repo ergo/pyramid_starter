@@ -119,8 +119,9 @@ class GroupsAPI(object):
 
     @view_config(route_name='api_objects', request_method='GET')
     def collection_list(self):
-        group_paginator = self.base_view.collection_list()
-        return [group for group in group_paginator.items]
+        groups = self.base_view.collection_list()
+        schema = GroupEditSchema(context={'request': self.request})
+        return schema.dump([group for group in groups], many=True).data
 
     @view_config(route_name='api_objects', request_method='POST')
     def post(self):
@@ -129,7 +130,7 @@ class GroupsAPI(object):
         group = Group()
         self.base_view.populate_instance(group, data)
         group.persist(flush=True, db_session=self.request.dbsession)
-        return group.get_dict()
+        return schema.dump(group).data
 
     @view_config(request_method='GET')
     def get(self):
