@@ -21,7 +21,7 @@ function UserListController($http) {
     vm.assignUserToGroup = function (groupId) {
         console.log('assignUserToGroup');
         return $http.post(API_BASE_URL + '/groups/' + groupId + '/users', {
-            id: vm.selectedUser.id
+            user_id: vm.selectedUser.id
         }).then(function (response) {
             window.location.reload(true);
         });

@@ -4,7 +4,11 @@ from six.moves.urllib import parse
 
 import pytest
 
-from testscaffold.tests.utils import create_group, session_context, create_admin
+from testscaffold.tests.utils import (
+    create_admin,
+    create_group,
+    create_user,
+    session_context)
 
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
@@ -103,7 +107,7 @@ class TestFunctionalAPIGroupsPermissions(object):
         permission = {
             'permission': 'root_administration',
         }
-        assert not group.permissions
+        assert not list(group.permissions)
         full_app.post_json(url_path, permission, status=200, headers=headers)
         sqla_session.expire_all()
         assert group.permissions[0].perm_name == 'root_administration'
@@ -138,6 +142,66 @@ class TestFunctionalAPIGroupsPermissions(object):
         }
         qs = parse.urlencode(permission)
         full_app.delete('{}?{}'.format(url_path, qs),
-                        params=permission, status=200, headers=headers)
+                        status=200, headers=headers)
         sqla_session.expire_all()
         assert group.permissions[0].perm_name == 'dummy_permission'
+
+
+@pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
+                         'sqla_session')
+class TestFunctionalAPIGroupsUsers(object):
+    def test_user_add(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            group = create_group({'group_name': 'test'},
+                                 sqla_session=session)
+            user_a = create_user({'user_name': 'aaaa', 'email': 'foo'},
+                                 sqla_session=session)
+            user_b = create_user({'user_name': 'bbbb', 'email': 'foo2'},
+                                 sqla_session=session)
+
+        url_path = '/api/0.1/groups/{}/users'.format(group.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        assert not list(group.users)
+        full_app.post_json(url_path, {'user_id': user_a.id},
+                           status=200, headers=headers)
+        full_app.post_json(url_path, {'user_id': user_b.id},
+                           status=200, headers=headers)
+        sqla_session.expire_all()
+        assert len(group.users) == 2
+
+    def test_user_delete_not_found(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            group = create_group(
+                {'group_name': 'test'},
+                permissions=['root_administration', 'dummy_permission'],
+                sqla_session=session)
+
+        url_path = '/api/0.1/groups/{}/users'.format(group.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        full_app.delete(url_path, status=404, headers=headers)
+
+    def test_user_delete(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            group = create_group(
+                {'group_name': 'test'},
+                permissions=['root_administration', 'dummy_permission'],
+                sqla_session=session)
+            user_a = create_user({'user_name': 'aaaa', 'email': 'foo'},
+                                 sqla_session=session)
+            user_b = create_user({'user_name': 'bbbb', 'email': 'foo2'},
+                                 sqla_session=session)
+            group.users.append(user_a)
+            group.users.append(user_b)
+
+        url_path = '/api/0.1/groups/{}/users'.format(group.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        qs = parse.urlencode({'user_id': user_b.id})
+
+        assert len(group.users) == 2
+        full_app.delete('{}?{}'.format(url_path, qs),
+                        status=200, headers=headers)
+        sqla_session.expire_all()
+        assert group.users[0].id == user_a.id

@@ -190,12 +190,13 @@ class GroupsUserRelationAPI(object):
     def post(self):
         json_body = self.request.unsafe_json_body
         group = self.base_view.group_get(self.request.matchdict['object_id'])
-        user = self.base_view.user_get(json_body.get('id'))
+        user = self.base_view.user_get(json_body.get('user_id'))
         self.base_view.user_post(group, user)
+        return True
 
     @view_config(request_method="DELETE")
     def delete(self):
         group = self.base_view.group_get(self.request.matchdict['object_id'])
         user = self.base_view.user_get(self.request.GET.get('user_id'))
         self.base_view.user_delete(group, user)
-        return group
+        return True

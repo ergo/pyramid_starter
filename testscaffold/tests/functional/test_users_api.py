@@ -26,6 +26,22 @@ class TestFunctionalAPIUsers(object):
         items = response.json
         assert len(items) == 2
 
+    def test_users_filtering(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_user({'user_name': 'test2', 'email': 'test@test.local2'},
+                        sqla_session=session)
+            create_user({'user_name': 'foo', 'email': 'test2@test.local2'},
+                        sqla_session=session)
+            create_user({'user_name': 'barbaz', 'email': 'test3@test.local2'},
+                        sqla_session=session)
+
+        url_path = '/api/0.1/users?user_name_like=bar'
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        response = full_app.get(url_path, status=200, headers=headers)
+        items = response.json
+        assert items[0]['user_name'] == 'barbaz'
+
     def test_user_create_no_json(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
