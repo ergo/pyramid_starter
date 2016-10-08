@@ -8,9 +8,12 @@ from datetime import datetime
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
+from ziggurat_foundations.models.services.user_permission import \
+    UserPermissionService
 
 from testscaffold.util import safe_integer
 from testscaffold.models.user import User
+from testscaffold.models.user_permission import UserPermission
 from testscaffold.services.user import UserService
 from testscaffold.validation.schemes import UserSearchSchema
 from testscaffold.validation.schemes import UserCreateSchema
@@ -21,7 +24,7 @@ log = logging.getLogger(__name__)
 USERS_PER_PAGE = 50
 
 
-class UsersViewBase(object):
+class UsersShared(object):
     """
     Used by API and admin views
     """
@@ -72,6 +75,39 @@ class UsersViewBase(object):
         self.request.session.flash({'msg': 'User removed.',
                                     'level': 'success'})
 
+    def permission_get(self, user, permission):
+        permission = UserPermissionService.by_user_and_perm(
+            user.id, permission, db_session=self.request.dbsession)
+        if not permission:
+            raise pyramid.httpexceptions.HTTPNotFound()
+        return permission
+
+    def permission_post(self, user, permission):
+        try:
+            self.permission_get(user, permission)
+        except pyramid.httpexceptions.HTTPNotFound:
+            log.info('user_permission_post',
+                     extra={'user_id': user.id,
+                            'user_name': user.user_name,
+                            'permission': permission})
+            permission_inst = UserPermission(perm_name=permission)
+            user.user_permissions.append(permission_inst)
+            self.request.session.flash({'msg': 'Permission granted for user.',
+                                        'level': 'success'})
+        return permission
+
+    def permission_delete(self, user, permission):
+        permission_inst = UserPermissionService.by_user_and_perm(
+            user.id, permission.perm_name, db_session=self.request.dbsession)
+        if permission_inst:
+            log.info('user_permission_delete',
+                     extra={'user_id': user.id,
+                            'user_name': user.user_name,
+                            'permission': permission})
+            user.user_permissions.remove(permission_inst)
+            self.request.session.flash(
+                {'msg': 'Permission withdrawn from user.',
+                 'level': 'success'})
 
 @view_defaults(route_name='api_object', renderer='json',
                permission='admin_users',
@@ -79,7 +115,7 @@ class UsersViewBase(object):
 class UserAPIView(object):
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersViewBase(request)
+        self.base_view = UsersShared(request)
 
     @view_config(route_name='api_objects', request_method='GET')
     def collection_list(self):
@@ -115,4 +151,28 @@ class UserAPIView(object):
     def delete(self):
         user = self.base_view.user_get(self.request.matchdict['object_id'])
         self.base_view.delete(user)
+        return True
+
+
+@view_defaults(route_name='api_object_relation', renderer='json',
+               match_param=('object=users', 'relation=permissions',),
+               permission='admin_users')
+class UsersPermissionsAPI(object):
+    def __init__(self, request):
+        self.request = request
+        self.base_view = UsersShared(request)
+
+    @view_config(request_method="POST")
+    def post(self):
+        json_body = self.request.unsafe_json_body
+        user = self.base_view.user_get(self.request.matchdict['object_id'])
+        self.base_view.permission_post(user, json_body['permission'])
+        return True
+
+    @view_config(request_method="DELETE")
+    def delete(self):
+        user = self.base_view.user_get(self.request.matchdict['object_id'])
+        permission = self.base_view.permission_get(
+            user, self.request.GET.get('permission'))
+        self.base_view.permission_delete(user, permission)
         return True

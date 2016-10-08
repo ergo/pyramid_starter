@@ -3,7 +3,12 @@ from __future__ import absolute_import, unicode_literals
 
 import pytest
 
-from testscaffold.tests.utils import create_user, session_context, create_admin
+from six.moves.urllib import parse
+
+from testscaffold.tests.utils import (
+    create_user,
+    session_context,
+    create_admin)
 
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
@@ -128,3 +133,58 @@ class TestFunctionalAPIUsers(object):
         url_path = '/api/0.1/users/{}'.format(user.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         full_app.delete_json(url_path, status=200, headers=headers)
+
+
+@pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
+                         'sqla_session')
+class TestFunctionalAPIUsersPermissions(object):
+    def test_permission_add(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            user = create_user(
+                {'user_name': 'testX', 'email': 'testX@test.local'},
+                sqla_session=session)
+
+        url_path = '/api/0.1/users/{}/permissions'.format(user.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        permission = {
+            'permission': 'root_administration',
+        }
+        assert not list(user.permissions)
+        full_app.post_json(url_path, permission, status=200, headers=headers)
+        sqla_session.expire_all()
+        print(user.permissions)
+        assert user.permissions[0].perm_name == 'root_administration'
+
+    def test_permission_delete_not_found(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            user = create_user(
+                {'user_name': 'testX', 'email': 'testX@test.local'},
+                sqla_session=session)
+
+        url_path = '/api/0.1/users/{}/permissions'.format(user.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        permission = {
+            'permission': 'c',
+        }
+        full_app.delete(url_path, permission, status=404, headers=headers)
+
+    def test_permission_delete(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            user = create_user(
+                {'user_name': 'testX', 'email': 'testX@test.local'},
+                permissions=['root_administration', 'dummy_permission'],
+                sqla_session=session)
+
+        url_path = '/api/0.1/users/{}/permissions'.format(user.id)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        permission = {
+            'permission': 'root_administration',
+        }
+        qs = parse.urlencode(permission)
+        full_app.delete('{}?{}'.format(url_path, qs),
+                        status=200, headers=headers)
+        sqla_session.expire_all()
+        assert user.permissions[0].perm_name == 'dummy_permission'

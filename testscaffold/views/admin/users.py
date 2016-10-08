@@ -10,7 +10,7 @@ from testscaffold.grids import UsersGrid
 from testscaffold.models.user import User
 from testscaffold.validation.forms import UserAdminCreateForm
 from testscaffold.validation.forms import UserAdminUpdateForm
-from testscaffold.views.api.users import UsersViewBase, USERS_PER_PAGE
+from testscaffold.views.api.users import UsersShared, USERS_PER_PAGE
 
 log = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 class AdminUsersViews(object):
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersViewBase(request)
+        self.base_view = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/index.jinja2',
                  match_param=('object=users', 'verb=GET'))
@@ -56,7 +56,7 @@ class AdminUsersViews(object):
 class AdminUserViews(object):
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersViewBase(request)
+        self.base_view = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
                  match_param=('object=users', 'verb=GET'))
