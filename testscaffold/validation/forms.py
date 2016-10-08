@@ -5,9 +5,10 @@ import wtforms
 import marshmallow
 from testscaffold.validation import ZigguratForm
 from testscaffold.validation.schemes import (UserCreateSchema,
+                                             UserEditSchema,
                                              GroupEditSchema)
 
-from testscaffold.models.group import Group
+from testscaffold.models.user import User
 
 
 def strip_filter(value):
@@ -77,7 +78,7 @@ class UserNewPasswordForm(ZigguratForm):
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
-            wtforms.validators.Length(min=3)])
+            validate_marshmallow_partial(UserEditSchema)])
     password_confirm = wtforms.PasswordField(
         "Confirm password",
         filters=[strip_filter],
@@ -117,11 +118,11 @@ class GroupUpdateForm(ZigguratForm):
 
 group_permission_choices = []
 
-for permission in Group.__possible_permissions__:
+for permission in User.__possible_permissions__:
     group_permission_choices.append((permission,
                                      permission.title().replace('_', ' '),))
 
 
-class GroupPermissionForm(ZigguratForm):
+class DirectPermissionForm(ZigguratForm):
     permission = wtforms.SelectField('Permission',
                                      choices=group_permission_choices)

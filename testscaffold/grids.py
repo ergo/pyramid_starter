@@ -88,3 +88,21 @@ class GroupPermissionsGrid(ObjectGrid):
                            class_='c{}'.format(col_num))
 
         self.column_formats['options'] = options_td
+
+
+class UserPermissionsGrid(ObjectGrid):
+    def __init__(self, *args, **kwargs):
+        kwargs['columns'] = ['perm_name', 'options']
+        super(UserPermissionsGrid, self).__init__(*args, **kwargs)
+
+        def options_td(col_num, i, item):
+            href = self.request.route_url(
+                'admin_object_relation', object='users',
+                object_id=self.additional_kw['user'].id, verb='DELETE',
+                relation='permissions',
+                _query={'permission': item.perm_name})
+            delete_link = HTML.a('Delete', class_='btn btn-danger', href=href)
+            return HTML.td(delete_link,
+                           class_='c{}'.format(col_num))
+
+        self.column_formats['options'] = options_td

@@ -6,10 +6,12 @@ import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
 
-from testscaffold.grids import UsersGrid
+from testscaffold.grids import UsersGrid, UserPermissionsGrid
 from testscaffold.models.user import User
-from testscaffold.validation.forms import UserAdminCreateForm
-from testscaffold.validation.forms import UserAdminUpdateForm
+from testscaffold.validation.forms import (
+    UserAdminCreateForm,
+    UserAdminUpdateForm,
+    DirectPermissionForm)
 from testscaffold.views.api.users import UsersShared, USERS_PER_PAGE
 
 log = logging.getLogger(__name__)
@@ -65,6 +67,11 @@ class AdminUserViews(object):
     def get_patch(self):
         request = self.request
         user = self.base_view.user_get(self.request.matchdict['object_id'])
+        permission_form = DirectPermissionForm(
+            request.POST, context={'request': request})
+        permissions_grid = UserPermissionsGrid(
+            user.user_permissions, request=request, user=user)
+
         user_form = UserAdminUpdateForm(
             request.POST, obj=user, context={'request': request,
                                              'modified_obj': user})
@@ -73,7 +80,9 @@ class AdminUserViews(object):
             self.base_view.populate_instance(user, user_form.data)
 
         return {"user": user,
-                "user_form": user_form}
+                "user_form": user_form,
+                "permission_form": permission_form,
+                "permissions_grid": permissions_grid}
 
     @view_config(
         renderer='testscaffold:templates/admin/relation_remove.jinja2',
@@ -95,6 +104,74 @@ class AdminUserViews(object):
 
         return {"parent_obj": user,
                 "member_obj": None,
+                "confirm_url": request.current_route_url(),
+                "back_url": back_url
+                }
+
+
+@view_defaults(route_name='admin_object_relation', permission='admin_users')
+class AdminUserRelationsView(object):
+    """
+    Handles operations on group properties
+    """
+
+    def __init__(self, request):
+        self.request = request
+        self.base_view = UsersShared(request)
+
+
+    @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
+                 match_param=['object=users', 'relation=permissions',
+                              'verb=POST'])
+    def permission_post(self):
+        request = self.request
+        user = self.base_view.user_get(request.matchdict['object_id'])
+        user_form = UserAdminUpdateForm(
+            request.POST, obj=user,
+            context={'request': request, 'modified_obj': user}
+        )
+        permission_form = DirectPermissionForm(
+            request.POST, context={'request': request})
+        permissions_grid = UserPermissionsGrid(
+            user.permissions, request=request, user=user)
+
+        if request.method == "POST" and permission_form.validate():
+            permission_name = permission_form.permission.data
+            self.base_view.permission_post(user, permission_name)
+            url = request.route_url('admin_object', object='users',
+                                    object_id=user.id, verb='GET')
+            return pyramid.httpexceptions.HTTPFound(location=url)
+
+        return {'user': user,
+                'user_form': user_form,
+                'permission_form': permission_form,
+                'permissions_grid': permissions_grid}
+
+    @view_config(
+        renderer='testscaffold:templates/admin/relation_remove.jinja2',
+        match_param=('object=users', 'relation=permissions',
+                     'verb=DELETE'),
+        request_method="GET")
+    @view_config(
+        renderer='testscaffold:templates/admin/relation_remove.jinja2',
+        match_param=('object=users', 'relation=permissions',
+                     'verb=DELETE'),
+        request_method="POST")
+    def permission_delete(self):
+        request = self.request
+        user = self.base_view.user_get(request.matchdict['object_id'])
+        permission = self.base_view.permission_get(
+            user, request.GET.get('permission'))
+        back_url = request.route_url(
+            'admin_object', object='users', object_id=user.id,
+            verb='GET')
+
+        if request.method == "POST":
+            self.base_view.permission_delete(user, permission)
+            return pyramid.httpexceptions.HTTPFound(location=back_url)
+
+        return {"parent_obj": user,
+                "member_obj": permission,
                 "confirm_url": request.current_route_url(),
                 "back_url": back_url
                 }

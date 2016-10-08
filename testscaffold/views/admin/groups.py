@@ -5,30 +5,18 @@ import logging
 import pyramid.httpexceptions
 
 from pyramid.view import view_config, view_defaults
-from testscaffold.grids import GroupsGrid, UsersGroupsGrid, \
-    GroupPermissionsGrid
+from testscaffold.grids import (
+    GroupsGrid,
+    UsersGroupsGrid,
+    GroupPermissionsGrid)
 
 from testscaffold.util import safe_integer
 from testscaffold.models.group import Group
 from testscaffold.services.group import GroupService
-from testscaffold.validation.forms import GroupUpdateForm, GroupPermissionForm
+from testscaffold.validation.forms import GroupUpdateForm, DirectPermissionForm
 from testscaffold.views.api.groups import GroupsShared, GROUPS_PER_PAGE
 
 log = logging.getLogger(__name__)
-
-
-class SharedRendererVars(object):
-    def __init__(self, request, base_view):
-        self.group = base_view.group_get(request.matchdict['object_id'])
-        self.group_form = GroupUpdateForm(
-            request.POST, obj=self.group,
-            context={'request': request, 'modified_obj': self.group})
-        self.permission_form = GroupPermissionForm(
-            request.POST, context={'request': request})
-
-        self.permissions_grid = GroupPermissionsGrid(self.group.permissions,
-                                                     request=request,
-                                                     group=self.group)
 
 
 @view_defaults(route_name='admin_objects', permission='admin_groups')
@@ -88,21 +76,29 @@ class AdminGroupView(object):
                  match_param=('object=groups', 'verb=PATCH'))
     def group_get_patch(self):
         request = self.request
-        shared = SharedRendererVars(request, self.base_view)
-        if request.method == "POST" and shared.group_form.validate():
-            self.base_view.populate_instance(shared.group,
-                                             shared.group_form.data)
+        group = self.base_view.group_get(request.matchdict['object_id'])
+        group_form = GroupUpdateForm(
+            request.POST, obj=group,
+            context={'request': request, 'modified_obj': group}
+        )
+        permission_form = DirectPermissionForm(
+            request.POST, context={'request': request})
+        permissions_grid = GroupPermissionsGrid(
+            group.permissions, request=request, group=group)
+        if request.method == "POST" and group_form.validate():
+            self.base_view.populate_instance(group,
+                                             group_form.data)
             request.session.flash({'msg': 'Group updated.',
                                    'level': 'success'})
             url = request.route_url(
                 'admin_object', object='groups',
-                object_id=shared.group.id, verb='GET')
+                object_id=group.id, verb='GET')
             return pyramid.httpexceptions.HTTPFound(location=url)
 
-        return {'group': shared.group,
-                'group_form': shared.group_form,
-                'permission_form': shared.permission_form,
-                'permissions_grid': shared.permissions_grid}
+        return {'group': group,
+                'group_form': group_form,
+                'permission_form': permission_form,
+                'permissions_grid': permissions_grid}
 
     @view_config(
         renderer='testscaffold:templates/admin/relation_remove.jinja2',
@@ -197,18 +193,27 @@ class AdminGroupRelationsView(object):
                               'verb=POST'])
     def permission_post(self):
         request = self.request
-        shared = SharedRendererVars(request, self.base_view)
-        if request.method == "POST" and shared.permission_form.validate():
-            permission_name = shared.permission_form.permission.data
-            self.base_view.permission_post(shared.group, permission_name)
+        group = self.base_view.group_get(request.matchdict['object_id'])
+        group_form = GroupUpdateForm(
+            request.POST, obj=group,
+            context={'request': request, 'modified_obj': group}
+        )
+        permission_form = DirectPermissionForm(
+            request.POST, context={'request': request})
+        permissions_grid = GroupPermissionsGrid(
+            group.permissions, request=request, group=group)
+
+        if request.method == "POST" and permission_form.validate():
+            permission_name = permission_form.permission.data
+            self.base_view.permission_post(group, permission_name)
             url = request.route_url('admin_object', object='groups',
-                                    object_id=shared.group.id, verb='GET')
+                                    object_id=group.id, verb='GET')
             return pyramid.httpexceptions.HTTPFound(location=url)
 
-        return {'group': shared.group,
-                'group_form': shared.group_form,
-                'permission_form': shared.permission_form,
-                'permissions_grid': shared.permissions_grid}
+        return {'group': group,
+                'group_form': group_form,
+                'permission_form': permission_form,
+                'permissions_grid': permissions_grid}
 
     @view_config(
         renderer='testscaffold:templates/admin/relation_remove.jinja2',

@@ -27,11 +27,11 @@ def main(global_config, **settings):
     stacked_policy.add_policy('auth_token', auth_token_policy)
     authorization_policy = ACLAuthorizationPolicy()
 
+    settings['jinja2.undefined'] = 'strict'
     config = Configurator(settings=settings,
                           authentication_policy=stacked_policy,
                           authorization_policy=authorization_policy,
                           root_factory='testscaffold.security.RootFactory')
-
     # modify json renderer
     json_renderer = JSON(indent=4)
 
