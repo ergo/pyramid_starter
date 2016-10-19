@@ -14,7 +14,8 @@ from testscaffold.util import safe_integer
 from testscaffold.models.group import Group
 from testscaffold.services.group import GroupService
 from testscaffold.validation.forms import GroupUpdateForm, DirectPermissionForm
-from testscaffold.views.api.groups import GroupsShared, GROUPS_PER_PAGE
+from testscaffold.views.api.groups import GROUPS_PER_PAGE
+from testscaffold.views.shared.groups import GroupsShared
 
 log = logging.getLogger(__name__)
 

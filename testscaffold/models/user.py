@@ -27,9 +27,3 @@ class User(UserMixin, Base):
         user_dict = super(User, self).get_dict(exclude_keys=exclude_keys,
                                                include_keys=include_keys)
         return user_dict
-
-    def permission_info(self):
-        return {
-            'system_permissions': [p.perm_name for p in self.permissions],
-            'resource_permissions': self.resources_with_perms(['owner'])
-        }

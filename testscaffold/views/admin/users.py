@@ -12,7 +12,7 @@ from testscaffold.validation.forms import (
     UserAdminCreateForm,
     UserAdminUpdateForm,
     DirectPermissionForm)
-from testscaffold.views.api.users import UsersShared, USERS_PER_PAGE
+from testscaffold.views.shared.users import UsersShared, USERS_PER_PAGE
 
 log = logging.getLogger(__name__)
 
@@ -118,7 +118,6 @@ class AdminUserRelationsView(object):
     def __init__(self, request):
         self.request = request
         self.base_view = UsersShared(request)
-
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
                  match_param=['object=users', 'relation=permissions',

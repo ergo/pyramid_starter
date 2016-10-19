@@ -43,3 +43,10 @@ class UserService(UService):
         return SqlalchemyOrmPage(query, page=page, item_count=item_count,
                                  items_per_page=items_per_page,
                                  **kwargs)
+
+    @classmethod
+    def permission_info(cls, user):
+        return {
+            'system_permissions': [p.perm_name for p in user.permissions],
+            'resource_permissions': user.resources_with_perms(['owner'])
+        }

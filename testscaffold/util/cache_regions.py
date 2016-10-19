@@ -86,3 +86,7 @@ class CacheRegions(object):
             "dogpile.cache.redis",
             expiration_time=3600,
             **copy.deepcopy(config_redis))
+
+
+def get_region(region):
+    return getattr(regions, region)
