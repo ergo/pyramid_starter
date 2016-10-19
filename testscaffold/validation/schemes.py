@@ -88,3 +88,25 @@ class GroupEditSchema(Schema):
             if not modified_obj or modified_obj.id != group.id:
                 msg = 'Group already exists in database'
                 raise validate.ValidationError(msg)
+
+
+class ResourceCreateSchemaMixin(Schema):
+    class Meta(object):
+        strict = True
+        ordered = True
+
+    resource_id = fields.Int(dump_only=True)
+    parent_id = fields.Int(dump_only=True)
+    resource_type = fields.Str(dump_only=True)
+    resource_name = fields.Str(required=True, validate=(validate.Length(100)))
+    ordering = fields.Int()
+    owner_user_id = fields.Int()
+    owner_group_id = fields.Int()
+
+
+class EntryCreateSchema(ResourceCreateSchemaMixin):
+    class Meta(object):
+        strict = True
+        ordered = True
+
+    note = fields.Str()
