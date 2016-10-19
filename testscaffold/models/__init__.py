@@ -25,6 +25,7 @@ from testscaffold.models.user_group import UserGroup  # flake8: noqa
 from testscaffold.models.user_permission import UserPermission  # flake8: noqa
 from testscaffold.models.user_resource_permission import \
     UserResourcePermission  # flake8: noqa
+from testscaffold.models.entry import Entry  # flake8: noqa
 
 ziggurat_model_init(User, Group, UserGroup, GroupPermission, UserPermission,
                     UserResourcePermission, GroupResourcePermission, Resource,

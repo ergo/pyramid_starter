@@ -96,9 +96,10 @@ class ResourceCreateSchemaMixin(Schema):
         ordered = True
 
     resource_id = fields.Int(dump_only=True)
-    parent_id = fields.Int(dump_only=True)
     resource_type = fields.Str(dump_only=True)
-    resource_name = fields.Str(required=True, validate=(validate.Length(100)))
+    parent_id = fields.Int()
+    resource_name = fields.Str(required=True, validate=(validate.Length(
+        min=1, max=100)))
     ordering = fields.Int()
     owner_user_id = fields.Int()
     owner_group_id = fields.Int()

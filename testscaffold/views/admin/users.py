@@ -21,13 +21,13 @@ log = logging.getLogger(__name__)
 class AdminUsersViews(object):
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersShared(request)
+        self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/index.jinja2',
                  match_param=('object=users', 'verb=GET'))
     def collection_list(self):
-        user_paginator = self.base_view.collection_list()
-        start_number = (USERS_PER_PAGE * (self.base_view.page - 1) + 1) or 1
+        user_paginator = self.shared.collection_list()
+        start_number = (USERS_PER_PAGE * (self.shared.page - 1) + 1) or 1
         user_grid = UsersGrid(user_paginator,
                               start_number=start_number, request=self.request)
 
@@ -42,7 +42,7 @@ class AdminUsersViews(object):
             request.POST, context={'request': request})
         if request.method == "POST" and user_form.validate():
             user = User()
-            self.base_view.populate_instance(user, user_form.data)
+            self.shared.populate_instance(user, user_form.data)
             user.persist(flush=True, db_session=request.dbsession)
             log.info('users_post', extra={'group_id': user.id,
                                           'group_name': user.user_name})
@@ -58,7 +58,7 @@ class AdminUsersViews(object):
 class AdminUserViews(object):
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersShared(request)
+        self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
                  match_param=('object=users', 'verb=GET'))
@@ -66,7 +66,7 @@ class AdminUserViews(object):
                  match_param=('object=users', 'verb=PATCH'))
     def get_patch(self):
         request = self.request
-        user = self.base_view.user_get(self.request.matchdict['object_id'])
+        user = self.shared.user_get(self.request.matchdict['object_id'])
         permission_form = DirectPermissionForm(
             request.POST, context={'request': request})
         permissions_grid = UserPermissionsGrid(
@@ -77,7 +77,7 @@ class AdminUserViews(object):
                                              'modified_obj': user})
 
         if request.method == "POST" and user_form.validate():
-            self.base_view.populate_instance(user, user_form.data)
+            self.shared.populate_instance(user, user_form.data)
 
         return {"user": user,
                 "user_form": user_form,
@@ -94,12 +94,12 @@ class AdminUserViews(object):
         request_method='POST')
     def delete(self):
         request = self.request
-        user = self.base_view.user_get(self.request.matchdict['object_id'])
+        user = self.shared.user_get(self.request.matchdict['object_id'])
         back_url = request.route_url('admin_objects', object='users',
                                      verb='GET')
 
         if request.method == "POST":
-            self.base_view.delete(user)
+            self.shared.delete(user)
             return pyramid.httpexceptions.HTTPFound(location=back_url)
 
         return {"parent_obj": user,
@@ -117,14 +117,14 @@ class AdminUserRelationsView(object):
 
     def __init__(self, request):
         self.request = request
-        self.base_view = UsersShared(request)
+        self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
                  match_param=['object=users', 'relation=permissions',
                               'verb=POST'])
     def permission_post(self):
         request = self.request
-        user = self.base_view.user_get(request.matchdict['object_id'])
+        user = self.shared.user_get(request.matchdict['object_id'])
         user_form = UserAdminUpdateForm(
             request.POST, obj=user,
             context={'request': request, 'modified_obj': user}
@@ -136,7 +136,7 @@ class AdminUserRelationsView(object):
 
         if request.method == "POST" and permission_form.validate():
             permission_name = permission_form.permission.data
-            self.base_view.permission_post(user, permission_name)
+            self.shared.permission_post(user, permission_name)
             url = request.route_url('admin_object', object='users',
                                     object_id=user.id, verb='GET')
             return pyramid.httpexceptions.HTTPFound(location=url)
@@ -158,15 +158,15 @@ class AdminUserRelationsView(object):
         request_method="POST")
     def permission_delete(self):
         request = self.request
-        user = self.base_view.user_get(request.matchdict['object_id'])
-        permission = self.base_view.permission_get(
+        user = self.shared.user_get(request.matchdict['object_id'])
+        permission = self.shared.permission_get(
             user, request.GET.get('permission'))
         back_url = request.route_url(
             'admin_object', object='users', object_id=user.id,
             verb='GET')
 
         if request.method == "POST":
-            self.base_view.permission_delete(user, permission)
+            self.shared.permission_delete(user, permission)
             return pyramid.httpexceptions.HTTPFound(location=back_url)
 
         return {"parent_obj": user,

@@ -59,7 +59,8 @@ class UsersShared(object):
         log.info('user_populate_instance',
                  extra={'action': 'updated',
                         'x': datetime.now(),
-                        'y': datetime.utcnow().date()})
+                        'y': datetime.utcnow().date(),
+                        'user_id': instance.id})
         if data.get('password'):
             # set hashed password
             instance.set_password(data['password'])
