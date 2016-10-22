@@ -26,14 +26,14 @@ class GroupsShared(object):
 
     def group_get(self, obj_id):
         request = self.request
-        group = GroupService.by_id(obj_id, db_session=request.dbsession)
+        group = GroupService.get(obj_id, db_session=request.dbsession)
         if not group:
             raise pyramid.httpexceptions.HTTPNotFound()
         return group
 
     def user_get(self, obj_id):
         request = self.request
-        user = UserService.by_id(obj_id, db_session=request.dbsession)
+        user = UserService.get(obj_id, db_session=request.dbsession)
         if not user:
             raise pyramid.httpexceptions.HTTPNotFound()
         return user

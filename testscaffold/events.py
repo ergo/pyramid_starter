@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 
 class EmailEvent(object):
-    """ When emitted the application with email recipients with an email
+    """ When emitted the application will send email to recipients that is
     generated from specified template
     """
 

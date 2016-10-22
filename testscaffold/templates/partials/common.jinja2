@@ -18,7 +18,7 @@
                 </li>
             {% endif %}
             {% for page in link_map['range_pages'] %}
-            <li class="{{ page['attrs']['class']}}"><a href="{{ page.href }}">{{ page.value }}</a></li>
+            <li class="{{ page['attrs'].get('class')}}"><a href="{{ page.href }}">{{ page.value }}</a></li>
             {% endfor %}
             {% if paginator.page < paginator.last_page %}
                 <li>

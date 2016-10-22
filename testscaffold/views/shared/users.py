@@ -13,10 +13,8 @@ from ziggurat_foundations.models.services.user_permission import \
 from testscaffold.util import safe_integer
 from testscaffold.models.user_permission import UserPermission
 from testscaffold.services.user import UserService
-from testscaffold.validation.schemes import UserSearchSchema
 
 USERS_PER_PAGE = 50
-
 
 log = logging.getLogger(__name__)
 
@@ -30,10 +28,9 @@ class UsersShared(object):
         self.request = request
         self.page = None
 
-    def collection_list(self):
+    def collection_list(self, page=1, filter_params=None):
         request = self.request
-        self.page = safe_integer(request.GET.get('page', 1))
-        filter_params = UserSearchSchema().load(request.GET.mixed()).data
+        self.page = page
         user_paginator = UserService.get_paginator(
             page=self.page,
             items_per_page=USERS_PER_PAGE,
@@ -46,8 +43,8 @@ class UsersShared(object):
 
     def user_get(self, user_id):
         request = self.request
-        user = UserService.by_id(safe_integer(user_id),
-                                 db_session=request.dbsession)
+        user = UserService.get(safe_integer(user_id),
+                               db_session=request.dbsession)
         if not user:
             raise pyramid.httpexceptions.HTTPNotFound()
 

@@ -3,8 +3,9 @@ from __future__ import absolute_import
 
 import logging
 
-from testscaffold.util import safe_integer
+import pyramid.httpexceptions
 
+from testscaffold.util import safe_integer
 from testscaffold.services.entry import EntryService
 
 ENTRIES_PER_PAGE = 50
@@ -21,10 +22,8 @@ class EntriesShared(object):
         self.request = request
         self.page = None
 
-    def collection_list(self):
+    def collection_list(self, page=1, filter_params=None):
         request = self.request
-        self.page = safe_integer(request.GET.get('page', 1))
-        filter_params = request.GET.mixed()
         entry_paginator = EntryService.get_paginator(
             page=self.page,
             items_per_page=ENTRIES_PER_PAGE,
@@ -41,9 +40,18 @@ class EntriesShared(object):
         log.info('entry_populate_instance',
                  extra={'action': 'updated', 'entry_id': instance.resource_id})
 
+    def entry_get(self, entry_id):
+        request = self.request
+        entry = EntryService.get(safe_integer(entry_id),
+                                 db_session=request.dbsession)
+        if not entry:
+            raise pyramid.httpexceptions.HTTPNotFound()
+
+        return entry
+
     def delete(self, instance):
-        log.info('entry_delete', extra={'entry_id': instance.id,
-                                        'entry_name': instance.entry_name})
+        log.info('entry_delete', extra={'entry_id': instance.resource_id,
+                                        'entry_name': instance.resource_id})
         instance.delete(self.request.dbsession)
         self.request.session.flash({'msg': 'Entry removed.',
                                     'level': 'success'})

@@ -13,6 +13,15 @@ log = logging.getLogger(__name__)
 class EntryService(RService):
 
     @classmethod
+    def get(cls, entry_id, db_session=None):
+        """ get entry by primary key from session """
+        if not entry_id:
+            return None
+        db_session = get_db_session(db_session)
+        query = db_session.query(cls.model)
+        return query.get(entry_id)
+
+    @classmethod
     def total_count(cls, db_session=None):
         db_session = get_db_session(db_session)
         return db_session.query(Entry).count()

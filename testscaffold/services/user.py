@@ -11,6 +11,16 @@ log = logging.getLogger(__name__)
 
 
 class UserService(UService):
+
+    @classmethod
+    def get(cls, user_id, db_session=None):
+        """ get user by primary key from session """
+        if not user_id:
+            return None
+        db_session = get_db_session(db_session)
+        query = db_session.query(cls.model)
+        return query.get(user_id)
+
     @classmethod
     def latest_registered_user(cls, db_session=None):
         db_session = get_db_session(db_session)

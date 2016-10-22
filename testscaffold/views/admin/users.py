@@ -8,6 +8,7 @@ from pyramid.view import view_config, view_defaults
 
 from testscaffold.grids import UsersGrid, UserPermissionsGrid
 from testscaffold.models.user import User
+from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (
     UserAdminCreateForm,
     UserAdminUpdateForm,
@@ -26,7 +27,8 @@ class AdminUsersViews(object):
     @view_config(renderer='testscaffold:templates/admin/users/index.jinja2',
                  match_param=('object=users', 'verb=GET'))
     def collection_list(self):
-        user_paginator = self.shared.collection_list()
+        page = safe_integer(self.request.GET.get('page', 1))
+        user_paginator = self.shared.collection_list(page=page)
         start_number = (USERS_PER_PAGE * (self.shared.page - 1) + 1) or 1
         user_grid = UsersGrid(user_paginator,
                               start_number=start_number, request=self.request)
