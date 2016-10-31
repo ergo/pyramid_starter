@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import datetime
+import warnings
 
 from pyramid_authstack import AuthenticationStackPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
@@ -86,5 +87,8 @@ def main(global_config, **settings):
     # setup dogpile cache
     cache_regions.regions = cache_regions.CacheRegions(settings)
     config.registry.cache_regions = cache_regions.regions
+
+    if not config.registry.settings.get('testscaffold.ignore_warnings', True):
+        warnings.filterwarnings('default')
 
     return config.make_wsgi_app()
