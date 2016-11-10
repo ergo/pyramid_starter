@@ -3,8 +3,14 @@ from __future__ import absolute_import, unicode_literals
 
 from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
+from ziggurat_foundations.models.services.resource import ResourceService
+from ziggurat_foundations.models.services.resource import (
+    ZigguratResourceOutOfBoundaryException,
+    ZigguratResourceTreeMissingException,
+    ZigguratResourceTreePathException, noop)
 
-from marshmallow import (Schema, fields, validate, validates, pre_load)
+from marshmallow import (Schema, fields, validate, validates, pre_load,
+                         validates_schema)
 
 user_regex_error = 'Username can only consist of ' \
                    'alphanumerical characters, hypens and underscores'
@@ -103,6 +109,65 @@ class ResourceCreateSchemaMixin(Schema):
     ordering = fields.Int()
     owner_user_id = fields.Int(dump_only=True)
     owner_group_id = fields.Int(dump_only=True)
+
+    @pre_load()
+    def populate_ordering(self, data):
+        request = self.context['request']
+        if not data.get('ordering'):
+            data['ordering'] = ResourceService.count_children(
+                None, db_session=request.dbsession) + 1
+
+    @validates('parent_id')
+    def validate_parent_id(self, value):
+        request = self.context['request']
+        resource = self.context.get('modified_obj')
+        new_parent_id = value
+        if not new_parent_id:
+            return True
+
+        resource_id = resource.resource_id if resource else None
+        if resource_id is None:
+            return True
+
+        try:
+            ResourceService.check_node_parent(
+                resource_id, new_parent_id, db_session=request.dbsession)
+        except ZigguratResourceTreeMissingException:
+            msg = 'New parent node not found'
+            raise validate.ValidationError(msg)
+        except ZigguratResourceTreePathException:
+            msg = 'Trying to insert node into itself'
+            raise validate.ValidationError(msg)
+
+    @validates_schema
+    def validate_ordering(self, data):
+        request = self.context['request']
+        resource = self.context.get('modified_obj')
+        new_parent_id = data.get('parent_id') or noop
+        to_position = data.get('ordering')
+        if not to_position or to_position == 1:
+            return
+
+        same_branch = False
+
+        # reset if parent is same as old
+        if resource and new_parent_id == resource.parent_id:
+            new_parent_id = noop
+
+        if new_parent_id is noop:
+            same_branch = True
+
+        if resource:
+            parent_id = resource.parent_id if new_parent_id is noop else new_parent_id
+        else:
+            parent_id = new_parent_id if new_parent_id is not noop else None
+        try:
+            ResourceService.check_node_position(
+                parent_id, to_position, on_same_branch=same_branch,
+                db_session=request.dbsession)
+        except ZigguratResourceOutOfBoundaryException:
+            msg = 'Too small or too big parent_id'
+            raise validate.ValidationError(msg)
 
 
 class EntryCreateSchemaAdmin(ResourceCreateSchemaMixin):
