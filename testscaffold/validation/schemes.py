@@ -124,9 +124,8 @@ class ResourceCreateSchemaMixin(Schema):
         new_parent_id = value
         if not new_parent_id:
             return True
-
         resource_id = resource.resource_id if resource else None
-        if resource_id is None:
+        if new_parent_id is None:
             return True
 
         try:
@@ -166,7 +165,7 @@ class ResourceCreateSchemaMixin(Schema):
                 parent_id, to_position, on_same_branch=same_branch,
                 db_session=request.dbsession)
         except ZigguratResourceOutOfBoundaryException:
-            msg = 'Too small or too big parent_id'
+            msg = 'Resource ordering not in range'
             raise validate.ValidationError(msg)
 
 

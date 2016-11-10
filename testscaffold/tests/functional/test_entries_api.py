@@ -50,9 +50,11 @@ class TestFunctionalAPIEntries(object):
         headers = {str('x-testscaffold-auth-token'): str(token)}
         full_app.post_json(url_path, status=422, headers=headers)
 
-    @pytest.mark.parametrize("test_input,error_keys", [
+    @pytest.mark.parametrize("test_input, error_keys", [
         ({}, ['resource_name']),
-        ({'parent_id': 'v'}, ['resource_name', 'parent_id'])
+        ({'parent_id': 'v'}, ['resource_name', 'parent_id']),
+        ({'ordering': 5, 'resource_name': 'x'}, ['_schema', ]),
+        ({'parent_id': 5}, ['resource_name', 'parent_id']),
     ])
     def test_entry_create_bad_json(self, full_app, sqla_session,
                                    test_input, error_keys):
@@ -79,6 +81,7 @@ class TestFunctionalAPIEntries(object):
         response = full_app.post_json(url_path, entry_dict, status=200,
                                       headers=headers)
         assert response.json['resource_id'] > 0
+        assert response.json['ordering'] == 1
         assert entry_dict['resource_name'] == response.json['resource_name']
         assert entry_dict['note'] == response.json['note']
 
