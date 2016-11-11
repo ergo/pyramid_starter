@@ -6,6 +6,8 @@ import logging
 
 from pyramid.view import view_config, view_defaults
 
+from ziggurat_foundations.models.services.resource import ResourceService
+
 from testscaffold.models.entry import Entry
 from testscaffold.validation.schemes import EntryCreateSchemaAdmin
 from testscaffold.views.shared.entries import EntriesShared
@@ -42,6 +44,11 @@ class EntriesAPIView(object):
         resource = Entry()
         self.shared.populate_instance(resource, data)
         resource.persist(flush=True, db_session=self.request.dbsession)
+        position = data.get('ordering')
+        if position is not None:
+            ResourceService.set_position(
+                resource_id=resource.resource_id, to_position=position,
+                db_session=self.request.dbsession)
         return schema.dump(resource).data
 
     @view_config(request_method="PATCH")

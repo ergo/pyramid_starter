@@ -7,7 +7,7 @@ from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.models.services.resource import (
     ZigguratResourceOutOfBoundaryException,
     ZigguratResourceTreeMissingException,
-    ZigguratResourceTreePathException, noop)
+    ZigguratResourceTreePathException, noparent)
 
 from marshmallow import (Schema, fields, validate, validates, pre_load,
                          validates_schema)
@@ -110,13 +110,6 @@ class ResourceCreateSchemaMixin(Schema):
     owner_user_id = fields.Int(dump_only=True)
     owner_group_id = fields.Int(dump_only=True)
 
-    @pre_load()
-    def populate_ordering(self, data):
-        request = self.context['request']
-        if not data.get('ordering'):
-            data['ordering'] = ResourceService.count_children(
-                None, db_session=request.dbsession) + 1
-
     @validates('parent_id')
     def validate_parent_id(self, value):
         request = self.context['request']
@@ -131,18 +124,16 @@ class ResourceCreateSchemaMixin(Schema):
         try:
             ResourceService.check_node_parent(
                 resource_id, new_parent_id, db_session=request.dbsession)
-        except ZigguratResourceTreeMissingException:
-            msg = 'New parent node not found'
-            raise validate.ValidationError(msg)
-        except ZigguratResourceTreePathException:
-            msg = 'Trying to insert node into itself'
-            raise validate.ValidationError(msg)
+        except ZigguratResourceTreeMissingException as exc:
+            raise validate.ValidationError(str(exc))
+        except ZigguratResourceTreePathException as exc:
+            raise validate.ValidationError(str(exc))
 
     @validates_schema
     def validate_ordering(self, data):
         request = self.context['request']
         resource = self.context.get('modified_obj')
-        new_parent_id = data.get('parent_id') or noop
+        new_parent_id = data.get('parent_id') or noparent
         to_position = data.get('ordering')
         if not to_position or to_position == 1:
             return
@@ -151,22 +142,21 @@ class ResourceCreateSchemaMixin(Schema):
 
         # reset if parent is same as old
         if resource and new_parent_id == resource.parent_id:
-            new_parent_id = noop
+            new_parent_id = noparent
 
-        if new_parent_id is noop:
+        if new_parent_id is noparent and resource:
             same_branch = True
 
         if resource:
-            parent_id = resource.parent_id if new_parent_id is noop else new_parent_id
+            parent_id = resource.parent_id if new_parent_id is noparent else new_parent_id
         else:
-            parent_id = new_parent_id if new_parent_id is not noop else None
+            parent_id = new_parent_id if new_parent_id is not noparent else None
         try:
             ResourceService.check_node_position(
                 parent_id, to_position, on_same_branch=same_branch,
                 db_session=request.dbsession)
-        except ZigguratResourceOutOfBoundaryException:
-            msg = 'Resource ordering not in range'
-            raise validate.ValidationError(msg)
+        except ZigguratResourceOutOfBoundaryException as exc:
+            raise validate.ValidationError(str(exc))
 
 
 class EntryCreateSchemaAdmin(ResourceCreateSchemaMixin):
