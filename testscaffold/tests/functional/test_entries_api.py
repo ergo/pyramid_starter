@@ -197,6 +197,31 @@ class TestFunctionalAPIEntries(object):
         assert [n['node'].resource_id for n in l_b_nodes] == [4]
         assert [n['node'].resource_id for n in l_ac_nodes] == [9]
 
+    def test_entry_no_parent_no_order(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+        url_path = '/api/0.1/entries'
+
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        entry_dict = {
+            'id': -9999,
+            'resource_name': 'some-new-entry',
+            'note': 'text'
+        }
+        response = full_app.post_json(url_path, entry_dict, status=200,
+                                      headers=headers)
+        from ziggurat_foundations.models.services.resource import \
+            ResourceService
+        result = ResourceService.from_parent_deeper(
+            None, db_session=sqla_session, limit_depth=1)
+        tree_struct = ResourceService.build_subtree_strut(result)['children']
+        pprint.pprint(tree_struct)
+        assert response.json['resource_id'] > 0
+        assert response.json['ordering'] == 4
+        new_id = response.json['resource_id']
+        assert [i for i in tree_struct.keys()] == [-1, -2, -3, new_id]
+
     def test_entry_no_parent_middle(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
@@ -221,8 +246,12 @@ class TestFunctionalAPIEntries(object):
 
         assert response.json['resource_id'] > 0
         assert response.json['ordering'] == 2
+        new_id = response.json['resource_id']
+        assert [i for i in tree_struct.keys()] == [-1, new_id, -2, -3]
 
     def test_entry_no_parent_last(self, full_app, sqla_session):
+        from ziggurat_foundations.models.services.resource import \
+            ResourceService
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_default_tree(db_session=sqla_session)
@@ -237,8 +266,13 @@ class TestFunctionalAPIEntries(object):
         }
         response = full_app.post_json(url_path, entry_dict, status=200,
                                       headers=headers)
+        result = ResourceService.from_parent_deeper(
+            None, db_session=sqla_session, limit_depth=1)
+        tree_struct = ResourceService.build_subtree_strut(result)['children']
         assert response.json['resource_id'] > 0
         assert response.json['ordering'] == 4
+        new_id = response.json['resource_id']
+        assert [i for i in tree_struct.keys()] == [-1, -2, -3, new_id]
 
     def test_entry_no_parent_too_high(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
@@ -256,6 +290,23 @@ class TestFunctionalAPIEntries(object):
         response = full_app.post_json(url_path, entry_dict, status=422,
                                       headers=headers)
         assert '4' in response.json['_schema'][0]
+
+    def test_entry_no_parent_too_low(self, full_app, sqla_session):
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+        url_path = '/api/0.1/entries'
+
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        entry_dict = {
+            'id': -9999,
+            'resource_name': 'some-new-entry',
+            'note': 'text',
+            'ordering': 0
+        }
+        response = full_app.post_json(url_path, entry_dict, status=422,
+                                      headers=headers)
+        assert '1' in response.json['_schema'][0]
 
     def test_entry_no_parent_too_low(self, full_app, sqla_session):
         from ziggurat_foundations.models.services.resource import \
@@ -281,3 +332,24 @@ class TestFunctionalAPIEntries(object):
                                       headers=headers)
         pprint.pprint(response.json)
         assert '1' in response.json['_schema'][0]
+
+    def test_entry_patch_order_same_branch(self, full_app, sqla_session):
+        from ziggurat_foundations.models.services.resource import \
+            ResourceService
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+
+        url_path = '/api/0.1/entries/{}'.format(-2)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        entry_dict = {
+            'ordering': 3
+        }
+        response = full_app.patch_json(url_path, entry_dict, status=200,
+                                       headers=headers)
+        result = ResourceService.from_parent_deeper(
+            None, db_session=sqla_session)
+        tree_struct = ResourceService.build_subtree_strut(result)['children']
+        pprint.pprint(tree_struct)
+        assert response.json['ordering'] == 3
+        assert [i for i in tree_struct.keys()] == [-1, -3, -2]

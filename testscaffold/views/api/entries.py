@@ -49,6 +49,14 @@ class EntriesAPIView(object):
             ResourceService.set_position(
                 resource_id=resource.resource_id, to_position=position,
                 db_session=self.request.dbsession)
+        else:
+            # this accounts for the newly inserted row so the total_children
+            # will be max+1 position for new row
+            total_children = ResourceService.count_children(
+                resource.parent_id, db_session=self.request.dbsession)
+            ResourceService.set_position(
+                resource_id=resource.resource_id, to_position=total_children,
+                db_session=self.request.dbsession)
         return schema.dump(resource).data
 
     @view_config(request_method="PATCH")
@@ -58,6 +66,10 @@ class EntriesAPIView(object):
             context={'request': self.request, 'modified_obj': entry})
         data = schema.load(self.request.unsafe_json_body, partial=True).data
         self.shared.populate_instance(entry, data)
+        if data.get('ordering') or data.get('parent_id'):
+            ResourceService.move_to_position(
+                resource_id=entry.resource_id, new_parent_id=entry.parent_id,
+                to_position=entry.ordering, db_session=self.request.dbsession)
         return schema.dump(entry).data
 
     @view_config(request_method="DELETE")
