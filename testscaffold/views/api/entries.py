@@ -7,12 +7,14 @@ import logging
 from pyramid.view import view_config, view_defaults
 
 from ziggurat_foundations.models.services.resource import ResourceService
+from ziggurat_foundations import noop, noparent
 
 from testscaffold.models.entry import Entry
 from testscaffold.validation.schemes import EntryCreateSchemaAdmin
 from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.util import safe_integer
 from testscaffold.util.request import gen_pagination_headers
+from testscaffold.services.resource_tree_service import tree_service
 
 log = logging.getLogger(__name__)
 
@@ -46,15 +48,15 @@ class EntriesAPIView(object):
         resource.persist(flush=True, db_session=self.request.dbsession)
         position = data.get('ordering')
         if position is not None:
-            ResourceService.set_position(
+            tree_service.set_position(
                 resource_id=resource.resource_id, to_position=position,
                 db_session=self.request.dbsession)
         else:
             # this accounts for the newly inserted row so the total_children
             # will be max+1 position for new row
-            total_children = ResourceService.count_children(
+            total_children = tree_service.count_children(
                 resource.parent_id, db_session=self.request.dbsession)
-            ResourceService.set_position(
+            tree_service.set_position(
                 resource_id=resource.resource_id, to_position=total_children,
                 db_session=self.request.dbsession)
         return schema.dump(resource).data
@@ -65,11 +67,15 @@ class EntriesAPIView(object):
         schema = EntryCreateSchemaAdmin(
             context={'request': self.request, 'modified_obj': entry})
         data = schema.load(self.request.unsafe_json_body, partial=True).data
+        # we need to ensure we are not overwriting the values
+        # before move_to_position is invoked
+        ordering = data.pop('ordering', noop)
+        parent_id = data.pop('parent_id', noparent)
         self.shared.populate_instance(entry, data)
-        if data.get('ordering') or data.get('parent_id'):
-            ResourceService.move_to_position(
-                resource_id=entry.resource_id, new_parent_id=entry.parent_id,
-                to_position=entry.ordering, db_session=self.request.dbsession)
+        if ordering is not noop or parent_id is not noparent:
+            tree_service.move_to_position(
+                resource_id=entry.resource_id, new_parent_id=parent_id,
+                to_position=ordering, db_session=self.request.dbsession)
         return schema.dump(entry).data
 
     @view_config(request_method="DELETE")

@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from ziggurat_foundations.models.services.user import UserService
-from ziggurat_foundations.models.services.group import GroupService
-from ziggurat_foundations.models.services.resource import ResourceService
-from ziggurat_foundations.models.services.resource import (
+from ziggurat_foundations.exc import (
     ZigguratResourceOutOfBoundaryException,
     ZigguratResourceTreeMissingException,
-    ZigguratResourceTreePathException, noparent)
+    ZigguratResourceTreePathException
+)
+from ziggurat_foundations import noparent
+from ziggurat_foundations.models.services.user import UserService
+from ziggurat_foundations.models.services.group import GroupService
+from ziggurat_foundations.models.services.resource import (
+    ResourceService
+)
+from testscaffold.services.resource_tree_service import tree_service
 
 from marshmallow import (Schema, fields, validate, validates, pre_load,
                          validates_schema)
@@ -122,7 +127,7 @@ class ResourceCreateSchemaMixin(Schema):
             return True
 
         try:
-            ResourceService.check_node_parent(
+            tree_service.check_node_parent(
                 resource_id, new_parent_id, db_session=request.dbsession)
         except ZigguratResourceTreeMissingException as exc:
             raise validate.ValidationError(str(exc))
@@ -135,7 +140,7 @@ class ResourceCreateSchemaMixin(Schema):
         resource = self.context.get('modified_obj')
         new_parent_id = data.get('parent_id') or noparent
         to_position = data.get('ordering')
-        if not to_position or to_position == 1:
+        if to_position is None or to_position == 1:
             return
 
         same_branch = False
@@ -152,7 +157,7 @@ class ResourceCreateSchemaMixin(Schema):
         else:
             parent_id = new_parent_id if new_parent_id is not noparent else None
         try:
-            ResourceService.check_node_position(
+            tree_service.check_node_position(
                 parent_id, to_position, on_same_branch=same_branch,
                 db_session=request.dbsession)
         except ZigguratResourceOutOfBoundaryException as exc:
