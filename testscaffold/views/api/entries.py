@@ -81,5 +81,6 @@ class EntriesAPIView(object):
     @view_config(request_method="DELETE")
     def delete(self):
         entry = self.shared.entry_get(self.request.matchdict['object_id'])
-        self.shared.delete(entry)
+        tree_service.delete_branch(
+            entry.resource_id, db_session=self.request.dbsession)
         return True
