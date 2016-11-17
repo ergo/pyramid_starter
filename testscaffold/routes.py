@@ -12,6 +12,7 @@ def includeme(config):
                      '/admin/{object}/{object_id}/{relation}/verb/{verb}')
 
     config.add_route('register', '/register')
+    config.add_route('language', '/language/{language}')
     config.add_route('lost_password', '/lost_password')
     config.add_route('lost_password_generate', '/lost_password_generate')
     config.add_route('social_auth', '/social_auth/{provider}')

@@ -1,6 +1,9 @@
 from __future__ import absolute_import
+
 import logging
 import pyramid.httpexceptions
+
+from pyramid.i18n import TranslationStringFactory
 from ziggurat_foundations.models.services.group_permission import \
     GroupPermissionService
 
@@ -10,6 +13,8 @@ from testscaffold.services.group import GroupService
 from testscaffold.services.user import UserService
 
 log = logging.getLogger(__name__)
+
+_ = TranslationStringFactory('testscaffold')
 
 
 class GroupsShared(object):
@@ -53,8 +58,8 @@ class GroupsShared(object):
         log.info('group_delete', extra={'group_id': instance.id,
                                         'group_name': instance.group_name})
         instance.delete(self.request.dbsession)
-        self.request.session.flash({'msg': 'Group removed.',
-                                    'level': 'success'})
+        self.request.session.flash(
+            {'msg': _('Group removed.'), 'level': 'success'})
 
     def permission_post(self, group, permission):
         try:
@@ -66,8 +71,8 @@ class GroupsShared(object):
                             'permission': permission})
             permission_inst = GroupPermission(perm_name=permission)
             group.permissions.append(permission_inst)
-            self.request.session.flash({'msg': 'Permission granted for group.',
-                                        'level': 'success'})
+            self.request.session.flash(
+                {'msg': _('Permission granted for group.'), 'level': 'success'})
         return permission
 
     def permission_delete(self, group, permission):
@@ -80,13 +85,13 @@ class GroupsShared(object):
                             'permission': permission})
             group.permissions.remove(permission_inst)
             self.request.session.flash(
-                {'msg': 'Permission withdrawn from group.',
+                {'msg': _('Permission withdrawn from group.'),
                  'level': 'success'})
 
     def user_post(self, group, user):
         if user not in group.users:
             group.users.append(user)
-            self.request.session.flash({'msg': 'User added to group.',
+            self.request.session.flash({'msg': _('User added to group.'),
                                         'level': 'success'})
             log.info('group_user_post',
                      extra={'group_id': group.id, 'user': user.id,
@@ -96,7 +101,7 @@ class GroupsShared(object):
     def user_delete(self, group, user):
         if user in group.users:
             group.users.remove(user)
-            self.request.session.flash({'msg': 'User removed from group.',
+            self.request.session.flash({'msg': _('User removed from group.'),
                                         'level': 'success'})
             log.info('group_user_delete',
                      extra={'group_id': group.id, 'user_id': user.id,

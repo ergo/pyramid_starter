@@ -11,6 +11,9 @@ with open(os.path.join(here, 'CHANGES.txt')) as f:
 with open(os.path.join(here, 'requirements.txt')) as f:
     REQUIREMENTS = f.readlines()
 
+with open(os.path.join(here, 'requirements-dev.txt')) as f:
+    REQUIREMENTS_DEV = f.readlines()
+
 compiled = re.compile('([^=><]*).*')
 
 
@@ -20,11 +23,7 @@ def parse_req(req):
 requires = filter(None, map(parse_req, REQUIREMENTS))
 
 
-tests_require = [
-    'WebTest >= 1.3.1',  # py3 compat
-    'pytest',  # includes virtualenv
-    'pytest-cov',
-    ]
+requires_dev = filter(None, map(parse_req, REQUIREMENTS_DEV))
 
 setup(name='testscaffold',
       version='0.0',
@@ -44,7 +43,7 @@ setup(name='testscaffold',
       include_package_data=True,
       zip_safe=False,
       extras_require={
-          'testing': tests_require,
+          'testing': requires_dev,
       },
       install_requires=requires,
       entry_points={

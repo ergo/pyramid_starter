@@ -6,6 +6,7 @@ import logging
 from datetime import datetime
 
 import pyramid.httpexceptions
+from pyramid.i18n import TranslationStringFactory
 
 from ziggurat_foundations.models.services.user_permission import \
     UserPermissionService
@@ -17,6 +18,8 @@ from testscaffold.services.user import UserService
 USERS_PER_PAGE = 50
 
 log = logging.getLogger(__name__)
+
+_ = TranslationStringFactory('testscaffold')
 
 
 class UsersShared(object):
@@ -87,8 +90,8 @@ class UsersShared(object):
                             'permission': permission})
             permission_inst = UserPermission(perm_name=permission)
             user.user_permissions.append(permission_inst)
-            self.request.session.flash({'msg': 'Permission granted for user.',
-                                        'level': 'success'})
+            self.request.session.flash(
+                {'msg': _('Permission granted for user.'), 'level': 'success'})
         return permission
 
     def permission_delete(self, user, permission):
@@ -101,5 +104,5 @@ class UsersShared(object):
                             'permission': permission})
             user.user_permissions.remove(permission_inst)
             self.request.session.flash(
-                {'msg': 'Permission withdrawn from user.',
+                {'msg': _('Permission withdrawn from user.'),
                  'level': 'success'})

@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 from pyramid.events import subscriber, BeforeRender, NewRequest
+from pyramid.i18n import TranslationStringFactory
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
 from pyramid.renderers import render
@@ -13,6 +14,8 @@ from ziggurat_foundations.models.services.external_identity import \
 from testscaffold.events import EmailEvent, SocialAuthEvent
 from testscaffold.models.external_identity import ExternalIdentity
 from testscaffold.validation.forms import UserLoginForm
+
+_ = TranslationStringFactory('testscaffold')
 
 
 @subscriber(EmailEvent)
@@ -38,8 +41,8 @@ def handle_social_data(event):
 
     if not social_data['user']['id']:
         request.session.flash(
-            'No external user id found? Perhaps permissions for '
-            'authentication are set incorrectly', 'error')
+            _('No external user id found? Perhaps permissions for '
+              'authentication are set incorrectly'), 'error')
         return False
 
     extng_id = ExternalIdentityService.by_external_id_and_provider(
@@ -55,8 +58,8 @@ def handle_social_data(event):
 
     if not extng_id or update_identity:
         if not update_identity:
-            request.session.flash({'msg': 'Your external identity is now '
-                                          'connected with your account',
+            request.session.flash({'msg': _('Your external identity is now '
+                                            'connected with your account'),
                                    'level': 'warning'})
         ex_identity = ExternalIdentity()
         ex_identity.external_id = social_data['user']['id']
@@ -75,7 +78,8 @@ def add_globals(event):
     flash_messages = request.session.pop_flash()
     event['flash_messages'] = flash_messages
     event['base_url'] = request.registry.settings['base_url']
-    request.response.headers[str('x-flash-messages')] = json.dumps(flash_messages)
+    request.response.headers[str('x-flash-messages')] = json.dumps(
+        flash_messages)
     # we only need to instantiate the form if user is unlogged
     if hasattr(request, 'user') and not request.user:
         event['layout_login_form'] = UserLoginForm(
@@ -88,7 +92,8 @@ def add_globals(event):
 def new_request(event):
     environ = event.request.environ
     event.request.response.headers[str('X-Frame-Options')] = str('SAMEORIGIN')
-    event.request.response.headers[str('X-XSS-Protection')] = str('1; mode=block')
+    event.request.response.headers[str('X-XSS-Protection')] = str(
+        '1; mode=block')
     if environ['wsgi.url_scheme'] == 'https':
         event.request.response.set_cookie(
             'XSRF-TOKEN', event.request.session.get_csrf_token(), secure=True)
@@ -96,4 +101,5 @@ def new_request(event):
         event.request.response.set_cookie(
             'XSRF-TOKEN', event.request.session.get_csrf_token())
     if event.request.user:
-        event.request.response.headers[str('x-uid')] = str(event.request.user.id)
+        event.request.response.headers[str('x-uid')] = str(
+            event.request.user.id)

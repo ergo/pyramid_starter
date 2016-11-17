@@ -4,7 +4,9 @@ from __future__ import absolute_import, unicode_literals
 import logging
 import pyramid.httpexceptions
 
+from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
+
 from testscaffold.grids import (
     GroupsGrid,
     UsersGroupsGrid,
@@ -18,6 +20,8 @@ from testscaffold.views.api.groups import GROUPS_PER_PAGE
 from testscaffold.views.shared.groups import GroupsShared
 
 log = logging.getLogger(__name__)
+
+_ = TranslationStringFactory('testscaffold')
 
 
 @view_defaults(route_name='admin_objects', permission='admin_groups')
@@ -51,7 +55,7 @@ class AdminGroupsView(object):
             group.persist(flush=True, db_session=request.dbsession)
             log.info('groups_post', extra={'group_id': group.id,
                                            'group_name': group.group_name})
-            request.session.flash({'msg': 'Group created.',
+            request.session.flash({'msg': _('Group created.'),
                                    'level': 'success'})
             location = request.route_url('admin_objects', object='groups',
                                          verb='GET')
@@ -89,7 +93,7 @@ class AdminGroupView(object):
         if request.method == "POST" and group_form.validate():
             self.shared.populate_instance(group,
                                              group_form.data)
-            request.session.flash({'msg': 'Group updated.',
+            request.session.flash({'msg': _('Group updated.'),
                                    'level': 'success'})
             url = request.route_url(
                 'admin_object', object='groups',

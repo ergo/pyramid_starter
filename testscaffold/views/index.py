@@ -2,8 +2,9 @@
 from __future__ import absolute_import, unicode_literals
 import logging
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from pyramid.httpexceptions import HTTPFound
+from pyramid.i18n import TranslationStringFactory
 from pyramid.response import Response
 from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.view import view_config
@@ -16,12 +17,14 @@ from testscaffold.validation.forms import (UserCreateForm,
 
 log = logging.getLogger(__name__)
 
+_ = TranslationStringFactory('testscaffold')
+
 
 @view_config(route_name='/', renderer='testscaffold:templates/index.jinja2')
 def index(request):
     login_form = UserLoginForm(request.POST, context={'request': request})
     log.warning('index', extra={'foo': 'xxx'})
-
+    log.info('locale', extra={'locale': request.locale_name})
     return {'login_form': login_form}
 
 
@@ -42,17 +45,17 @@ def lost_password(request):
             user.security_code_date = datetime.utcnow()
             email_vars = {'user': user,
                           'request': request,
-                          'email_title': "testscaffold :: "
-                                         "New password request"}
+                          'email_title': _("testscaffold :: "
+                                           "New password request")}
 
             ev = EmailEvent(
                 request, recipients=[user.email], tmpl_vars=email_vars,
                 tmpl_loc='testscaffold:templates/emails/lost_password.jinja2')
             request.registry.notify(ev)
-            msg = {'msg': 'Password reset email had been sent. '
-                          'Please check your mailbox for further instructions.'
-                          'If you can\'t see the message please check '
-                          'your spam box.',
+            msg = {'msg': _('Password reset email had been sent. '
+                            'Please check your mailbox for further instructions.'
+                            'If you can\'t see the message please check '
+                            'your spam box.'),
                    'level': 'success'}
             request.session.flash(msg)
             return HTTPFound(location=request.route_url('lost_password'))
@@ -82,7 +85,7 @@ def lost_password_generate(request):
         form = UserNewPasswordForm(request.POST, context={'context': request})
         if request.method == "POST" and form.validate():
             user.set_password(form.password.data)
-            msg = {'msg': 'You can sign in with your new password.',
+            msg = {'msg': _('You can sign in with your new password.'),
                    'level': 'success'}
             request.session.flash(msg)
             return HTTPFound(location=request.route_url('register'))
@@ -142,7 +145,7 @@ def register(request):
         new_user.status = 1
         new_user.set_password(new_user.password)
         new_user.registration_ip = request.environ.get('REMOTE_ADDR')
-        log.info('register', extra={'new_user':new_user.user_name})
+        log.info('register', extra={'new_user': new_user.user_name})
 
         # bind 3rd party identity
         if social_data:
@@ -150,13 +153,13 @@ def register(request):
                                                     social_data))
 
         email_vars = {'user': new_user,
-                      'email_title': "testscaffold :: Start information"}
+                      'email_title': _("testscaffold :: Start information")}
         ev = EmailEvent(request,
                         recipients=[new_user.email], tmpl_vars=email_vars,
                         tmpl_loc='testscaffold:'
                                  'templates/emails/registered.jinja2')
         request.registry.notify(ev)
-        request.session.flash({'msg': 'You have successfully registered.',
+        request.session.flash({'msg': _('You have successfully registered.'),
                                'level': 'success'})
         headers = remember(request, new_user.id)
         return HTTPFound(location=request.route_url('/'),
@@ -165,3 +168,14 @@ def register(request):
         "registration_form": registration_form,
         'login_form': login_form
     }
+
+
+@view_config(route_name='language', renderer='json',
+             permission=NO_PERMISSION_REQUIRED)
+def set_language_cookie(request):
+    selected_language = request.matchdict.get('language', 'en')
+    came_from = request.params.get('came_from', '/')
+    resp = HTTPFound(location=request.route_url('/'))
+    request.response.set_cookie(
+        '_LOCALE_', selected_language, max_age=timedelta(days=365))
+    return request.response.merge_cookies(resp)

@@ -7,7 +7,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Add a new user to <strong>{{group}}</strong></h3>
+            <h3 class="panel-title">{% trans %}Add a new user to{% endtrans %} <strong>{{group}}</strong></h3>
         </div>
         <div class="panel-body" data-ng-controller="UserListController as userCtrl">
             <form data-ng-submit="userCtrl.assignUserToGroup({{group.id}})">
@@ -15,17 +15,17 @@
                        data-uib-typeahead="user as user.user_name for user in userCtrl.getUsers($viewValue)"
                        data-typeahead-loading="userCtrl.loadingUsers"
                        data-typeahead-no-results="userCtrl.noResults" class="form-control">
-                <button type="submit" class="btn btn-info">Assign user</button>
-                <i data-ng-show="userCtrl.loadingUsers"> Loading </i>
+                <button type="submit" class="btn btn-info">{% trans %}Assign user{% endtrans %}</button>
+                <i data-ng-show="userCtrl.loadingUsers"> {% trans %}Loading{% endtrans %} </i>
 
-                <div data-ng-show="userCtrl.noResults"><i>No Results Found</i></div>
+                <div data-ng-show="userCtrl.noResults"><i>{% trans %}No Results Found{% endtrans %}</i></div>
             </form>
         </div>
     </div>
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Members of <strong>{{group}}</strong></h3>
+            <h3 class="panel-title">{% trans %}Members of{% endtrans %} <strong>{{group}}</strong></h3>
         </div>
         <div class="panel-body">
             <table class="table">

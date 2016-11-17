@@ -1,6 +1,6 @@
 repoze.sendmail==4.1
 sqlalchemy>=1.0.12
-ziggurat_foundations>=0.6.8
+ziggurat_foundations>=0.7.0
 celery>=3.1.23
 redis>=2.10.3
 psycopg2>=2.6

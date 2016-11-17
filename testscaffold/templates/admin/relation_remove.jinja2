@@ -8,15 +8,15 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">
-                Confirm operation
+                {% trans %}Confirm operation{% endtrans %}
             </h3>
         </div>
         <div class="panel-body text-center">
             <p>
             {% if member_obj is none %}
-                Delete <strong>{{parent_obj}}</strong>?
+                {% trans %}Delete{% endtrans %} <strong>{{parent_obj}}</strong>?
             {% else %}
-                Delete membership of <strong>{{member_obj}}</strong> in <strong>{{parent_obj}}</strong>?
+                {% trans %}Delete membership of{% endtrans %} <strong>{{member_obj}}</strong> {% trans %}in{% endtrans %} <strong>{{parent_obj}}</strong>?
             {% endif %}
             </p>
 
@@ -24,7 +24,7 @@
                 <input type="hidden" value="{{request.session.get_csrf_token()}}" name="csrf_token" />
                 <a href="{{back_url}}" class="btn btn-primary">Back</a>
 
-                <button class="btn btn-danger">Confirm</button>
+                <button class="btn btn-danger">{% trans %}Confirm{% endtrans %}</button>
             </form>
         </div>
     </div>

@@ -19,6 +19,8 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
 
+    settings.setdefault('jinja2.i18n.domain', 'testscaffold')
+
     stacked_policy = AuthenticationStackPolicy()
     auth_tkt = AuthTktAuthenticationPolicy(settings['auth_tkt.seed'],
                                            callback=groupfinder)
@@ -33,6 +35,8 @@ def main(global_config, **settings):
                           authentication_policy=stacked_policy,
                           authorization_policy=authorization_policy,
                           root_factory='testscaffold.security.RootFactory')
+    config.add_translation_dirs('locale/')
+
     # modify json renderer
     json_renderer = JSON(indent=4)
 

@@ -1,20 +1,38 @@
 {% extends "testscaffold:templates/admin/layout.jinja2" %}
 
 {% block content %}
-<div class="col-md-9">
+    <div class="col-md-9">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Application statistics</h3>
-        </div>
-        <div class="panel-body">
-            <p>Registered users: <strong>{{ total_registered_users }}</strong></p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Application
+                    statistics{% endtrans %}</h3>
+            </div>
+            <div class="panel-body">
+                <p>{% trans %}Registered users{% endtrans %}:
+                    <strong>{{ total_registered_users }}</strong></p>
 
-            <p>Last registered: <strong>{{ latest_registered_user.user_name if latest_registered_user else 'No one registered yet'}}</strong>
-            </p>
+                <p>{% trans %}Last registered{% endtrans %}:
+                    <strong>
+                        {% if latest_registered_user %}
+                            {{ latest_registered_user.user_name }}
+                        {% else %}
+                            {% trans %}No one registered yet
+                            {% endtrans %}
+                        {% endif %}
+                    </strong>
+                </p>
 
-            <p>Last logged: <strong>{{ latest_logged_user.user_name if latest_logged_user else 'No one logged in yet'}}</strong></p>
+                <p>{% trans %}Last logged{% endtrans %}:
+                    <strong>
+                        {% if latest_logged_user %}
+                            {{ latest_logged_user.user_name }}
+                        {% else %}
+                            {% trans %}No one logged in yet
+                            {% endtrans %}
+                        {% endif %}
+                    </strong></p>
+            </div>
         </div>
     </div>
-</div>
 {% endblock content %}

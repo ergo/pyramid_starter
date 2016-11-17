@@ -3,6 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 import wtforms
 import marshmallow
+
+from pyramid.i18n import TranslationStringFactory
+
 from testscaffold.validation import ZigguratForm
 from testscaffold.validation.schemes import (UserCreateSchema,
                                              UserEditSchema,
@@ -13,6 +16,8 @@ from testscaffold.models.user import User
 
 def strip_filter(value):
     return value.strip() if value else None
+
+_ = TranslationStringFactory('testscaffold')
 
 
 def validate_marshmallow_partial(schema):
@@ -31,19 +36,19 @@ def validate_marshmallow_partial(schema):
 
 class UserCreateForm(ZigguratForm):
     user_name = wtforms.StringField(
-        "User name",
+        _("User name"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
             validate_marshmallow_partial(UserCreateSchema)])
     password = wtforms.PasswordField(
-        "Password",
+        _("Password"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
             validate_marshmallow_partial(UserCreateSchema)])
     email = wtforms.StringField(
-        "Email",
+        _("Email"),
         filters=[strip_filter],
         validators=[wtforms.validators.InputRequired(),
                     validate_marshmallow_partial(UserCreateSchema)])
@@ -51,13 +56,13 @@ class UserCreateForm(ZigguratForm):
 
 class UserLoginForm(ZigguratForm):
     login = wtforms.StringField(
-        "Login",
+        _("Login"),
         filters=[strip_filter],
         validators=[wtforms.validators.InputRequired(),
                     wtforms.validators.Length(min=3)])
 
     password = wtforms.PasswordField(
-        "Password",
+        _("Password"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
@@ -66,7 +71,7 @@ class UserLoginForm(ZigguratForm):
 
 class UserLostPasswordForm(ZigguratForm):
     email = wtforms.StringField(
-        "Email",
+        _("Email"),
         filters=[strip_filter],
         validators=[wtforms.validators.InputRequired(),
                     wtforms.validators.Email()])
@@ -74,13 +79,13 @@ class UserLostPasswordForm(ZigguratForm):
 
 class UserNewPasswordForm(ZigguratForm):
     password = wtforms.PasswordField(
-        "Password",
+        _("Password"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
             validate_marshmallow_partial(UserEditSchema)])
     password_confirm = wtforms.PasswordField(
-        "Confirm password",
+        _("Confirm password"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
@@ -93,7 +98,7 @@ class UserAdminCreateForm(UserCreateForm):
 
 class UserAdminUpdateForm(UserAdminCreateForm):
     password = wtforms.PasswordField(
-        "Password",
+        _("Password"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.Optional(),
@@ -102,14 +107,14 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
 class GroupUpdateForm(ZigguratForm):
     group_name = wtforms.StringField(
-        "name",
+        _("Name"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
             validate_marshmallow_partial(GroupEditSchema)])
 
     description = wtforms.TextAreaField(
-        "description",
+        _("Description"),
         filters=[strip_filter],
         validators=[
             wtforms.validators.InputRequired(),
@@ -124,5 +129,5 @@ for permission in User.__possible_permissions__:
 
 
 class DirectPermissionForm(ZigguratForm):
-    permission = wtforms.SelectField('Permission',
+    permission = wtforms.SelectField(_('Permission'),
                                      choices=group_permission_choices)

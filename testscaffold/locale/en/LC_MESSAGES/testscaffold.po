@@ -1,0 +1,172 @@
+#
+# English translations for PACKAGE package
+# This file is distributed under the same license as the PACKAGE package.
+# ergo <info@appenlight.com>, 2016.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE 1.0\n"
+"POT-Creation-Date: 2016-11-17 12:29+0100\n"
+"PO-Revision-Date: 2016-11-17 12:52+0100\n"
+"Last-Translator: ergo <info@appenlight.com>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Generated-By: Lingua 3.8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: testscaffold/subscribers.py:44
+msgid ""
+"No external user id found? Perhaps permissions for authentication are set "
+"incorrectly"
+msgstr ""
+"No external user id found? Perhaps permissions for authentication are set "
+"incorrectly"
+
+#: testscaffold/subscribers.py:61
+msgid "Your external identity is now connected with your account"
+msgstr "Your external identity is now connected with your account"
+
+#: testscaffold/views/index.py:156
+msgid "testscaffold :: Start information"
+msgstr "testscaffold :: Start information"
+
+#: testscaffold/views/index.py:48
+msgid "testscaffold :: New password request"
+msgstr "testscaffold :: New password request"
+
+#: testscaffold/views/index.py:55
+msgid ""
+"Password reset email had been sent. Please check your mailbox for further "
+"instructions.If you can't see the message please check your spam box."
+msgstr ""
+"Password reset email had been sent. Please check your mailbox for further "
+"instructions.If you can't see the message please check your spam box."
+
+#: testscaffold/views/index.py:88
+msgid "You can sign in with your new password."
+msgstr "You can sign in with your new password."
+
+#: testscaffold/views/index.py:162
+msgid "You have successfully registered."
+msgstr "You have successfully registered."
+
+#: testscaffold/views/auth.py:87
+msgid ""
+"Something went wrong when accessing third party provider - please try again"
+msgstr ""
+"Something went wrong when accessing third party provider - please try again"
+
+#: testscaffold/views/auth.py:35
+msgid "Signed in"
+msgstr "Signed in"
+
+#: testscaffold/views/auth.py:62
+msgid "Signed out"
+msgstr "Signed out"
+
+#: testscaffold/views/auth.py:138
+msgid ""
+"You need to finish registration process to bind your external identity to "
+"your account or sign in to existing account"
+msgstr ""
+"You need to finish registration process to bind your external identity to "
+"your account or sign in to existing account"
+
+#: testscaffold/views/admin/users.py:55
+msgid "User created."
+msgstr "User created."
+
+#: testscaffold/views/admin/groups.py:58
+msgid "Group created."
+msgstr "Group created."
+
+#: testscaffold/views/admin/groups.py:96
+msgid "Group updated."
+msgstr "Group updated."
+
+#: testscaffold/views/admin/celery.py:34
+msgid "Task sent"
+msgstr "Task sent"
+
+#: testscaffold/views/shared/users.py:107
+msgid "Permission withdrawn from user."
+msgstr "Permission withdrawn from user."
+
+#: testscaffold/views/shared/users.py:94
+msgid "Permission granted for user."
+msgstr "Permission granted for user."
+
+#: testscaffold/views/shared/entries.py:59
+msgid "Entry removed."
+msgstr "Entry removed."
+
+#: testscaffold/views/shared/groups.py:62
+msgid "Group removed."
+msgstr "Group removed."
+
+#: testscaffold/views/shared/groups.py:88
+msgid "Permission withdrawn from group."
+msgstr "Permission withdrawn from group."
+
+#: testscaffold/views/shared/groups.py:94
+msgid "User added to group."
+msgstr "User added to group."
+
+#: testscaffold/views/shared/groups.py:104
+msgid "User removed from group."
+msgstr "User removed from group."
+
+#: testscaffold/views/shared/groups.py:75
+msgid "Permission granted for group."
+msgstr "Permission granted for group."
+
+#: testscaffold/validation/schemes.py:48
+msgid "Only administrator can change usernames"
+msgstr "Only administrator can change usernames"
+
+#: testscaffold/validation/schemes.py:52
+msgid "User already exists in database"
+msgstr "User already exists in database"
+
+#: testscaffold/validation/schemes.py:62
+msgid "Email already exists in database"
+msgstr "Email already exists in database"
+
+#: testscaffold/validation/schemes.py:101
+msgid "Group already exists in database"
+msgstr "Group already exists in database"
+
+#: testscaffold/validation/forms.py:39
+msgid "User name"
+msgstr "User name"
+
+#: testscaffold/validation/forms.py:45 testscaffold/validation/forms.py:65
+#: testscaffold/validation/forms.py:82 testscaffold/validation/forms.py:101
+msgid "Password"
+msgstr "Password"
+
+#: testscaffold/validation/forms.py:51 testscaffold/validation/forms.py:74
+msgid "Email"
+msgstr "Email"
+
+#: testscaffold/validation/forms.py:59
+msgid "Login"
+msgstr "Login"
+
+#: testscaffold/validation/forms.py:88
+msgid "Confirm password"
+msgstr "Confirm password"
+
+#: testscaffold/validation/forms.py:110
+msgid "Name"
+msgstr "Name"
+
+#: testscaffold/validation/forms.py:117
+msgid "Description"
+msgstr "Description"
+
+#: testscaffold/validation/forms.py:132
+msgid "Permission"
+msgstr "Permission"

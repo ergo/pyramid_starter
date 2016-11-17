@@ -5,8 +5,9 @@ import logging
 
 from datetime import datetime
 from authomatic.adapters import WebObAdapter
-from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.httpexceptions import HTTPFound
+from pyramid.i18n import TranslationStringFactory
+from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.view import view_config
 
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInSuccess
@@ -19,6 +20,8 @@ from testscaffold.events import SocialAuthEvent
 
 log = logging.getLogger(__name__)
 
+_ = TranslationStringFactory('testscaffold')
+
 
 def shared_sign_in(request, user, headers, came_from=None):
     """ Shared among sign_in and social_auth views"""
@@ -29,7 +32,7 @@ def shared_sign_in(request, user, headers, came_from=None):
 
     log.info('shared_sign_in', extra={'user': user})
 
-    request.session.flash({'msg': 'Signed in', 'level': 'success'})
+    request.session.flash({'msg': _('Signed in'), 'level': 'success'})
     # if social data is still present bind the account
     social_data = request.session.get('zigg.social_auth')
     if social_data:
@@ -56,7 +59,7 @@ def bad_auth(request):
 
 @view_config(context=ZigguratSignOut, permission=NO_PERMISSION_REQUIRED)
 def sign_out(request):
-    request.session.flash({'msg': 'Signed out', 'level': 'success'})
+    request.session.flash({'msg': _('Signed out'), 'level': 'success'})
     return HTTPFound(location=request.route_url('/'),
                      headers=request.context.headers)
 
@@ -81,8 +84,8 @@ def handle_auth_error(request, result):
     # Login procedure finished with an error.
     request.session.pop('zigg.social_auth', None)
     log.error('social_auth', extra={'error': result.error.message})
-    msg = {'msg': 'Something went wrong when accessing third party '
-                  'provider - please try again',
+    msg = {'msg': _('Something went wrong when accessing third party '
+                    'provider - please try again'),
            'level': 'danger'}
     request.session.flash(msg)
     return HTTPFound(location=request.route_url('/'))
@@ -132,10 +135,10 @@ def handle_auth_success(request, result):
             request.session.pop('zigg.social_auth', None)
             return shared_sign_in(request, user, headers)
         else:
-            msg = {'msg': 'You need to finish registration '
-                          'process to bind your external '
-                          'identity to your account or sign in to '
-                          'existing account',
+            msg = {'msg': _('You need to finish registration '
+                            'process to bind your external '
+                            'identity to your account or sign in to '
+                            'existing account'),
                    'level': 'warning'}
             request.session.flash(msg)
             return HTTPFound(location=request.route_url('register'))

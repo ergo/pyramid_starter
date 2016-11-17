@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals
 import logging
 import pyramid.httpexceptions
 
+from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
 from testscaffold.grids import UsersGrid, UserPermissionsGrid
@@ -16,6 +17,8 @@ from testscaffold.validation.forms import (
 from testscaffold.views.shared.users import UsersShared, USERS_PER_PAGE
 
 log = logging.getLogger(__name__)
+
+_ = TranslationStringFactory('testscaffold')
 
 
 @view_defaults(route_name='admin_objects', permission='admin_users')
@@ -48,7 +51,8 @@ class AdminUsersViews(object):
             user.persist(flush=True, db_session=request.dbsession)
             log.info('users_post', extra={'group_id': user.id,
                                           'group_name': user.user_name})
-            request.session.flash({'msg': 'User created.', 'level': 'success'})
+            request.session.flash(
+                {'msg': _('User created.'), 'level': 'success'})
             location = request.route_url('admin_objects', object='users',
                                          verb='GET')
             return pyramid.httpexceptions.HTTPFound(location=location)

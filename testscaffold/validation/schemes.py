@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from pyramid.i18n import TranslationStringFactory
+
 from ziggurat_foundations.exc import (
     ZigguratResourceOutOfBoundaryException,
     ZigguratResourceTreeMissingException,
@@ -9,13 +11,12 @@ from ziggurat_foundations.exc import (
 from ziggurat_foundations import noparent
 from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
-from ziggurat_foundations.models.services.resource import (
-    ResourceService
-)
 from testscaffold.services.resource_tree_service import tree_service
 
 from marshmallow import (Schema, fields, validate, validates, pre_load,
                          validates_schema)
+
+_ = TranslationStringFactory('testscaffold')
 
 user_regex_error = 'Username can only consist of ' \
                    'alphanumerical characters, hypens and underscores'
@@ -44,11 +45,11 @@ class UserCreateSchema(Schema):
         user = UserService.by_user_name(value, db_session=request.dbsession)
         by_admin = request.has_permission('root_administrator')
         if modified_obj and not by_admin:
-            msg = 'Only administrator can change usernames'
+            msg = _('Only administrator can change usernames')
             raise validate.ValidationError(msg)
         if user:
             if not modified_obj or modified_obj.id != user.id:
-                msg = 'User already exists in database'
+                msg = _('User already exists in database')
                 raise validate.ValidationError(msg)
 
     @validates('email')
@@ -58,7 +59,7 @@ class UserCreateSchema(Schema):
         user = UserService.by_email(value, db_session=request.dbsession)
         if user:
             if not modified_obj or modified_obj.id != user.id:
-                msg = 'Email already exists in database'
+                msg = _('Email already exists in database')
                 raise validate.ValidationError(msg)
 
 
@@ -97,7 +98,7 @@ class GroupEditSchema(Schema):
         group = GroupService.by_group_name(value, db_session=request.dbsession)
         if group:
             if not modified_obj or modified_obj.id != group.id:
-                msg = 'Group already exists in database'
+                msg = _('Group already exists in database')
                 raise validate.ValidationError(msg)
 
 

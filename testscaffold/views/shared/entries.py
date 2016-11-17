@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import logging
 
 import pyramid.httpexceptions
+from pyramid.i18n import TranslationStringFactory
 
 from testscaffold.util import safe_integer
 from testscaffold.services.entry import EntryService
@@ -11,6 +12,8 @@ from testscaffold.services.entry import EntryService
 ENTRIES_PER_PAGE = 50
 
 log = logging.getLogger(__name__)
+
+_ = TranslationStringFactory('testscaffold')
 
 
 class EntriesShared(object):
@@ -53,5 +56,5 @@ class EntriesShared(object):
         log.info('entry_delete', extra={'entry_id': instance.resource_id,
                                         'entry_name': instance.resource_id})
         instance.delete(self.request.dbsession)
-        self.request.session.flash({'msg': 'Entry removed.',
+        self.request.session.flash({'msg': +_('Entry removed.'),
                                     'level': 'success'})

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{request.locale_name}}" data-ng-app="demoApp">
+<html lang="{{ request.locale_name }}" data-ng-app="demoApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,13 +11,21 @@
     <title>Ziggurat Scaffold for The Pyramid Web Framework</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+    <link
+        href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+        rel="stylesheet">
 
     <!-- Custom styles for this scaffold -->
-    <link href="{{request.static_url('testscaffold:static/theme.css')}}" rel="stylesheet">
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.2/ui-bootstrap-tpls.min.js"></script>
+    <link href="{{ request.static_url('testscaffold:static/theme.css') }}"
+          rel="stylesheet">
+    <script
+        src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script
+        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.2/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript">
         var BASE_URL = '{{request.route_url('/')[:-1]}}';
         var API_BASE_URL = '{{request.route_url('api_objects', version='0.1', object='O')[:-2]}}';
@@ -33,8 +41,21 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Test Scaffold</a>
+            <a class="navbar-brand" href="#">{% trans %}Test
+                Scaffold{% endtrans %}</a>
         </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li><a
+                href="{{ request.route_url('language', language='en', _query={'came_from':request.current_route_url()}) }}">
+                EN</a>
+            </li>
+            <li><a
+                href="{{ request.route_url('language', language='pl', _query={'came_from':request.current_route_url()}) }}">
+                PL</a>
+            </li>
+        </ul>
+
     </div>
 </nav>
 
@@ -43,16 +64,17 @@
     {% include 'testscaffold:templates/layout_login.jinja2' %}
 
     {% for flash in flash_messages %}
-        <div class="alert alert-{{flash['level']}}" role="alert">{{flash['msg']}}</div>
+        <div class="alert alert-{{ flash['level'] }}"
+             role="alert">{{ flash['msg'] }}</div>
     {% endfor %}
     {% block outer_content %}
-    <div class="row">
-        <div class="col-md-12">
-            {% block content %}
-            <p>No content</p>
-            {% endblock content %}
+        <div class="row">
+            <div class="col-md-12">
+                {% block content %}
+                    <p>{% trans %}No content{% endtrans %}</p>
+                {% endblock content %}
+            </div>
         </div>
-    </div>
     {% endblock outer_content %}
 
 </div> <!-- /container -->
