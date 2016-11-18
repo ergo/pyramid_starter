@@ -28,7 +28,7 @@
 
         <form action="{{request.route_url('register')}}" method="POST">
             {{form.render_form(registration_form)}}
-            <button type="submit" class="btn btn-default">Register</button>
+            <button type="submit" class="btn btn-default">{% trans %}Register{% endtrans %}</button>
         </form>
     </div>
 </div>

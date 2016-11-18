@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 13:30+0100\n"
-"PO-Revision-Date: 2016-11-18 13:19+0100\n"
+"POT-Creation-Date: 2016-11-18 14:13+0100\n"
+"PO-Revision-Date: 2016-11-18 14:11+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -129,7 +129,7 @@ msgstr "Użytkownik usunięty z grupy"
 
 #: testscaffold/templates/layout.jinja2:45
 msgid "Some project name"
-msgstr ""
+msgstr "Nazwa projektu"
 
 #: testscaffold/templates/layout.jinja2:75
 msgid "No content"
@@ -143,6 +143,10 @@ msgstr "Zalogowano jako"
 msgid "Administration panel"
 msgstr "Panel administracyjny"
 
+#: testscaffold/templates/layout_login.jinja2:15
+msgid "Sign out"
+msgstr "Wyloguj się"
+
 #: testscaffold/templates/layout_login.jinja2:25
 #: testscaffold/templates/auth/register.jinja2:19
 msgid "Login via social account"
@@ -152,14 +156,17 @@ msgstr "Zaloguj się przez konto społecznościowe"
 msgid "Log in"
 msgstr "Zaloguj się"
 
+#: testscaffold/templates/layout_login.jinja2:39
+msgid "Log In "
+msgstr "Zaloguj się"
+
 #: testscaffold/templates/layout_login.jinja2:40
-#: testscaffold/templates/auth/register.jinja2:27
-msgid "Register"
-msgstr "Rejestracja"
+msgid "Register here"
+msgstr "Rejestruj się"
 
 #: testscaffold/templates/layout_login.jinja2:41
 msgid "Forgot password?"
-msgstr "Potwierdź hasło"
+msgstr "Zgubione hasło?"
 
 #: testscaffold/templates/index.jinja2:6
 msgid "This is the index page content"
@@ -351,6 +358,11 @@ msgstr "Zaloguj się"
 msgid "Return to index page"
 msgstr "Powróć do strony głównej"
 
+#: testscaffold/templates/auth/register.jinja2:27
+#: testscaffold/templates/auth/register.jinja2:31
+msgid "Register"
+msgstr "Rejestruj się"
+
 #: testscaffold/templates/auth/lost_password.jinja2:8
 msgid "Lost Password"
 msgstr "Zapomniane hasło"
@@ -423,17 +435,3 @@ msgstr "Opis"
 #: testscaffold/validation/forms.py:132
 msgid "Permission"
 msgstr "Uprawnienie"
-
-#~ msgid "Delete membership of"
-#~ msgstr "Usuń połączenie między"
-
-#~ msgid "in"
-#~ msgstr "w"
-
-#~ msgid "Add permission"
-#~ msgstr "Uprawnienie"
-
-#~ msgid ""
-#~ "Send\n"
-#~ "                    task"
-#~ msgstr "Wyślij zdarzenie"
