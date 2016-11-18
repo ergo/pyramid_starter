@@ -22,6 +22,9 @@ _ = TranslationStringFactory('testscaffold')
 
 @view_config(route_name='/', renderer='testscaffold:templates/index.jinja2')
 def index(request):
+    msg = {'msg': _('You can sign in with your new password.'),
+           'level': 'success'}
+    request.session.flash(msg)
     login_form = UserLoginForm(request.POST, context={'request': request})
     log.warning('index', extra={'foo': 'xxx'})
     log.info('locale', extra={'locale': request.locale_name})
@@ -43,10 +46,12 @@ def lost_password(request):
         if user:
             user.regenerate_security_code()
             user.security_code_date = datetime.utcnow()
+            title = _('${project} :: New password request', mapping={
+                'project': 'testscaffold'
+            })
             email_vars = {'user': user,
                           'request': request,
-                          'email_title': _("testscaffold :: "
-                                           "New password request")}
+                          'email_title': title}
 
             ev = EmailEvent(
                 request, recipients=[user.email], tmpl_vars=email_vars,
@@ -152,8 +157,10 @@ def register(request):
             request.registry.notify(SocialAuthEvent(request, new_user,
                                                     social_data))
 
+        title = _("${project} :: Start information",
+                  mapping={'project': 'testscaffold'})
         email_vars = {'user': new_user,
-                      'email_title': _("testscaffold :: Start information")}
+                      'email_title': title}
         ev = EmailEvent(request,
                         recipients=[new_user.email], tmpl_vars=email_vars,
                         tmpl_loc='testscaffold:'

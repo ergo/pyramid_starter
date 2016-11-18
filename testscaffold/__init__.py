@@ -35,7 +35,7 @@ def main(global_config, **settings):
                           authentication_policy=stacked_policy,
                           authorization_policy=authorization_policy,
                           root_factory='testscaffold.security.RootFactory')
-    config.add_translation_dirs('locale/')
+    config.add_translation_dirs('testscaffold:locale/')
 
     # modify json renderer
     json_renderer = JSON(indent=4)

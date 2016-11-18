@@ -13,14 +13,19 @@ Getting Started
 Working with Translations
 -------------------------
 
-Create fresh pot file
+Create pot file
 
     pot-create -c message-extraction.ini \
-            -o testscaffold/locale/testscaffold.pot testscaffold
+    -o testscaffold/locale/testscaffold.pot \
+    --package-name testscaffold testscaffold
 
 create new PO files for specific language:
 
     msginit -l en -o testscaffold/locale/en/LC_MESSAGES/testscaffold.po
+
+update PO files for specific language:
+
+    msgmerge --update testscaffold/locale/en/LC_MESSAGES/testscaffold.po testscaffold/locale/testscaffold.pot
 
 compile translations
 

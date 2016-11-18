@@ -4,15 +4,15 @@
 # ergo <info@appenlight.com>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-11-17 12:29+0100\n"
-"PO-Revision-Date: 2016-11-17 12:52+0100\n"
+"Project-Id-Version: testscaffold 1.0\n"
+"POT-Creation-Date: 2016-11-18 13:10+0100\n"
+"PO-Revision-Date: 2016-11-18 11:33+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en\n"
 "Generated-By: Lingua 3.8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -28,35 +28,31 @@ msgstr ""
 msgid "Your external identity is now connected with your account"
 msgstr "Your external identity is now connected with your account"
 
-#: testscaffold/views/index.py:156
-msgid "testscaffold :: Start information"
-msgstr "testscaffold :: Start information"
-
-#: testscaffold/views/index.py:48
-msgid "testscaffold :: New password request"
-msgstr "testscaffold :: New password request"
-
-#: testscaffold/views/index.py:55
-msgid ""
-"Password reset email had been sent. Please check your mailbox for further "
-"instructions.If you can't see the message please check your spam box."
-msgstr ""
-"Password reset email had been sent. Please check your mailbox for further "
-"instructions.If you can't see the message please check your spam box."
-
-#: testscaffold/views/index.py:88
+#: testscaffold/views/index.py:25 testscaffold/views/index.py:93
 msgid "You can sign in with your new password."
 msgstr "You can sign in with your new password."
 
-#: testscaffold/views/index.py:162
+#: testscaffold/views/index.py:49
+#, fuzzy, python-format
+msgid "${project} :: New password request"
+msgstr "testscaffold :: New password request"
+
+#: testscaffold/views/index.py:60
+msgid ""
+"Password reset email had been sent. Please check your mailbox for further "
+"instructions.If you can't see the message please check your spam box."
+msgstr ""
+"Password reset email had been sent. Please check your mailbox for further "
+"instructions.If you can't see the message please check your spam box."
+
+#: testscaffold/views/index.py:160
+#, fuzzy, python-format
+msgid "${project} :: Start information"
+msgstr "testscaffold :: Start information"
+
+#: testscaffold/views/index.py:169
 msgid "You have successfully registered."
 msgstr "You have successfully registered."
-
-#: testscaffold/views/auth.py:87
-msgid ""
-"Something went wrong when accessing third party provider - please try again"
-msgstr ""
-"Something went wrong when accessing third party provider - please try again"
 
 #: testscaffold/views/auth.py:35
 msgid "Signed in"
@@ -65,6 +61,12 @@ msgstr "Signed in"
 #: testscaffold/views/auth.py:62
 msgid "Signed out"
 msgstr "Signed out"
+
+#: testscaffold/views/auth.py:87
+msgid ""
+"Something went wrong when accessing third party provider - please try again"
+msgstr ""
+"Something went wrong when accessing third party provider - please try again"
 
 #: testscaffold/views/auth.py:138
 msgid ""
@@ -90,13 +92,13 @@ msgstr "Group updated."
 msgid "Task sent"
 msgstr "Task sent"
 
-#: testscaffold/views/shared/users.py:107
-msgid "Permission withdrawn from user."
-msgstr "Permission withdrawn from user."
-
 #: testscaffold/views/shared/users.py:94
 msgid "Permission granted for user."
 msgstr "Permission granted for user."
+
+#: testscaffold/views/shared/users.py:107
+msgid "Permission withdrawn from user."
+msgstr "Permission withdrawn from user."
 
 #: testscaffold/views/shared/entries.py:59
 msgid "Entry removed."
@@ -105,6 +107,10 @@ msgstr "Entry removed."
 #: testscaffold/views/shared/groups.py:62
 msgid "Group removed."
 msgstr "Group removed."
+
+#: testscaffold/views/shared/groups.py:75
+msgid "Permission granted for group."
+msgstr "Permission granted for group."
 
 #: testscaffold/views/shared/groups.py:88
 msgid "Permission withdrawn from group."
@@ -118,9 +124,260 @@ msgstr "User added to group."
 msgid "User removed from group."
 msgstr "User removed from group."
 
-#: testscaffold/views/shared/groups.py:75
-msgid "Permission granted for group."
-msgstr "Permission granted for group."
+#: testscaffold/templates/layout.jinja2:44
+msgid ""
+"Test\n"
+"                Scaffold"
+msgstr ""
+
+#: testscaffold/templates/layout.jinja2:74
+msgid "No content"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:8
+msgid "You are logged as"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:12
+msgid "Administration panel"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:25
+#: testscaffold/templates/auth/register.jinja2:19
+msgid "Login via social account"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:32
+msgid "Log in"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:40
+#: testscaffold/templates/auth/register.jinja2:27
+msgid "Register"
+msgstr ""
+
+#: testscaffold/templates/layout_login.jinja2:41
+#, fuzzy
+msgid "Forgot password?"
+msgstr "Confirm password"
+
+#: testscaffold/templates/index.jinja2:6
+msgid "This is the index page content"
+msgstr ""
+
+#: testscaffold/templates/admin/layout.jinja2:12
+msgid "Back to front page"
+msgstr ""
+
+#: testscaffold/templates/admin/layout.jinja2:15
+msgid "Admin panel"
+msgstr ""
+
+#: testscaffold/templates/admin/layout.jinja2:18
+msgid "List users"
+msgstr ""
+
+#: testscaffold/templates/admin/layout.jinja2:21
+msgid "List groups"
+msgstr ""
+
+#: testscaffold/templates/admin/layout.jinja2:24
+msgid "Celery test"
+msgstr ""
+
+#: testscaffold/templates/admin/celery.jinja2:8
+msgid ""
+"Celery\n"
+"                    test"
+msgstr ""
+
+#: testscaffold/templates/admin/celery.jinja2:12
+msgid ""
+"You can test celery integration\n"
+"                    here"
+msgstr ""
+
+#: testscaffold/templates/admin/celery.jinja2:16
+msgid ""
+"Send\n"
+"                    task"
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:8
+msgid ""
+"Application\n"
+"                    statistics"
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:12
+msgid "Registered users"
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:15
+msgid "Last registered"
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:20
+msgid ""
+"No one registered yet\n"
+"                            "
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:26
+msgid "Last logged"
+msgstr ""
+
+#: testscaffold/templates/admin/index.jinja2:31
+msgid ""
+"No one logged in yet\n"
+"                            "
+msgstr ""
+
+#: testscaffold/templates/admin/relation_remove.jinja2:11
+#, fuzzy
+msgid "Confirm operation"
+msgstr "Confirm password"
+
+#: testscaffold/templates/admin/relation_remove.jinja2:17
+msgid "Delete"
+msgstr ""
+
+#: testscaffold/templates/admin/relation_remove.jinja2:19
+msgid "Delete membership of"
+msgstr ""
+
+#: testscaffold/templates/admin/relation_remove.jinja2:19
+msgid "in"
+msgstr ""
+
+#: testscaffold/templates/admin/relation_remove.jinja2:27
+#, fuzzy
+msgid "Confirm"
+msgstr "Confirm password"
+
+#: testscaffold/templates/admin/users/edit.jinja2:12
+msgid "Create a new user"
+msgstr ""
+
+#: testscaffold/templates/admin/users/edit.jinja2:14
+msgid "Editing "
+msgstr ""
+
+#: testscaffold/templates/admin/users/edit.jinja2:34
+msgid "Create"
+msgstr ""
+
+#: testscaffold/templates/admin/users/edit.jinja2:36
+msgid "Update"
+msgstr ""
+
+#: testscaffold/templates/admin/users/edit.jinja2:49
+#: testscaffold/templates/admin/groups/edit.jinja2:52
+#, fuzzy
+msgid "Permissions"
+msgstr "Permission"
+
+#: testscaffold/templates/admin/users/edit.jinja2:58
+#, fuzzy
+msgid "Add permission"
+msgstr "Permission"
+
+#: testscaffold/templates/admin/users/index.jinja2:9
+msgid "Browse users"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:12
+msgid "Create a new group"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:14
+msgid "Editing"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:29
+msgid "Create group"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:31
+msgid "Update group"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:42
+#, fuzzy
+msgid "Group Members"
+msgstr "Group removed."
+
+#: testscaffold/templates/admin/groups/edit.jinja2:44
+msgid "Add/remove members"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/edit.jinja2:58
+#, fuzzy
+msgid "Add Permission"
+msgstr "Permission"
+
+#: testscaffold/templates/admin/groups/index.jinja2:9
+msgid "Groups"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:10
+msgid "Add a new user to"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:18
+msgid "Assign user"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:19
+msgid "Loading"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:21
+msgid "No Results Found"
+msgstr ""
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:28
+msgid "Members of"
+msgstr ""
+
+#: testscaffold/templates/user/auth_tokens.jinja2:5
+msgid "Authentication tokens"
+msgstr ""
+
+#: testscaffold/templates/auth/register.jinja2:13
+msgid "Log In"
+msgstr ""
+
+#: testscaffold/templates/auth/register.jinja2:15
+#: testscaffold/templates/auth/lost_password.jinja2:14
+msgid "Return to index page"
+msgstr ""
+
+#: testscaffold/templates/auth/lost_password.jinja2:8
+#, fuzzy
+msgid "Lost Password"
+msgstr "Password"
+
+#: testscaffold/templates/auth/lost_password.jinja2:12
+#, fuzzy
+msgid "Get new password"
+msgstr "Confirm password"
+
+#: testscaffold/templates/emails/lost_password.jinja2:1
+msgid "Password change request"
+msgstr ""
+
+#: testscaffold/templates/emails/lost_password.jinja2:2
+msgid "You can generate a new password by clicking following URL:"
+msgstr ""
+
+#: testscaffold/templates/emails/lost_password.jinja2:10
+msgid "This link expires in 10 minutes from the moment you filled in your form"
+msgstr ""
+
+#: testscaffold/templates/emails/lost_password.jinja2:11
+msgid "If you didn't request new password please ignore this email"
+msgstr ""
 
 #: testscaffold/validation/schemes.py:48
 msgid "Only administrator can change usernames"

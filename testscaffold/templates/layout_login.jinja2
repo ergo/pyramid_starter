@@ -22,14 +22,14 @@
 
         <div class="row">
             <div class="col-md-6">
-                <h2>Login via social account</h2>
+                <h2>{% trans %}Login via social account{% endtrans %}</h2>
                 <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-default">Facebook</a>
                 <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-default">Google</a>
                 <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-default">Twitter</a>
 
             </div>
             <div class="col-md-6">
-                <h2>Login</h2>
+                <h2>{% trans %}Log in{% endtrans %}</h2>
 
                 <form action="{{request.route_url('ziggurat.routes.sign_in')}}" method="POST">
                     <div class="form-inline form-group">
