@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 16:53+0100\n"
-"PO-Revision-Date: 2016-11-18 16:57+0100\n"
+"POT-Creation-Date: 2016-11-18 20:41+0100\n"
+"PO-Revision-Date: 2016-11-18 20:41+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -29,6 +29,16 @@ msgstr ""
 #: testscaffold/subscribers.py:61
 msgid "Your external identity is now connected with your account"
 msgstr "Konto zewnętrzne jest teraz połączone z twoim profilem"
+
+#: testscaffold/grids.py:21 testscaffold/grids.py:49 testscaffold/grids.py:77
+msgid "Edit"
+msgstr "Edytuj"
+
+#: testscaffold/grids.py:26 testscaffold/grids.py:55 testscaffold/grids.py:79
+#: testscaffold/grids.py:99 testscaffold/grids.py:120
+#: testscaffold/templates/admin/relation_remove.jinja2:17
+msgid "Delete"
+msgstr "Usuń"
 
 #: testscaffold/views/index.py:51
 #, python-format
@@ -56,18 +66,22 @@ msgstr "${project} :: Informacje startowe"
 msgid "You have successfully registered."
 msgstr "Poprawnie zarejestrowano użytkownika"
 
-#: testscaffold/views/auth.py:51
+#: testscaffold/views/auth.py:43
+msgid "Wrong username or password"
+msgstr "Nieprawidłowa nazwa użytkownika lub hasło"
+
+#: testscaffold/views/auth.py:53
 msgid "Signed out"
 msgstr "Wylogowano"
 
-#: testscaffold/views/auth.py:77
+#: testscaffold/views/auth.py:79
 msgid ""
 "Something went wrong when accessing third party provider - please try again"
 msgstr ""
 "Niestety operacja logowania za pomocą zewnętrznego profilu się nie powiodła "
 "- spróbuj ponownie"
 
-#: testscaffold/views/auth.py:129
+#: testscaffold/views/auth.py:131
 msgid ""
 "You need to finish registration process to bind your external identity to "
 "your account or sign in to existing account"
@@ -75,7 +89,7 @@ msgstr ""
 "Proszę dokończyć proces rejestracji aby połączyć konto zewnętrzne z twoim "
 "profilem"
 
-#: testscaffold/views/auth.py:147
+#: testscaffold/views/auth.py:149
 msgid "Signed in"
 msgstr "Zalogowano"
 
@@ -103,15 +117,15 @@ msgstr "Zaktualizowano użytkownika"
 msgid "User password updated."
 msgstr "Hasło użytkownika zostało zmienione."
 
-#: testscaffold/views/shared/users.py:80
+#: testscaffold/views/shared/users.py:79
 msgid "User removed."
 msgstr "Usunięto użytkownika"
 
-#: testscaffold/views/shared/users.py:103
+#: testscaffold/views/shared/users.py:100
 msgid "Permission granted for user."
 msgstr "Uprawnienie nadano użytkownikowi"
 
-#: testscaffold/views/shared/users.py:118
+#: testscaffold/views/shared/users.py:114
 msgid "Permission withdrawn from user."
 msgstr "Uprawnienie odebrano użytkownikowi"
 
@@ -255,10 +269,6 @@ msgstr "Nikt się jeszcze nie logował"
 msgid "Confirm operation"
 msgstr "Potwierdź hasło"
 
-#: testscaffold/templates/admin/relation_remove.jinja2:17
-msgid "Delete"
-msgstr "Usuń"
-
 #: testscaffold/templates/admin/relation_remove.jinja2:19
 msgid "Delete relation between"
 msgstr "Usuń połączenie pomiędzy"
@@ -392,6 +402,14 @@ msgstr "Zapomniane hasło"
 msgid "Get new password"
 msgstr "Potwierdź hasło"
 
+#: testscaffold/templates/emails/registered.jinja2:12
+msgid "Hi, "
+msgstr "Cześć,"
+
+#: testscaffold/templates/emails/registered.jinja2:14
+msgid "You just registered"
+msgstr "Właśnie się zarejestrowałeś(aś)."
+
 #: testscaffold/templates/emails/lost_password.jinja2:1
 msgid "Password change request"
 msgstr "Prośba o zmianę hasła"
@@ -408,19 +426,31 @@ msgstr "To łącze wygasa po 10 minutach od momentu wypełnienia formularza"
 msgid "If you didn't request new password please ignore this email"
 msgstr "Jeśli nie chcesz generować nowego hasła możesz zignorować tę wiadomość"
 
-#: testscaffold/validation/schemes.py:48
+#: testscaffold/validation/schemes.py:21
+msgid ""
+"Username can only consist of alphanumerical characters, hypens and "
+"underscores"
+msgstr ""
+"Nazwa użytkownika może składać się tylko ze znaków alfanumerycznych, "
+"podkreśleń lub łączników"
+
+#: testscaffold/validation/schemes.py:37
+msgid "Not a valid email"
+msgstr "Nieprawidłowy email"
+
+#: testscaffold/validation/schemes.py:49
 msgid "Only administrator can change usernames"
 msgstr "Tylko administrator może zmieniać nazwy użytkowników"
 
-#: testscaffold/validation/schemes.py:52
+#: testscaffold/validation/schemes.py:53
 msgid "User already exists in database"
 msgstr "Użytkownik istnieje w bazie danych"
 
-#: testscaffold/validation/schemes.py:62
+#: testscaffold/validation/schemes.py:63
 msgid "Email already exists in database"
 msgstr "Email już istnieje w bazie danych"
 
-#: testscaffold/validation/schemes.py:101
+#: testscaffold/validation/schemes.py:102
 msgid "Group already exists in database"
 msgstr "Grupa już istnieje w bazie danych"
 

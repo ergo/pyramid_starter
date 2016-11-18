@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 {% macro render_form(form) -%}
+    {% set translate = form.form_translator %}
+
     {% for field in form %}
         {% if field.type in ['HiddenField','CSRFTokenField'] %}
             <div id="field-{{field.name}}" style="display:none">
@@ -9,7 +11,7 @@
         {% else %}
             {% if field.errors %}
                 {% for error in field.errors %}
-                    <div class="alert alert-warning form-error">{{error}}</div>
+                    <div class="alert alert-warning form-error">{{translate(error)}}</div>
                 {% endfor %}
             {% endif %}
 
@@ -23,14 +25,14 @@
             <div class="form-group" id="field-{{field.name}}">
 
                 <label for="{{field.name}}" id="label-{{field.name}}" class="control-label">
-                    {{field.label.text}}
+                    {{translate(field.label.text)}}
                     {% if field.flags.required and field.label.text %}
                         <span class="required">*</span>
                     {% endif %}
                 </label>
                 {{render_field(form, field)}}
                 {% if field.description %}
-                <p class="description">{{field.description|safe}}</p>
+                <p class="description">{{translate(field.description)|safe}}</p>
                 {% endif %}
             </div>
         {% endif %}

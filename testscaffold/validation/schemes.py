@@ -18,8 +18,8 @@ from marshmallow import (Schema, fields, validate, validates, pre_load,
 
 _ = TranslationStringFactory('testscaffold')
 
-user_regex_error = 'Username can only consist of ' \
-                   'alphanumerical characters, hypens and underscores'
+user_regex_error = _('Username can only consist of '
+                     'alphanumerical characters, hypens and underscores')
 
 
 class UserCreateSchema(Schema):
@@ -33,7 +33,8 @@ class UserCreateSchema(Schema):
                                      validate.Regexp('^[\w-]*$',
                                                      error=user_regex_error)))
     password = fields.Str(required=True, validate=(validate.Length(3)))
-    email = fields.Str(required=True, validate=(validate.Email()))
+    email = fields.Str(required=True,
+                       validate=(validate.Email(error=_('Not a valid email'))))
     status = fields.Int(dump_only=True)
     last_login_date = fields.DateTime(dump_only=True)
     registered_date = fields.DateTime(dump_only=True)

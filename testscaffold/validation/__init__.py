@@ -1,13 +1,63 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
-from pyramid.threadlocal import get_current_request
-from wtforms.ext.csrf.form import SecureForm
-
 from pyramid.exceptions import BadCSRFToken
+from pyramid.i18n import TranslationStringFactory
+from pyramid.threadlocal import get_current_request
+from wtforms.csrf.core import CSRF
+from wtforms import Form
+
+_ = TranslationStringFactory('wtforms')
 
 
-class ZigguratForm(SecureForm):
-    schema_instance = None
+class PyramidCSRF(CSRF):
+    """
+    Reuse tokens from pyramid session
+    """
+
+    def setup_form(self, form):
+        request = form.context.get('request')
+        if request:
+            self.csrf_context = request
+        else:
+            self.csrf_context = get_current_request()
+        return super(PyramidCSRF, self).setup_form(form)
+
+    def generate_csrf_token(self, csrf_token):
+        return self.csrf_context.session.get_csrf_token()
+
+    def validate_csrf_token(self, form, field):
+        if field.data != field.current_token:
+            raise BadCSRFToken('Invalid CSRF token')
+
+
+class PyramidTranslator(object):
+    """
+    Uses pyramid translation machinery for wtforms INTERNAL translation strings
+    """
+
+    def __init__(self, request, domain=None):
+        self.translate = request.localizer.translate
+        self.pluralize = request.localizer.pluralize
+        self.domain = domain
+
+    def gettext(self, string):
+        return self.translate(_(string))
+
+    def ngettext(self, singular, plural, n):
+        return self.pluralize(singular, plural, n)
+
+
+class ZigguratForm(Form):
+    class Meta:
+        csrf = True
+        csrf_class = PyramidCSRF
+
+        def get_translations(self, form):
+            """
+            This will translate internal wtform validators for us
+            """
+            request = form.context.get('request') or get_current_request()
+            return PyramidTranslator(request)
 
     def __init__(self, formdata=None, obj=None, prefix='', context=None,
                  **kwargs):
@@ -15,24 +65,22 @@ class ZigguratForm(SecureForm):
         :param formdata:
         :param obj:
         :param prefix:
-        :param csrf_context: Optional extra data which is passed
-        transparently to your CSRF implementation.
         :param context: Optional extra data which may be handy later in
         validation and processing
         :param kwargs:
         :return:
         """
-        super(SecureForm, self).__init__(formdata, obj, prefix, **kwargs)
         self.context = context
-        self.csrf_token.current_token = self.generate_csrf_token(
-            self.context.get('request'))
         self.obj = obj
+        super(ZigguratForm, self).__init__(formdata, obj, prefix, **kwargs)
 
-    def generate_csrf_token(self, csrf_context):
-        if not csrf_context:
-            csrf_context = get_current_request()
-        return csrf_context.session.get_csrf_token()
-
-    def validate_csrf_token(self, field):
-        if field.data != field.current_token:
-            raise BadCSRFToken()
+    def form_translator(self, string):
+        """
+        Used to translate our in-app form messages and field names
+        It is required because for example marshmallow validator messages will
+        lose metadata (is there any easy fix for that?)
+        :param entry:
+        :return:
+        """
+        request = self.context.get('request') or get_current_request()
+        return request.localizer.translate(_(string), domain='testscaffold')
