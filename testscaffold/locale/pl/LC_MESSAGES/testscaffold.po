@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 13:10+0100\n"
-"PO-Revision-Date: 2016-11-18 13:11+0100\n"
+"POT-Creation-Date: 2016-11-18 13:30+0100\n"
+"PO-Revision-Date: 2016-11-18 13:19+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -127,13 +127,11 @@ msgstr "Użytkownik dodany do grupy"
 msgid "User removed from group."
 msgstr "Użytkownik usunięty z grupy"
 
-#: testscaffold/templates/layout.jinja2:44
-msgid ""
-"Test\n"
-"                Scaffold"
+#: testscaffold/templates/layout.jinja2:45
+msgid "Some project name"
 msgstr ""
 
-#: testscaffold/templates/layout.jinja2:74
+#: testscaffold/templates/layout.jinja2:75
 msgid "No content"
 msgstr "Brak treści"
 
@@ -193,17 +191,15 @@ msgid ""
 "                    test"
 msgstr "Test Celery"
 
-#: testscaffold/templates/admin/celery.jinja2:12
+#: testscaffold/templates/admin/celery.jinja2:13
 msgid ""
 "You can test celery integration\n"
-"                    here"
-msgstr "Możesz przetertować integrację z celery"
+"                        here"
+msgstr "Możesz przetestować integrację z celery"
 
-#: testscaffold/templates/admin/celery.jinja2:16
-msgid ""
-"Send\n"
-"                    task"
-msgstr "Wyślij zdarzenie"
+#: testscaffold/templates/admin/celery.jinja2:19
+msgid "Send task"
+msgstr "Wyślij zadanie"
 
 #: testscaffold/templates/admin/index.jinja2:8
 msgid ""
@@ -213,7 +209,7 @@ msgstr "Statystyki aplikacji"
 
 #: testscaffold/templates/admin/index.jinja2:12
 msgid "Registered users"
-msgstr "Zarjestrowani użytkownicy"
+msgstr "Zarejestrowani użytkownicy"
 
 #: testscaffold/templates/admin/index.jinja2:15
 msgid "Last registered"
@@ -244,18 +240,23 @@ msgid "Delete"
 msgstr "Usuń"
 
 #: testscaffold/templates/admin/relation_remove.jinja2:19
-msgid "Delete membership of"
-msgstr "Usuń połączenie między"
+msgid "Delete relation between"
+msgstr "Usuń połączenie pomiędzy"
 
 #: testscaffold/templates/admin/relation_remove.jinja2:19
-msgid "in"
-msgstr "w"
+msgid "and"
+msgstr "oraz"
+
+#: testscaffold/templates/admin/relation_remove.jinja2:25
+msgid "Back"
+msgstr "Cofnij"
 
 #: testscaffold/templates/admin/relation_remove.jinja2:27
 msgid "Confirm"
-msgstr "Potwierdź hasło"
+msgstr "Potwierdź"
 
 #: testscaffold/templates/admin/users/edit.jinja2:12
+#: testscaffold/templates/admin/users/index.jinja2:15
 msgid "Create a new user"
 msgstr "Stwórz nowego użytkownika"
 
@@ -277,14 +278,15 @@ msgid "Permissions"
 msgstr "Uprawnienie"
 
 #: testscaffold/templates/admin/users/edit.jinja2:58
-msgid "Add permission"
-msgstr "Uprawnienie"
+msgid "Add"
+msgstr "Dodaj"
 
 #: testscaffold/templates/admin/users/index.jinja2:9
 msgid "Browse users"
 msgstr "Przeglądaj użytkowników"
 
 #: testscaffold/templates/admin/groups/edit.jinja2:12
+#: testscaffold/templates/admin/groups/index.jinja2:15
 msgid "Create a new group"
 msgstr "Stwórz nową grupę"
 
@@ -421,3 +423,17 @@ msgstr "Opis"
 #: testscaffold/validation/forms.py:132
 msgid "Permission"
 msgstr "Uprawnienie"
+
+#~ msgid "Delete membership of"
+#~ msgstr "Usuń połączenie między"
+
+#~ msgid "in"
+#~ msgstr "w"
+
+#~ msgid "Add permission"
+#~ msgstr "Uprawnienie"
+
+#~ msgid ""
+#~ "Send\n"
+#~ "                    task"
+#~ msgstr "Wyślij zdarzenie"

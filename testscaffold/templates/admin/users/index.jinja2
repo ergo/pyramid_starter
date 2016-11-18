@@ -11,7 +11,9 @@
         <div class="panel-body">
 
             <p>
-                <a href="{{request.route_url('admin_objects', object="users", verb='POST')}}" class="btn btn-info">Create a new user</a>
+                <a href="{{request.route_url('admin_objects', object="users", verb='POST')}}" class="btn btn-info">
+                    {% trans %}Create a new user{% endtrans %}
+                </a>
             </p>
 
             <div class="text-center">

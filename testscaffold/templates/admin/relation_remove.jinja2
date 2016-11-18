@@ -16,13 +16,13 @@
             {% if member_obj is none %}
                 {% trans %}Delete{% endtrans %} <strong>{{parent_obj}}</strong>?
             {% else %}
-                {% trans %}Delete membership of{% endtrans %} <strong>{{member_obj}}</strong> {% trans %}in{% endtrans %} <strong>{{parent_obj}}</strong>?
+                {% trans %}Delete relation between{% endtrans %} <strong>{{member_obj}}</strong> {% trans %}and{% endtrans %} <strong>{{parent_obj}}</strong>?
             {% endif %}
             </p>
 
             <form action="{{confirm_url}}" method="POST">
                 <input type="hidden" value="{{request.session.get_csrf_token()}}" name="csrf_token" />
-                <a href="{{back_url}}" class="btn btn-primary">Back</a>
+                <a href="{{back_url}}" class="btn btn-primary">{% trans %}Back{% endtrans %}</a>
 
                 <button class="btn btn-danger">{% trans %}Confirm{% endtrans %}</button>
             </form>

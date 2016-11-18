@@ -9,12 +9,15 @@
                     test{% endtrans %}</h3>
             </div>
             <div class="panel-body">
-                <p>{% trans %}You can test celery integration
-                    here{% endtrans %}</p>
-                <p><a
-                    href="{{ request.route_url('admin_objects', object='celery', verb='POST') }}"
-                    class="btn btn-primary">{% trans %}Send
-                    task{% endtrans %}</a></p>
+                <p>
+                    {% trans %}You can test celery integration
+                        here{% endtrans %}
+                </p>
+                <p>
+                    <a href="{{ request.route_url('admin_objects', object='celery', verb='POST') }}"
+                       class="btn btn-primary">
+                        {% trans %}Send task{% endtrans %}
+                    </a></p>
             </div>
         </div>
     </div>
