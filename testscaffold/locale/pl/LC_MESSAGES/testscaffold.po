@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 14:13+0100\n"
+"POT-Creation-Date: 2016-11-18 14:21+0100\n"
 "PO-Revision-Date: 2016-11-18 14:11+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
@@ -30,16 +30,17 @@ msgstr ""
 msgid "Your external identity is now connected with your account"
 msgstr "Konto zewnętrzne jest teraz połączone z twoim profilem"
 
-#: testscaffold/views/index.py:25 testscaffold/views/index.py:93
+#: testscaffold/views/index.py:25 testscaffold/views/index.py:27
+#: testscaffold/views/index.py:94
 msgid "You can sign in with your new password."
 msgstr "Możesz się już logować za pomocą nowego hasła"
 
-#: testscaffold/views/index.py:49
+#: testscaffold/views/index.py:50
 #, python-format
 msgid "${project} :: New password request"
 msgstr "${project} :: Żądanie zmiany hasła"
 
-#: testscaffold/views/index.py:60
+#: testscaffold/views/index.py:61
 msgid ""
 "Password reset email had been sent. Please check your mailbox for further "
 "instructions.If you can't see the message please check your spam box."
@@ -47,12 +48,12 @@ msgstr ""
 "Wysłano informacje potrzebne aby zmienić twoje hasło. Sprawdz swoją skrzynkę "
 "pocztową, jeśli nie widzisz wiadomości sprawdź skrzynkę spam."
 
-#: testscaffold/views/index.py:160
+#: testscaffold/views/index.py:161
 #, python-format
 msgid "${project} :: Start information"
 msgstr "${project} :: Informacje startowe"
 
-#: testscaffold/views/index.py:169
+#: testscaffold/views/index.py:170
 msgid "You have successfully registered."
 msgstr "Poprawnie zarejestrowano użytkownika"
 

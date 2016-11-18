@@ -24,6 +24,7 @@ _ = TranslationStringFactory('testscaffold')
 def index(request):
     msg = {'msg': _('You can sign in with your new password.'),
            'level': 'success'}
+    print(_('You can sign in with your new password.'))
     request.session.flash(msg)
     login_form = UserLoginForm(request.POST, context={'request': request})
     log.warning('index', extra={'foo': 'xxx'})
