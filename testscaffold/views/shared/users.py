@@ -72,48 +72,44 @@ class UsersShared(object):
                  'level': 'success'})
         log.info('user_GET_PATCH', extra={'action': 'password_updated'})
 
+    def delete(self, instance):
+        log.info('user_delete', extra={'user_id': instance.id,
+                                       'user_name': instance.user_name})
+        instance.delete(self.request.dbsession)
+        self.request.session.flash({'msg': self.translate(_('User removed.')),
+                                    'level': 'success'})
 
-def delete(self, instance):
-    log.info('user_delete', extra={'user_id': instance.id,
-                                   'user_name': instance.user_name})
-    instance.delete(self.request.dbsession)
-    self.request.session.flash({'msg': self.translate(_('User removed.')),
-                                'level': 'success'})
+    def permission_get(self, user, permission):
+        permission = UserPermissionService.by_user_and_perm(
+            user.id, permission, db_session=self.request.dbsession)
+        if not permission:
+            raise pyramid.httpexceptions.HTTPNotFound()
+        return permission
 
+    def permission_post(self, user, permission):
+        try:
+            self.permission_get(user, permission)
+        except pyramid.httpexceptions.HTTPNotFound:
+            log.info('user_permission_post',
+                     extra={'user_id': user.id,
+                            'user_name': user.user_name,
+                            'permission': permission})
+            permission_inst = UserPermission(perm_name=permission)
+            user.user_permissions.append(permission_inst)
+            self.request.session.flash(
+                {'msg': self.translate(_('Permission granted for user.')),
+                 'level': 'success'})
+        return permission
 
-def permission_get(self, user, permission):
-    permission = UserPermissionService.by_user_and_perm(
-        user.id, permission, db_session=self.request.dbsession)
-    if not permission:
-        raise pyramid.httpexceptions.HTTPNotFound()
-    return permission
-
-
-def permission_post(self, user, permission):
-    try:
-        self.permission_get(user, permission)
-    except pyramid.httpexceptions.HTTPNotFound:
-        log.info('user_permission_post',
-                 extra={'user_id': user.id,
-                        'user_name': user.user_name,
-                        'permission': permission})
-        permission_inst = UserPermission(perm_name=permission)
-        user.user_permissions.append(permission_inst)
-        self.request.session.flash(
-            {'msg': self.translate(_('Permission granted for user.')),
-             'level': 'success'})
-    return permission
-
-
-def permission_delete(self, user, permission):
-    permission_inst = UserPermissionService.by_user_and_perm(
-        user.id, permission.perm_name, db_session=self.request.dbsession)
-    if permission_inst:
-        log.info('user_permission_delete',
-                 extra={'user_id': user.id,
-                        'user_name': user.user_name,
-                        'permission': permission})
-        user.user_permissions.remove(permission_inst)
-        self.request.session.flash(
-            {'msg': self.translate(_('Permission withdrawn from user.')),
-             'level': 'success'})
+    def permission_delete(self, user, permission):
+        permission_inst = UserPermissionService.by_user_and_perm(
+            user.id, permission.perm_name, db_session=self.request.dbsession)
+        if permission_inst:
+            log.info('user_permission_delete',
+                     extra={'user_id': user.id,
+                            'user_name': user.user_name,
+                            'permission': permission})
+            user.user_permissions.remove(permission_inst)
+            self.request.session.flash(
+                {'msg': self.translate(_('Permission withdrawn from user.')),
+                 'level': 'success'})
