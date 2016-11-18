@@ -11,6 +11,7 @@ from ziggurat_foundations import noop, noparent
 
 from testscaffold.models.entry import Entry
 from testscaffold.validation.schemes import EntryCreateSchemaAdmin
+from testscaffold.views import BaseView
 from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.util import safe_integer
 from testscaffold.util.request import gen_pagination_headers
@@ -22,9 +23,9 @@ log = logging.getLogger(__name__)
 @view_defaults(route_name='api_object', renderer='json',
                permission='admin_users',
                match_param=('object=entries',))
-class EntriesAPIView(object):
+class EntriesAPIView(BaseView):
     def __init__(self, request):
-        self.request = request
+        super(EntriesAPIView, self).__init__(request)
         self.shared = EntriesShared(request)
 
     @view_config(route_name='api_objects', request_method='GET')

@@ -15,6 +15,7 @@ from testscaffold.validation.forms import (
     UserAdminUpdateForm,
     DirectPermissionForm)
 from testscaffold.views.shared.users import UsersShared, USERS_PER_PAGE
+from testscaffold.views import BaseView
 
 log = logging.getLogger(__name__)
 
@@ -22,9 +23,9 @@ _ = TranslationStringFactory('testscaffold')
 
 
 @view_defaults(route_name='admin_objects', permission='admin_users')
-class AdminUsersViews(object):
+class AdminUsersViews(BaseView):
     def __init__(self, request):
-        self.request = request
+        super(AdminUsersViews, self).__init__(request)
         self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/index.jinja2',
@@ -52,7 +53,7 @@ class AdminUsersViews(object):
             log.info('users_post', extra={'group_id': user.id,
                                           'group_name': user.user_name})
             request.session.flash(
-                {'msg': _('User created.'), 'level': 'success'})
+                {'msg': self.translate(_('User created.')), 'level': 'success'})
             location = request.route_url('admin_objects', object='users',
                                          verb='GET')
             return pyramid.httpexceptions.HTTPFound(location=location)
@@ -61,9 +62,9 @@ class AdminUsersViews(object):
 
 
 @view_defaults(route_name='admin_object', permission='admin_users')
-class AdminUserViews(object):
+class AdminUserViews(BaseView):
     def __init__(self, request):
-        self.request = request
+        super(AdminUserViews, self).__init__(request)
         self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
@@ -116,13 +117,13 @@ class AdminUserViews(object):
 
 
 @view_defaults(route_name='admin_object_relation', permission='admin_users')
-class AdminUserRelationsView(object):
+class AdminUserRelationsView(BaseView):
     """
     Handles operations on group properties
     """
 
     def __init__(self, request):
-        self.request = request
+        super(AdminUserRelationsView, self).__init__(request)
         self.shared = UsersShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',

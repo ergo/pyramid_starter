@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 14:21+0100\n"
-"PO-Revision-Date: 2016-11-18 14:11+0100\n"
+"POT-Creation-Date: 2016-11-18 16:53+0100\n"
+"PO-Revision-Date: 2016-11-18 16:57+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -30,17 +30,12 @@ msgstr ""
 msgid "Your external identity is now connected with your account"
 msgstr "Konto zewnętrzne jest teraz połączone z twoim profilem"
 
-#: testscaffold/views/index.py:25 testscaffold/views/index.py:27
-#: testscaffold/views/index.py:94
-msgid "You can sign in with your new password."
-msgstr "Możesz się już logować za pomocą nowego hasła"
-
-#: testscaffold/views/index.py:50
+#: testscaffold/views/index.py:51
 #, python-format
 msgid "${project} :: New password request"
 msgstr "${project} :: Żądanie zmiany hasła"
 
-#: testscaffold/views/index.py:61
+#: testscaffold/views/index.py:63
 msgid ""
 "Password reset email had been sent. Please check your mailbox for further "
 "instructions.If you can't see the message please check your spam box."
@@ -48,31 +43,31 @@ msgstr ""
 "Wysłano informacje potrzebne aby zmienić twoje hasło. Sprawdz swoją skrzynkę "
 "pocztową, jeśli nie widzisz wiadomości sprawdź skrzynkę spam."
 
-#: testscaffold/views/index.py:161
+#: testscaffold/views/index.py:99
+msgid "You can sign in with your new password."
+msgstr "Możesz się już logować za pomocą nowego hasła"
+
+#: testscaffold/views/index.py:166
 #, python-format
 msgid "${project} :: Start information"
 msgstr "${project} :: Informacje startowe"
 
-#: testscaffold/views/index.py:170
+#: testscaffold/views/index.py:176
 msgid "You have successfully registered."
 msgstr "Poprawnie zarejestrowano użytkownika"
 
-#: testscaffold/views/auth.py:35
-msgid "Signed in"
-msgstr "Zalogowano"
-
-#: testscaffold/views/auth.py:62
+#: testscaffold/views/auth.py:51
 msgid "Signed out"
 msgstr "Wylogowano"
 
-#: testscaffold/views/auth.py:87
+#: testscaffold/views/auth.py:77
 msgid ""
 "Something went wrong when accessing third party provider - please try again"
 msgstr ""
 "Niestety operacja logowania za pomocą zewnętrznego profilu się nie powiodła "
 "- spróbuj ponownie"
 
-#: testscaffold/views/auth.py:138
+#: testscaffold/views/auth.py:129
 msgid ""
 "You need to finish registration process to bind your external identity to "
 "your account or sign in to existing account"
@@ -80,15 +75,19 @@ msgstr ""
 "Proszę dokończyć proces rejestracji aby połączyć konto zewnętrzne z twoim "
 "profilem"
 
-#: testscaffold/views/admin/users.py:55
+#: testscaffold/views/auth.py:147
+msgid "Signed in"
+msgstr "Zalogowano"
+
+#: testscaffold/views/admin/users.py:56
 msgid "User created."
 msgstr "Stworzono użytkownika."
 
-#: testscaffold/views/admin/groups.py:58
+#: testscaffold/views/admin/groups.py:59
 msgid "Group created."
 msgstr "Stworzono grupę."
 
-#: testscaffold/views/admin/groups.py:96
+#: testscaffold/views/admin/groups.py:97
 msgid "Group updated."
 msgstr "Zaktualizowane grupę"
 
@@ -96,35 +95,47 @@ msgstr "Zaktualizowane grupę"
 msgid "Task sent"
 msgstr "Wysłano zadanie"
 
-#: testscaffold/views/shared/users.py:94
+#: testscaffold/views/shared/users.py:61
+msgid "User updated."
+msgstr "Zaktualizowano użytkownika"
+
+#: testscaffold/views/shared/users.py:71
+msgid "User password updated."
+msgstr "Hasło użytkownika zostało zmienione."
+
+#: testscaffold/views/shared/users.py:80
+msgid "User removed."
+msgstr "Usunięto użytkownika"
+
+#: testscaffold/views/shared/users.py:103
 msgid "Permission granted for user."
 msgstr "Uprawnienie nadano użytkownikowi"
 
-#: testscaffold/views/shared/users.py:107
+#: testscaffold/views/shared/users.py:118
 msgid "Permission withdrawn from user."
 msgstr "Uprawnienie odebrano użytkownikowi"
 
-#: testscaffold/views/shared/entries.py:59
+#: testscaffold/views/shared/entries.py:60
 msgid "Entry removed."
 msgstr "Wpis usunięto"
 
-#: testscaffold/views/shared/groups.py:62
+#: testscaffold/views/shared/groups.py:63
 msgid "Group removed."
 msgstr "Grupa usunięta"
 
-#: testscaffold/views/shared/groups.py:75
+#: testscaffold/views/shared/groups.py:76
 msgid "Permission granted for group."
 msgstr "Uprawnienie dodane do grupy"
 
-#: testscaffold/views/shared/groups.py:88
+#: testscaffold/views/shared/groups.py:90
 msgid "Permission withdrawn from group."
 msgstr "Uprawenienie odebrane grupie"
 
-#: testscaffold/views/shared/groups.py:94
+#: testscaffold/views/shared/groups.py:97
 msgid "User added to group."
 msgstr "Użytkownik dodany do grupy"
 
-#: testscaffold/views/shared/groups.py:104
+#: testscaffold/views/shared/groups.py:108
 msgid "User removed from group."
 msgstr "Użytkownik usunięty z grupy"
 
@@ -149,7 +160,7 @@ msgid "Sign out"
 msgstr "Wyloguj się"
 
 #: testscaffold/templates/layout_login.jinja2:25
-#: testscaffold/templates/auth/register.jinja2:19
+#: testscaffold/templates/auth/register.jinja2:18
 msgid "Login via social account"
 msgstr "Zaloguj się przez konto społecznościowe"
 
@@ -166,6 +177,7 @@ msgid "Register here"
 msgstr "Rejestruj się"
 
 #: testscaffold/templates/layout_login.jinja2:41
+#: testscaffold/templates/auth/register.jinja2:14
 msgid "Forgot password?"
 msgstr "Zgubione hasło?"
 
@@ -350,17 +362,25 @@ msgstr "Przynależy do"
 msgid "Authentication tokens"
 msgstr "Tokeny uwierzytelniające"
 
-#: testscaffold/templates/auth/register.jinja2:13
-msgid "Log In"
-msgstr "Zaloguj się"
+#: testscaffold/templates/auth/lost_password_generate.jinja2:8
+msgid "Set your new password"
+msgstr "Ustaw nowe hasło"
 
-#: testscaffold/templates/auth/register.jinja2:15
+#: testscaffold/templates/auth/lost_password_generate.jinja2:14
+msgid "Update password"
+msgstr "Zmień hasło"
+
+#: testscaffold/templates/auth/lost_password_generate.jinja2:15
 #: testscaffold/templates/auth/lost_password.jinja2:14
 msgid "Return to index page"
 msgstr "Powróć do strony głównej"
 
-#: testscaffold/templates/auth/register.jinja2:27
-#: testscaffold/templates/auth/register.jinja2:31
+#: testscaffold/templates/auth/register.jinja2:13
+msgid "Log In"
+msgstr "Zaloguj się"
+
+#: testscaffold/templates/auth/register.jinja2:26
+#: testscaffold/templates/auth/register.jinja2:30
 msgid "Register"
 msgstr "Rejestruj się"
 

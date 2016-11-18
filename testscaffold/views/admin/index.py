@@ -3,15 +3,13 @@ from __future__ import absolute_import, unicode_literals
 import logging
 from pyramid.view import view_config, view_defaults
 from testscaffold.services.user import UserService
+from testscaffold.views import BaseView
 
 log = logging.getLogger(__name__)
 
 
 @view_defaults(route_name='admin_index', permission='admin_panel')
-class AdminPanelView(object):
-    def __init__(self, request):
-        self.request = request
-
+class AdminPanelView(BaseView):
     @view_config(renderer='testscaffold:templates/admin/index.jinja2')
     def index(self):
         request = self.request

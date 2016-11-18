@@ -11,8 +11,7 @@
               method="POST">
             {{form.render_form(login_form)}}
             <button type="submit" class="btn btn-default">{% trans %}Log In{% endtrans %}</button>
-
-            <a href="{{request.route_url('/')}}">{% trans %}Return to index page{% endtrans %}</a>
+            <a href="{{request.route_url('lost_password')}}">{% trans %}Forgot password?{% endtrans %}</a>
 
         </form>
 

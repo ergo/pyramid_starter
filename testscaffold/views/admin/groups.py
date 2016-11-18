@@ -16,6 +16,7 @@ from testscaffold.util import safe_integer
 from testscaffold.models.group import Group
 from testscaffold.services.group import GroupService
 from testscaffold.validation.forms import GroupUpdateForm, DirectPermissionForm
+from testscaffold.views import BaseView
 from testscaffold.views.api.groups import GROUPS_PER_PAGE
 from testscaffold.views.shared.groups import GroupsShared
 
@@ -25,13 +26,13 @@ _ = TranslationStringFactory('testscaffold')
 
 
 @view_defaults(route_name='admin_objects', permission='admin_groups')
-class AdminGroupsView(object):
+class AdminGroupsView(BaseView):
     """
     Handles group list and new group form
     """
 
     def __init__(self, request):
-        self.request = request
+        super(AdminGroupsView, self).__init__(request)
         self.shared = GroupsShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/groups/index.jinja2',
@@ -55,7 +56,7 @@ class AdminGroupsView(object):
             group.persist(flush=True, db_session=request.dbsession)
             log.info('groups_post', extra={'group_id': group.id,
                                            'group_name': group.group_name})
-            request.session.flash({'msg': _('Group created.'),
+            request.session.flash({'msg': self.translate(_('Group created.')),
                                    'level': 'success'})
             location = request.route_url('admin_objects', object='groups',
                                          verb='GET')
@@ -92,7 +93,7 @@ class AdminGroupView(object):
             group.permissions, request=request, group=group)
         if request.method == "POST" and group_form.validate():
             self.shared.populate_instance(group,
-                                             group_form.data)
+                                          group_form.data)
             request.session.flash({'msg': _('Group updated.'),
                                    'level': 'success'})
             url = request.route_url(

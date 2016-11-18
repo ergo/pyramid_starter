@@ -23,6 +23,7 @@ class EntriesShared(object):
 
     def __init__(self, request):
         self.request = request
+        self.translate = request.localizer.translate
         self.page = None
 
     def collection_list(self, page=1, filter_params=None):
@@ -56,5 +57,5 @@ class EntriesShared(object):
         log.info('entry_delete', extra={'entry_id': instance.resource_id,
                                         'entry_name': instance.resource_id})
         instance.delete(self.request.dbsession)
-        self.request.session.flash({'msg': +_('Entry removed.'),
+        self.request.session.flash({'msg': self.translate(_('Entry removed.')),
                                     'level': 'success'})

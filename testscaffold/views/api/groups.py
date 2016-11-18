@@ -4,6 +4,7 @@ import logging
 from pyramid.view import view_config, view_defaults
 
 from testscaffold.models.group import Group
+from testscaffold.views import BaseView
 from testscaffold.views.shared.groups import GroupsShared
 from testscaffold.validation.schemes import GroupEditSchema
 
@@ -15,9 +16,9 @@ GROUPS_PER_PAGE = 50
 @view_defaults(route_name='api_object', renderer='json',
                match_param='object=groups',
                permission='admin_groups')
-class GroupsAPI(object):
+class GroupsAPIView(BaseView):
     def __init__(self, request):
-        self.request = request
+        super(GroupsAPIView, self).__init__(request)
         self.shared = GroupsShared(request)
 
     @view_config(route_name='api_objects', request_method='GET')
