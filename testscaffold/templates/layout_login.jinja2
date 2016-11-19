@@ -32,7 +32,7 @@
                 <h2>{% trans %}Log in{% endtrans %}</h2>
 
                 <form action="{{request.route_url('ziggurat.routes.sign_in')}}" method="POST">
-                    <div class="form-inline form-group">
+                    <div class="form-group">
                         {{form.render_form(layout_login_form)}}
                     </div>
                     <div class="form-group">
