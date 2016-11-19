@@ -72,12 +72,13 @@ def allow_root_access(request, context):
                     (perm[0], perm[1], ALL_PERMISSIONS))
 
 
-def resource_security_factory(request):
+def object_security_factory(request):
     object_type = request.matchdict['object']
-    if object_type == 'entries':
-        return EntryFactory(request)
+    # fetch deta
+    if object_type in ['resources', 'entries']:
+        return DefaultResourceFactory(request)
 
-    return DefaultResourceFactory(request)
+    return RootFactory(request)
 
 
 class RootFactory(object):
@@ -100,16 +101,6 @@ class RootFactory(object):
 
 
 class DefaultResourceFactory(object):
-    """
-    For resources without their own dedicated factories
-    """
-
-    def __init__(self, request):
-        self.__acl__ = []
-        allow_root_access(request, context=self)
-
-
-class EntryFactory(object):
     def __init__(self, request):
         self.__acl__ = []
         resource_id = safe_integer(request.matchdict.get("object_id"))

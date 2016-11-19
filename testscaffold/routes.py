@@ -7,9 +7,11 @@ def includeme(config):
     config.add_route('/', '/')
     config.add_route('admin_index', '/admin')
     config.add_route('admin_objects', '/admin/{object}/verb/{verb}')
-    config.add_route('admin_object', '/admin/{object}/{object_id}/verb/{verb}')
+    config.add_route('admin_object', '/admin/{object}/{object_id}/verb/{verb}',
+                     factory='testscaffold.security.object_security_factory')
     config.add_route('admin_object_relation',
-                     '/admin/{object}/{object_id}/{relation}/verb/{verb}')
+                     '/admin/{object}/{object_id}/{relation}/verb/{verb}',
+                     factory='testscaffold.security.object_security_factory')
 
     config.add_route('register', '/register')
     config.add_route('language', '/language/{language}')
@@ -24,7 +26,7 @@ def includeme(config):
 
     config.add_route('api_objects', '/api/{version}/{object}')
     config.add_route('api_object', '/api/{version}/{object}/{object_id}',
-                     factory='testscaffold.security.resource_security_factory')
+                     factory='testscaffold.security.object_security_factory')
     config.add_route('api_object_relation',
                      '/api/{version}/{object}/{object_id}/{relation}',
-                     factory='testscaffold.security.resource_security_factory')
+                     factory='testscaffold.security.object_security_factory')

@@ -181,8 +181,20 @@ class UserResourcePermissionSchema(Schema):
         strict = True
         ordered = True
 
-    user_id = fields.Str(required=True,
-                         validate=(validate.Length(3)))
+    user_id = fields.Int(required=True)
 
-    perm_name = fields.Str(required=True,
-                           validate=(validate.Length(3)))
+    perm_name = fields.Str(required=True)
+
+    @validates('user_id')
+    def validate_user_id(self, value):
+        request = self.context['request']
+        user = UserService.get(value, db_session=request.dbsession)
+        if not user:
+            raise validate.ValidationError(_('User not found'))
+
+    @validates('perm_name')
+    def validate_perm_name(self, value):
+        perms = self.context['resource'].__possible_permissions__
+        if value not in perms:
+            raise validate.ValidationError(
+                _('Incorrect permission name for resource'))
