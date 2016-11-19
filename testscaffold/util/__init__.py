@@ -7,7 +7,7 @@ from pyramid.httpexceptions import HTTPBadRequest
 def safe_integer(integer):
     try:
         return int(integer)
-    except ValueError:
+    except (ValueError, TypeError):
         raise HTTPBadRequest()
 
 

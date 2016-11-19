@@ -50,12 +50,4 @@ class EntriesShared(object):
                                  db_session=request.dbsession)
         if not entry:
             raise pyramid.httpexceptions.HTTPNotFound()
-
         return entry
-
-    def delete(self, instance):
-        log.info('entry_delete', extra={'entry_id': instance.resource_id,
-                                        'entry_name': instance.resource_id})
-        instance.delete(self.request.dbsession)
-        self.request.session.flash({'msg': self.translate(_('Entry removed.')),
-                                    'level': 'success'})

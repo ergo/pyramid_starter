@@ -3,9 +3,12 @@ from __future__ import absolute_import, unicode_literals
 import logging
 
 from pyramid.security import Allow, Authenticated, ALL_PERMISSIONS
+from pyramid.exceptions import HTTPNotFound
 from pyramid.authentication import CallbackAuthenticationPolicy
+from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import permission_to_pyramid_acls
 
+from testscaffold.util import safe_integer
 from testscaffold.services.auth_token import AuthTokenService
 from testscaffold.services.user import UserService
 
@@ -58,6 +61,25 @@ def rewrite_root_perm(outcome, perm_user, perm_name):
         return outcome, perm_user, perm_name
 
 
+def allow_root_access(request, context):
+    """
+    Adds ALL_PERMISSIONS to every resource if user has 'root_permission'
+    """
+    if getattr(request, 'user'):
+        for perm in permission_to_pyramid_acls(request.user.permissions):
+            if perm[2] == 'root_administration':
+                context.__acl__.append(
+                    (perm[0], perm[1], ALL_PERMISSIONS))
+
+
+def resource_security_factory(request):
+    object_type = request.matchdict['object']
+    if object_type == 'entries':
+        return EntryFactory(request)
+
+    return DefaultResourceFactory(request)
+
+
 class RootFactory(object):
     """
     General factory for non-resource specific pages, returns an empty
@@ -68,10 +90,46 @@ class RootFactory(object):
     def __init__(self, request):
         self.__acl__ = []
         # general page factory - append custom non resource permissions
-        if hasattr(request, 'user') and request.user:
+        if getattr(request, 'user'):
             permissions = UserService.permissions(request.user,
                                                   db_session=request.dbsession)
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
                     permissions):
                 self.__acl__.append(
                     rewrite_root_perm(outcome, perm_user, perm_name))
+
+
+class DefaultResourceFactory(object):
+    """
+    For resources without their own dedicated factories
+    """
+
+    def __init__(self, request):
+        self.__acl__ = []
+        allow_root_access(request, context=self)
+
+
+class EntryFactory(object):
+    def __init__(self, request):
+        self.__acl__ = []
+        resource_id = safe_integer(request.matchdict.get("object_id"))
+        self.resource = ResourceService.by_resource_id(
+            resource_id, db_session=request.dbsession)
+        if not self.resource:
+            raise HTTPNotFound()
+
+        if self.resource:
+            self.__acl__ = self.resource.__acl__
+
+        if self.resource and request.user:
+            # add perms that this user has for this resource
+            # this is a big performance optimization - we fetch only data
+            # needed to check one specific user
+            permissions = ResourceService.perms_for_user(
+                self.resource, request.user)
+            for outcome, perm_user, perm_name in permission_to_pyramid_acls(
+                    permissions):
+                self.__acl__.append(
+                    rewrite_root_perm(outcome, perm_user, perm_name))
+
+        allow_root_access(request, context=self)

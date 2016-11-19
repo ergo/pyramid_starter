@@ -23,6 +23,8 @@ def includeme(config):
                      '/{object}/{object_id}/{relation}/verb/{verb}')
 
     config.add_route('api_objects', '/api/{version}/{object}')
-    config.add_route('api_object', '/api/{version}/{object}/{object_id}')
+    config.add_route('api_object', '/api/{version}/{object}/{object_id}',
+                     factory='testscaffold.security.resource_security_factory')
     config.add_route('api_object_relation',
-                     '/api/{version}/{object}/{object_id}/{relation}')
+                     '/api/{version}/{object}/{object_id}/{relation}',
+                     factory='testscaffold.security.resource_security_factory')

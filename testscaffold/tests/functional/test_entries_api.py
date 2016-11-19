@@ -4,12 +4,11 @@ import pprint
 
 import pytest
 
-from six.moves.urllib import parse
-
 from testscaffold.tests.utils import (
     create_entry,
     session_context,
-    create_admin)
+    create_admin,
+)
 
 
 def create_default_tree(db_session):
@@ -178,8 +177,8 @@ class TestFunctionalAPIEntries(object):
         from testscaffold.services.resource_tree_service import tree_service
         root = create_default_tree(sqla_session)[0]
 
-        result = tree_service.from_resource_deeper(root.resource_id,
-                                                      db_session=sqla_session)
+        result = tree_service.from_resource_deeper(
+            root.resource_id, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)['children'][
             -1]
         pprint.pprint(tree_struct)
@@ -275,8 +274,8 @@ class TestFunctionalAPIEntries(object):
         (0, '1'),
         (-1, '1')
     ])
-    def test_root_entry_no_parent_wrong_order(self, full_app, sqla_session,
-                                         ordering, expected):
+    def test_root_entry_no_parent_wrong_order(
+            self, full_app, sqla_session, ordering, expected):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_default_tree(db_session=sqla_session)
@@ -345,8 +344,8 @@ class TestFunctionalAPIEntries(object):
         (6, 2, [5, 6, 7, 8]),
         (6, 4, [5, 7, 8, 6]),
     ])
-    def test_entry_patch_order_same_branch_nested(self, full_app, sqla_session,
-                                             node_id, position, ordered_elems):
+    def test_entry_patch_order_same_branch_nested(
+            self, full_app, sqla_session, node_id, position, ordered_elems):
         from testscaffold.services.resource_tree_service import tree_service
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
@@ -367,14 +366,16 @@ class TestFunctionalAPIEntries(object):
         assert [i for i in tree_struct.keys()] == ordered_elems
         assert [i['node'].ordering for i in tree_struct.values()] == [1, 2, 3,
                                                                       4]
+
     @pytest.mark.parametrize("node_id, position, ordered_elems", [
-        (12, 3, [5, 6, 12,  7, 8]),
+        (12, 3, [5, 6, 12, 7, 8]),
         (12, 1, [12, 5, 6, 7, 8]),
         (12, 2, [5, 12, 6, 7, 8]),
         (12, 5, [5, 6, 7, 8, 12]),
     ])
     def test_entry_patch_order_upper_branch_nested(self, full_app, sqla_session,
-                                                  node_id, position, ordered_elems):
+                                                   node_id, position,
+                                                   ordered_elems):
         from testscaffold.services.resource_tree_service import tree_service
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)

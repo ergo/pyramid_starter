@@ -174,3 +174,15 @@ class EntryCreateSchemaAdmin(ResourceCreateSchemaMixin):
     note = fields.Str()
     owner_user_id = fields.Int()
     owner_group_id = fields.Int()
+
+
+class UserResourcePermissionSchema(Schema):
+    class Meta(object):
+        strict = True
+        ordered = True
+
+    user_id = fields.Str(required=True,
+                         validate=(validate.Length(3)))
+
+    perm_name = fields.Str(required=True,
+                           validate=(validate.Length(3)))
