@@ -198,3 +198,27 @@ class UserResourcePermissionSchema(Schema):
         if value not in perms:
             raise validate.ValidationError(
                 _('Incorrect permission name for resource'))
+
+
+class GroupResourcePermissionSchema(Schema):
+    class Meta(object):
+        strict = True
+        ordered = True
+
+    group_id = fields.Int(required=True)
+
+    perm_name = fields.Str(required=True)
+
+    @validates('group_id')
+    def validate_group_id(self, value):
+        request = self.context['request']
+        group = GroupService.get(value, db_session=request.dbsession)
+        if not group:
+            raise validate.ValidationError(_('Group not found'))
+
+    @validates('perm_name')
+    def validate_perm_name(self, value):
+        perms = self.context['resource'].__possible_permissions__
+        if value not in perms:
+            raise validate.ValidationError(
+                _('Incorrect permission name for resource'))

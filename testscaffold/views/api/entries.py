@@ -13,11 +13,13 @@ from testscaffold.validation.schemes import EntryCreateSchemaAdmin
 from testscaffold.views import BaseView
 from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.views.shared.resources import ResourcesShared
-from testscaffold.views.shared.users import UsersShared
 from testscaffold.util import safe_integer
 from testscaffold.util.request import gen_pagination_headers
 from testscaffold.services.resource_tree_service import tree_service
-from testscaffold.validation.schemes import UserResourcePermissionSchema
+from testscaffold.validation.schemes import (
+    UserResourcePermissionSchema,
+    GroupResourcePermissionSchema,
+)
 
 log = logging.getLogger(__name__)
 
@@ -101,38 +103,3 @@ class EntriesAPIView(BaseView):
         return True
 
 
-@view_defaults(route_name='api_object_relation', renderer='json',
-               match_param=('object=resources', 'relation=user_permissions',),
-               permission='owner')
-class ResourcesPermissionsAPI(object):
-    def __init__(self, request):
-        self.request = request
-        self.shared = ResourcesShared(request)
-        self.shared_users = UsersShared(request)
-
-    @view_config(request_method="POST")
-    def post(self):
-        resource = self.request.context.resource
-
-        schema = UserResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
-        data = schema.load(self.request.unsafe_json_body).data
-        perm_inst = self.shared.user_permission_post(
-            resource, data['user_id'], data['perm_name'])
-        self.request.dbsession.flush()
-        return perm_inst.get_dict()
-
-    @view_config(request_method="DELETE")
-    def delete(self):
-        resource = self.request.context.resource
-
-        schema = UserResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
-        params = {'user_id': self.request.GET.get('user_id'),
-                  'perm_name': self.request.GET.get('perm_name')}
-        data = schema.load(params).data
-        self.shared.user_permission_delete(
-            resource, data['user_id'], data['perm_name'])
-        return True
