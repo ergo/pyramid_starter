@@ -175,7 +175,7 @@ class TestFunctionalAPIUsersPermissions(object):
             admin, token = create_admin(session)
             user = create_user(
                 {'user_name': 'testX', 'email': 'testX@test.local'},
-                permissions=['root_administration', 'dummy_permission'],
+                permissions=['root_administration', 'admin_panel'],
                 sqla_session=session)
 
         url_path = '/api/0.1/users/{}/permissions'.format(user.id)
@@ -187,4 +187,4 @@ class TestFunctionalAPIUsersPermissions(object):
         full_app.delete('{}?{}'.format(url_path, qs),
                         status=200, headers=headers)
         sqla_session.expire_all()
-        assert user.permissions[0].perm_name == 'dummy_permission'
+        assert user.permissions[0].perm_name == 'admin_panel'

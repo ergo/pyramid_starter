@@ -6,7 +6,7 @@ import logging
 EXCLUDED_LOG_VARS = ['threadName', 'name', 'thread', 'created', 'process',
                      'processName', 'args', 'module', 'filename',
                      'levelno', 'exc_text', 'pathname', 'lineno', 'msg',
-                     'exc_info', 'message', 'funcName',
+                     'exc_info', 'message', 'funcName', 'stack_info',
                      'relativeCreated', 'levelname', 'msecs', 'asctime']
 
 

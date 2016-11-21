@@ -7,7 +7,7 @@ from testscaffold.models.meta import Base
 
 
 class User(UserMixin, Base):
-    __possible_permissions__ = ['root_administration', 'dummy_permission']
+    __possible_permissions__ = ['root_administration', 'admin_panel', 'admin_users', 'admin_groups']
 
     # registration_ip = sa.Column(sa.Unicode())
 

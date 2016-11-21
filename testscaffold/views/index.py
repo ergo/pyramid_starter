@@ -22,14 +22,22 @@ _ = TranslationStringFactory('testscaffold')
 
 
 class IndexViews(BaseView):
-
-    @view_config(route_name='/', renderer='testscaffold:templates/index.jinja2')
+    @view_config(route_name='/', renderer='testscaffold:templates/index.jinja2',
+                 permission=NO_PERMISSION_REQUIRED)
     def index(self):
         request = self.request
         login_form = UserLoginForm(request.POST, context={'request': request})
         log.warning('index', extra={'foo': 'xxx'})
         log.info('locale', extra={'locale': request.locale_name})
         return {'login_form': login_form}
+
+    @view_config(
+        route_name='objects',
+        renderer='testscaffold:templates/admin/relation_remove.jinja2',
+        match_param=('object=error'),
+        request_method='GET')
+    def error_test(self):
+        return 1 / 0
 
     @view_config(route_name='lost_password',
                  renderer='testscaffold:templates/auth/lost_password.jinja2',
@@ -97,7 +105,7 @@ class IndexViews(BaseView):
                 user.set_password(form.password.data)
                 msg = {'msg': self.translate(
                     _('You can sign in with your new password.')),
-                       'level': 'success'}
+                    'level': 'success'}
                 request.session.flash(msg)
                 return HTTPFound(location=request.route_url('register'))
             else:

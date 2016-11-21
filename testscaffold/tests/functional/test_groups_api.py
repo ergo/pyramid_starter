@@ -117,7 +117,7 @@ class TestFunctionalAPIGroupsPermissions(object):
             admin, token = create_admin(session)
             group = create_group(
                 {'group_name': 'test'},
-                permissions=['root_administration', 'dummy_permission'],
+                permissions=['root_administration', 'admin_panel'],
                 sqla_session=session)
 
         url_path = '/api/0.1/groups/{}/permissions'.format(group.id)
@@ -132,7 +132,7 @@ class TestFunctionalAPIGroupsPermissions(object):
             admin, token = create_admin(session)
             group = create_group(
                 {'group_name': 'test'},
-                permissions=['root_administration', 'dummy_permission'],
+                permissions=['root_administration', 'admin_panel'],
                 sqla_session=session)
 
         url_path = '/api/0.1/groups/{}/permissions'.format(group.id)
@@ -144,7 +144,7 @@ class TestFunctionalAPIGroupsPermissions(object):
         full_app.delete('{}?{}'.format(url_path, qs),
                         status=200, headers=headers)
         sqla_session.expire_all()
-        assert group.permissions[0].perm_name == 'dummy_permission'
+        assert group.permissions[0].perm_name == 'admin_panel'
 
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
@@ -175,7 +175,7 @@ class TestFunctionalAPIGroupsUsers(object):
             admin, token = create_admin(session)
             group = create_group(
                 {'group_name': 'test'},
-                permissions=['root_administration', 'dummy_permission'],
+                permissions=['root_administration', 'admin_panel'],
                 sqla_session=session)
 
         url_path = '/api/0.1/groups/{}/users'.format(group.id)
@@ -187,7 +187,7 @@ class TestFunctionalAPIGroupsUsers(object):
             admin, token = create_admin(session)
             group = create_group(
                 {'group_name': 'test'},
-                permissions=['root_administration', 'dummy_permission'],
+                permissions=['root_administration', 'admin_panel'],
                 sqla_session=session)
             user_a = create_user({'user_name': 'aaaa', 'email': 'foo'},
                                  sqla_session=session)

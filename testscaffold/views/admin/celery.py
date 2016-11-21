@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 _ = TranslationStringFactory('testscaffold')
 
 
-@view_defaults(route_name='admin_objects', permission='admin_celery')
+@view_defaults(route_name='admin_objects', permission='admin_panel')
 class CeleryAdminView(BaseView):
 
     @view_config(renderer='testscaffold:templates/admin/celery.jinja2',
