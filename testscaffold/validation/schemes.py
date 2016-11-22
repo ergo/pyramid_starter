@@ -166,6 +166,14 @@ class ResourceCreateSchemaMixin(Schema):
             raise validate.ValidationError(str(exc))
 
 
+class EntryCreateSchema(ResourceCreateSchemaMixin):
+    class Meta(object):
+        strict = True
+        ordered = True
+
+    note = fields.Str()
+
+
 class EntryCreateSchemaAdmin(ResourceCreateSchemaMixin):
     class Meta(object):
         strict = True

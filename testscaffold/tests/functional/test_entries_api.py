@@ -138,6 +138,7 @@ class TestFunctionalAPIEntries(object):
         }
         response = full_app.post_json(url_path, entry_dict, status=200,
                                       headers=headers)
+        assert response.json['owner_user_id'] == admin.id
         assert response.json['resource_id'] > 0
         assert response.json['ordering'] == 1
         assert entry_dict['resource_name'] == response.json['resource_name']
