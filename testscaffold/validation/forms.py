@@ -9,7 +9,8 @@ from pyramid.i18n import TranslationStringFactory
 from testscaffold.validation import ZigguratForm
 from testscaffold.validation.schemes import (UserCreateSchema,
                                              UserEditSchema,
-                                             GroupEditSchema)
+                                             GroupEditSchema,
+                                             EntryCreateSchema)
 
 from testscaffold.models.user import User
 
@@ -17,14 +18,18 @@ from testscaffold.models.user import User
 def strip_filter(value):
     return value.strip() if value else None
 
+
 _ = TranslationStringFactory('testscaffold')
 
 
-def validate_marshmallow_partial(schema):
+def validate_marshmallow_partial(schema, field_name=None):
     """ This attempts to validate a single node of a schema
         of same name as wtform field name, form context is passed to schema """
 
     def _validator(form, field):
+        if field_name:
+            field = getattr(form, field_name)
+
         schema_inst = schema(context=form.context)
         try:
             schema_inst.load({field.name: field.data}, partial=True)
@@ -131,3 +136,20 @@ for permission in User.__possible_permissions__:
 class DirectPermissionForm(ZigguratForm):
     permission = wtforms.SelectField(_('Permission'),
                                      choices=group_permission_choices)
+
+
+class EntryCreateForm(ZigguratForm):
+    resource_name = wtforms.StringField(
+        _("Name"), filters=[strip_filter],
+        validators=[
+            validate_marshmallow_partial(EntryCreateSchema, 'resource_name')])
+
+    note = wtforms.StringField(
+        _("Note"), filters=[strip_filter])
+
+    parent_id = wtforms.SelectField(
+        choices=(),
+        coerce=int,
+        validators=[
+            validate_marshmallow_partial(EntryCreateSchema, 'parent_id')
+        ])

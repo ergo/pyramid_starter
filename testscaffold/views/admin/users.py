@@ -50,8 +50,8 @@ class AdminUsersViews(BaseView):
             user = User()
             self.shared.populate_instance(user, user_form.data)
             user.persist(flush=True, db_session=request.dbsession)
-            log.info('users_post', extra={'group_id': user.id,
-                                          'group_name': user.user_name})
+            log.info('users_post', extra={'user_id': user.id,
+                                          'user_name': user.user_name})
             request.session.flash(
                 {'msg': self.translate(_('User created.')), 'level': 'success'})
             location = request.route_url('admin_objects', object='users',

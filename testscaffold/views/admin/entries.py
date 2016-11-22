@@ -7,13 +7,11 @@ import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
-from testscaffold.grids import UsersGrid, UserPermissionsGrid
-from testscaffold.models.user import User
+from testscaffold.models.entry import Entry
+from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (
-    UserAdminCreateForm,
-    UserAdminUpdateForm,
-    DirectPermissionForm)
+    EntryCreateForm)
 from testscaffold.views.shared.entries import ENTRIES_PER_PAGE, EntriesShared
 from testscaffold.views import BaseView
 
@@ -31,19 +29,63 @@ class AdminEntriesViews(BaseView):
     @view_config(renderer='testscaffold:templates/admin/entries/index.jinja2',
                  match_param=('object=entries', 'verb=GET'))
     def collection_list(self):
-        page = safe_integer(self.request.GET.get('page', 1))
-        entries_paginator = self.shared.collection_list(page=page)
-        start_number = (ENTRIES_PER_PAGE * (self.shared.page - 1) + 1) or 1
-        # entries_grid = UsersGrid(entries_paginator,
-        #                          start_number=start_number,
-        #                          request=self.request)
-        entries_grid = None
+        result = tree_service.from_parent_deeper(
+            db_session=self.request.dbsession)
+        entries_tree = tree_service.build_subtree_strut(result)
 
-        return {'entries_paginator': entries_paginator,
-                'entries_grid': entries_grid}
+        return {'entries_tree': entries_tree}
 
     @view_config(renderer='testscaffold:templates/admin/entries/edit.jinja2',
                  match_param=('object=entries', 'verb=POST'))
     def post(self):
         request = self.request
-        return {}
+        resource_form = EntryCreateForm(
+            request.POST, context={'request': request})
+
+        result = tree_service.from_parent_deeper(
+            db_session=self.request.dbsession)
+        choices = [(0, self.translate(_('Root (/)')))]
+        for row in result:
+            choices.append((row.Resource.resource_id,
+                            '{} {}'.format('-' * row.depth,
+                                           row.Resource.resource_name)))
+
+        resource_form.parent_id.choices = choices
+
+        if request.method == "POST" and resource_form.validate():
+            resource = Entry()
+            parent_id = resource_form.data.get('parent_id') or None
+            position = resource_form.data.get('ordering')
+
+            self.shared.populate_instance(resource, resource_form.data,
+                                          include_keys=['resource_name',
+                                                        'note'])
+            resource.parent_id = parent_id
+            resource.persist(flush=True, db_session=request.dbsession)
+
+            if position is not None:
+                tree_service.set_position(
+                    resource_id=resource.resource_id, to_position=position,
+                    db_session=self.request.dbsession)
+            else:
+                # this accounts for the newly inserted row so the total_children
+                # will be max+1 position for new row
+                total_children = tree_service.count_children(
+                    parent_id, db_session=self.request.dbsession)
+                tree_service.set_position(
+                    resource_id=resource.resource_id,
+                    to_position=total_children,
+                    db_session=self.request.dbsession)
+
+            log.info('entries_post', extra={
+                'type': 'entry',
+                'resource_id': resource.resource_id,
+                'resource_name': resource.resource_name})
+            request.session.flash(
+                {'msg': self.translate(_('Entry created.')),
+                 'level': 'success'})
+            location = request.route_url('admin_objects', object='entries',
+                                         verb='GET')
+            return pyramid.httpexceptions.HTTPFound(location=location)
+
+        return {"resource_form": resource_form}

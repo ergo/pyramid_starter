@@ -54,9 +54,9 @@ class UsersShared(object):
 
         return user
 
-    def populate_instance(self, instance, data):
+    def populate_instance(self, instance, data, *args, **kwargs):
         # this is safe and doesn't overwrite user_password with cleartext
-        instance.populate_obj(data)
+        instance.populate_obj(data, *args, **kwargs)
         self.request.session.flash(
             {'msg': self.translate(_('User updated.')), 'level': 'success'})
         log.info('user_populate_instance',

@@ -38,9 +38,9 @@ class EntriesShared(object):
         )
         return entry_paginator
 
-    def populate_instance(self, instance, data):
+    def populate_instance(self, instance, data, *args, **kwargs):
         # this is safe and doesn't overwrite entry_password with cleartext
-        instance.populate_obj(data)
+        instance.populate_obj(data, *args, **kwargs)
         log.info('entry_populate_instance',
                  extra={'action': 'updated', 'entry_id': instance.resource_id})
 

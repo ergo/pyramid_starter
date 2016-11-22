@@ -12,26 +12,30 @@
             <div class="panel-body">
 
                 <p>
-                    <a href="{{request.route_url('admin_objects', object="entries", verb='POST')}}" class="btn btn-info">
+                    <a href="{{ request.route_url('admin_objects', object="entries", verb='POST') }}"
+                       class="btn btn-info">
                         {% trans %}Create a new entry{% endtrans %}
                     </a>
                 </p>
 
-                <span>/</span> &raquo;
-
-                <div class="text-center">
-                    {{common_widgets.render_paginator(entries_paginator)}}
-                </div>
-
-                <ul>
-                    <li>test</li>
-                </ul>
-
-                <div class="text-center">
-                    {{common_widgets.render_paginator(entries_paginator)}}
-                </div>
+                {{ render_tree_node(entries_tree['children']) }}
 
             </div>
         </div>
     </div>
 {% endblock content %}
+
+{% macro render_tree_node(node_list) -%}
+    {% if node_list %}
+        <ul>
+            {% for node in node_list.values() %}
+                <li><strong>{{ node['node'] }}</strong>
+                    {% if node['children'] %}
+                        <div>{% trans %}Sub-elements:{% endtrans %}</div>
+                        {{ render_tree_node(node['children']) }}
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{%- endmacro %}

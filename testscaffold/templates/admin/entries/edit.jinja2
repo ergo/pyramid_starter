@@ -1,5 +1,6 @@
 {% extends "testscaffold:templates/admin/layout.jinja2" %}
 {% import 'testscaffold:templates/partials/common.jinja2' as common_widgets %}
+{% import 'testscaffold:templates/partials/ziggurat_form.jinja2' as form %}
 
 {% block content %}
     <div class="col-md-9">
@@ -27,7 +28,7 @@
                         method="POST">
                 {% endif %}
 
-                FORM HERE
+                {{ form.render_form(resource_form) }}
 
                 <button type="submit" class="btn btn-default">
                     {% if request.matchdict.get('verb') == 'POST' %}

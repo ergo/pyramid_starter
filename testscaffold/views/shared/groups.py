@@ -51,8 +51,8 @@ class GroupsShared(object):
             raise pyramid.httpexceptions.HTTPNotFound()
         return permission
 
-    def populate_instance(self, instance, data):
-        instance.populate_obj(data)
+    def populate_instance(self, instance, data, *args, **kwargs):
+        instance.populate_obj(data, *args, **kwargs)
         log.info('group_populate_instance', extra={'action': 'updated'})
 
     def delete(self, instance):
