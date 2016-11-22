@@ -79,10 +79,11 @@ def main(global_config, **settings):
     config.add_view_predicate('context_type_class',
                               'testscaffold.predicates.contextTypeClass')
 
+    config.scan('testscaffold.events')
+    config.scan('testscaffold.subscribers')
     config.include('testscaffold.models')
     config.include('testscaffold.routes')
-    config.scan(ignore=['testscaffold.migrations', 'testscaffold.tests',
-                        'testscaffold.scripts'])
+    config.include('testscaffold.views')
 
     # configure celery in later phase
     def wrap_config_celery():

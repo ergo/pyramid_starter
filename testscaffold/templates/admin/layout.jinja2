@@ -13,6 +13,9 @@
                         <a href="{{ request.route_url('admin_index') }}"
                            class="list-group-item {{ 'active' if request.matched_route.name.startswith('admin_index') else '' }}">
                             {% trans %}Admin panel{% endtrans %}</a>
+                        <a href="{{ request.route_url('admin_objects', object='entries', verb='GET') }}"
+                           class="list-group-item {{ 'active' if 'entries' in request.matchdict.get('object','') else '' }}">
+                            {% trans %}Manage Entries{% endtrans %}</a>
                         <a href="{{ request.route_url('admin_objects', object='users', verb='GET') }}"
                            class="list-group-item {{ 'active' if 'users' in request.matchdict.get('object','') else '' }}">
                             {% trans %}List users{% endtrans %}</a>

@@ -20,7 +20,7 @@
             {% for page in link_map['range_pages'] %}
             <li class="{{ page['attrs'].get('class')}}"><a href="{{ page.href }}">{{ page.value }}</a></li>
             {% endfor %}
-            {% if paginator.page < paginator.last_page %}
+            {% if paginator.last_page and paginator.page < paginator.last_page %}
                 <li>
                     <a href="{{ link_map['next_page']['href'] }}" aria-label="Next">
                         <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>

@@ -37,9 +37,7 @@ def forbidden(context, request):
         'testscaffold:templates/error_handlers/forbidden.jinja2', value={},
         request=request)
 
-@view_config(context=Exception,
-             permission=NO_PERMISSION_REQUIRED,
-             renderer='string')
+
 def error(context, request):
     request.response.status = 500
     if request.matched_route and request.matched_route.name.startswith('api_'):

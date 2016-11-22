@@ -24,7 +24,7 @@ class EntriesShared(object):
     def __init__(self, request):
         self.request = request
         self.translate = request.localizer.translate
-        self.page = None
+        self.page = 1
 
     def collection_list(self, page=1, filter_params=None):
         request = self.request

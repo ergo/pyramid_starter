@@ -31,7 +31,7 @@ class ResourcesShared(object):
     def __init__(self, request):
         self.request = request
         self.translate = request.localizer.translate
-        self.page = None
+        self.page = 1
 
     def resource_get(self, resource_id):
         request = self.request
