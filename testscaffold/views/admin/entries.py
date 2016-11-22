@@ -54,6 +54,7 @@ class AdminEntriesViews(BaseView):
 
         if request.method == "POST" and resource_form.validate():
             resource = Entry()
+            # we want to get rid of 0 value here
             parent_id = resource_form.data.get('parent_id') or None
             position = resource_form.data.get('ordering')
 
@@ -61,6 +62,7 @@ class AdminEntriesViews(BaseView):
                                           include_keys=['resource_name',
                                                         'note'])
             resource.parent_id = parent_id
+            request.user.resources.append(resource)
             resource.persist(flush=True, db_session=request.dbsession)
 
             if position is not None:
