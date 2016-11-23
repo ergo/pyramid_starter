@@ -142,7 +142,12 @@ class DirectPermissionForm(ZigguratForm):
                                     choices=direct_permission_choices)
 
 
-class ResourcePermissionForm(ZigguratForm):
+class UserResourcePermissionForm(ZigguratForm):
+    perm_name = wtforms.SelectField(_('Permission'), choices=None)
+
+
+class GroupResourcePermissionForm(ZigguratForm):
+    group_id = wtforms.SelectField(_('Group'), choices=None, coerce=int)
     perm_name = wtforms.SelectField(_('Permission'), choices=None)
 
 

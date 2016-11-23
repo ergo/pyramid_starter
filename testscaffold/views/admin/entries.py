@@ -10,17 +10,22 @@ from pyramid.view import view_config, view_defaults
 from ziggurat_foundations import noop
 from ziggurat_foundations.permissions import ANY_PERMISSION
 from ziggurat_foundations.models.services.resource import ResourceService
+from ziggurat_foundations.models.services.group import GroupService
 
+from testscaffold.models.group import Group
 from testscaffold.models.entry import Entry
 from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (
-    ResourcePermissionForm,
+    UserResourcePermissionForm,
+    GroupResourcePermissionForm,
     EntryCreateForm
 )
-from testscaffold.grids import ResourceUserPermissionsGrid
+from testscaffold.grids import (
+    ResourceUserPermissionsGrid,
+    ResourceGroupPermissionsGrid)
 
-from testscaffold.views.shared.entries import ENTRIES_PER_PAGE, EntriesShared
+from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.views import BaseView
 
 log = logging.getLogger(__name__)
@@ -117,22 +122,36 @@ class AdminEntryViews(BaseView):
         breadcrumbs = tree_service.path_upper(
             resource.resource_id, db_session=self.request.dbsession)
 
-        permission_form = ResourcePermissionForm(
+        user_permission_form = UserResourcePermissionForm(
             request.POST, context={'request': request})
+
+        group_permission_form = GroupResourcePermissionForm(
+            request.POST, context={'request': request})
+        groups = GroupService.base_query(db_session=request.dbsession)
+        group_permission_form.group_id.choices = [
+            (g.id, g.group_name) for g in groups]
+
         choices = [(p, p) for p in resource.__possible_permissions__]
-        permission_form.perm_name.choices = choices
+        user_permission_form.perm_name.choices = choices
+        group_permission_form.perm_name.choices = choices
 
         permissions = ResourceService.users_for_perm(
-            resource, perm_name=ANY_PERMISSION, skip_group_perms=True)
+            resource, perm_name=ANY_PERMISSION, limit_group_permissions=True)
+        user_permissions = sorted([p for p in permissions if p.type == 'user'],
+                                  key=lambda x: x.user.user_name)
+        group_permissions = sorted([p for p in permissions if p.type == 'group'],
+                                   key=lambda x: x.group.group_name)
 
-        permissions_grid = ResourceUserPermissionsGrid(
-            permissions, request=request)
+        user_permissions_grid = ResourceUserPermissionsGrid(
+            user_permissions, request=request)
+        group_permissions_grid = ResourceGroupPermissionsGrid(
+            group_permissions, request=request)
 
-        choices = get_possible_parents(self.request)
+        parent_id_choices = get_possible_parents(self.request)
         resource_form = EntryCreateForm(
             request.POST, obj=resource,
             context={'request': request, 'modified_obj': resource})
-        resource_form.parent_id.choices = choices
+        resource_form.parent_id.choices = parent_id_choices
 
         if request.method == "POST" and resource_form.validate():
             parent_id = resource_form.data.get('parent_id', noop)
@@ -152,8 +171,10 @@ class AdminEntryViews(BaseView):
                     resource_id=resource.resource_id, new_parent_id=parent_id,
                     to_position=position, db_session=self.request.dbsession)
 
-        return {"breadcrumbs": breadcrumbs,
-                "resource": resource,
-                "resource_form": resource_form,
-                "permission_form": permission_form,
-                "permissions_grid": permissions_grid}
+        return {'breadcrumbs': breadcrumbs,
+                'resource': resource,
+                'resource_form': resource_form,
+                'user_permission_form': user_permission_form,
+                'group_permission_form': group_permission_form,
+                'group_permissions_grid': group_permissions_grid,
+                'user_permissions_grid': user_permissions_grid}

@@ -50,11 +50,9 @@
 
         {% if request.matchdict.get('verb') in ['GET', 'PATCH'] %}
             <div class="card">
-                <div class="card-header">
-                    <h3 class="panel-title">
-                        {% trans %}User Permissions{% endtrans %}
-                    </h3>
-                </div>
+                <h4 class="card-header">
+                    {% trans %}User Permissions{% endtrans %}
+                </h4>
                 <div class="card-block"
                      data-ng-controller="UserListController as userCtrl">
                     <form
@@ -78,17 +76,40 @@
                             Results Found{% endtrans %}</i></div>
 
 
-                        {{ form.render_form(permission_form) }}
+                        {{ form.render_form(user_permission_form) }}
                         <button type="submit" class="btn btn-secondary">
                             {% trans %}Add{% endtrans %}
                         </button>
                     </form>
 
                     <table class="table">
-                        {{ permissions_grid }}
+                        {{ user_permissions_grid }}
                     </table>
                 </div>
             </div>
+
+            <div class="card">
+                <h4 class="card-header">
+                    {% trans %}Group Permissions{% endtrans %}
+                </h4>
+                <div class="card-block">
+                    <form
+                        action="{{ request.route_url('admin_object_relation',
+                        object='resources', object_id=resource.resource_id,
+                        relation='group_permissions', verb='POST' ) }}"
+                        method="POST">
+                        {{ form.render_form(group_permission_form) }}
+                        <button type="submit" class="btn btn-secondary">
+                            {% trans %}Add{% endtrans %}
+                        </button>
+                    </form>
+
+                    <table class="table">
+                        {{ group_permissions_grid }}
+                    </table>
+                </div>
+            </div>
+
         {% endif %}
 
     </div>

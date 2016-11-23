@@ -58,6 +58,14 @@ class ResourcesShared(object):
             raise pyramid.httpexceptions.HTTPNotFound()
         return perm_inst
 
+    def group_permission_get(self, resource_id, group_id, perm_name):
+        perm_inst = GroupResourcePermissionService.get(
+            resource_id=resource_id, group_id=group_id,
+            perm_name=perm_name, db_session=self.request.dbsession)
+        if not perm_inst:
+            raise pyramid.httpexceptions.HTTPNotFound()
+        return perm_inst
+
     def user_permission_delete(self, resource, user_id, perm_name):
         perm_inst = self.user_permission_get(resource.resource_id, user_id,
                                              perm_name)

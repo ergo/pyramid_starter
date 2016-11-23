@@ -162,3 +162,41 @@ class ResourceUserPermissionsGrid(ObjectGrid):
         self.column_formats['user'] = user_td
         self.column_formats['perm_name'] = translate_perm_td
         self.column_formats['options'] = options_td
+
+
+class ResourceGroupPermissionsGrid(ObjectGrid):
+    def __init__(self, *args, **kwargs):
+        kwargs['columns'] = ['group', 'perm_name', 'options']
+        super(ResourceGroupPermissionsGrid, self).__init__(*args, **kwargs)
+        translate = self.request.localizer.translate
+
+        def group_td(col_num, i, item):
+            return HTML.td(item.group.group_name,
+                           class_='c{}'.format(col_num))
+
+        def translate_perm_td(col_num, i, item):
+            if getattr(item, 'owner', None) is True:
+                perm_name = translate(_('Resource owner'))
+            else:
+                perm_name = item.perm_name
+            return HTML.td(perm_name, class_='c{}'.format(col_num))
+
+        def options_td(col_num, i, item):
+            if item.owner is True:
+                return HTML.td('', class_='c{}'.format(col_num))
+
+            href = self.request.route_url(
+                'admin_object_relation', object='resources',
+                object_id=item.resource.resource_id, verb='DELETE',
+                relation='group_permissions',
+                _query={'perm_name': item.perm_name,
+                        'group_id': item.group.id})
+            delete_link = HTML.a(translate(_('Delete')),
+                                 class_='btn btn-danger',
+                                 href=href)
+            return HTML.td(delete_link,
+                           class_='c{}'.format(col_num))
+
+        self.column_formats['group'] = group_td
+        self.column_formats['perm_name'] = translate_perm_td
+        self.column_formats['options'] = options_td
