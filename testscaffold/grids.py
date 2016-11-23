@@ -46,7 +46,7 @@ class UsersGroupsGrid(UsersGrid):
             href = self.request.route_url(
                 'admin_object', object='users', object_id=item.id, verb='GET')
             edit_link = HTML.a(
-                translate(_('Edit')), class_='btn btn-info',href=href)
+                translate(_('Edit')), class_='btn btn-info', href=href)
             href = self.request.route_url(
                 'admin_object_relation', object='groups',
                 object_id=self.additional_kw['group'].id, relation='users',
@@ -123,4 +123,42 @@ class UserPermissionsGrid(ObjectGrid):
             return HTML.td(delete_link,
                            class_='c{}'.format(col_num))
 
+        self.column_formats['options'] = options_td
+
+
+class ResourceUserPermissionsGrid(ObjectGrid):
+    def __init__(self, *args, **kwargs):
+        kwargs['columns'] = ['user', 'perm_name', 'options']
+        super(ResourceUserPermissionsGrid, self).__init__(*args, **kwargs)
+        translate = self.request.localizer.translate
+
+        def user_td(col_num, i, item):
+            return HTML.td(item.user.user_name,
+                           class_='c{}'.format(col_num))
+
+        def translate_perm_td(col_num, i, item):
+            if getattr(item, 'owner', None) is True:
+                perm_name = translate(_('Resource owner'))
+            else:
+                perm_name = item.perm_name
+            return HTML.td(perm_name, class_='c{}'.format(col_num))
+
+        def options_td(col_num, i, item):
+            if item.owner is True:
+                return HTML.td('', class_='c{}'.format(col_num))
+
+            href = self.request.route_url(
+                'admin_object_relation', object='resources',
+                object_id=item.resource.resource_id, verb='DELETE',
+                relation='user_permissions',
+                _query={'perm_name': item.perm_name,
+                        'user_name': item.user.user_name})
+            delete_link = HTML.a(translate(_('Delete')),
+                                 class_='btn btn-danger',
+                                 href=href)
+            return HTML.td(delete_link,
+                           class_='c{}'.format(col_num))
+
+        self.column_formats['user'] = user_td
+        self.column_formats['perm_name'] = translate_perm_td
         self.column_formats['options'] = options_td

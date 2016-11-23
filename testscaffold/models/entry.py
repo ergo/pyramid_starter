@@ -15,6 +15,9 @@ class Entry(Resource):
 
     __possible_permissions__ = ['view', 'edit']
 
+    # handy for generic redirections based on type
+    plural_type = 'entries'
+
     resource_id = sa.Column(sa.Integer(),
                             sa.ForeignKey('resources.resource_id',
                                           onupdate='CASCADE',

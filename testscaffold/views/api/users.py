@@ -81,13 +81,13 @@ class UsersPermissionsAPI(object):
     def post(self):
         json_body = self.request.unsafe_json_body
         user = self.shared.user_get(self.request.matchdict['object_id'])
-        self.shared.permission_post(user, json_body['permission'])
+        self.shared.permission_post(user, json_body['perm_name'])
         return True
 
     @view_config(request_method="DELETE")
     def delete(self):
         user = self.shared.user_get(self.request.matchdict['object_id'])
         permission = self.shared.permission_get(
-            user, self.request.GET.get('permission'))
+            user, self.request.GET.get('perm_name'))
         self.shared.permission_delete(user, permission)
         return True

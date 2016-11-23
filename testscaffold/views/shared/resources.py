@@ -14,7 +14,8 @@ from ziggurat_foundations.models.services.group_resource_permission import \
 
 from testscaffold.util import safe_integer
 from testscaffold.models.user_resource_permission import UserResourcePermission
-from testscaffold.models.group_resource_permission import GroupResourcePermission
+from testscaffold.models.group_resource_permission import \
+    GroupResourcePermission
 
 ENTRIES_PER_PAGE = 50
 
@@ -41,18 +42,25 @@ class ResourcesShared(object):
             raise pyramid.httpexceptions.HTTPNotFound()
         return resource
 
-    def user_permission_post(self, resource, user_id, permission):
+    def user_permission_post(self, resource, user_id, perm_name):
         perm_inst = UserResourcePermission(
             user_id=user_id,
-            perm_name=permission
+            perm_name=perm_name
         )
         resource.user_permissions.append(perm_inst)
         return perm_inst
 
-    def user_permission_delete(self, resource, user_id, perm_name):
+    def user_permission_get(self, resource_id, user_id, perm_name):
         perm_inst = UserResourcePermissionService.get(
-            resource_id=resource.resource_id, user_id=user_id,
+            resource_id=resource_id, user_id=user_id,
             perm_name=perm_name, db_session=self.request.dbsession)
+        if not perm_inst:
+            raise pyramid.httpexceptions.HTTPNotFound()
+        return perm_inst
+
+    def user_permission_delete(self, resource, user_id, perm_name):
+        perm_inst = self.user_permission_get(resource.resource_id, user_id,
+                                             perm_name)
         resource.user_permissions.remove(perm_inst)
         return True
 

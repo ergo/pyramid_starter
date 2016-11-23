@@ -8,15 +8,17 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
 from ziggurat_foundations import noop
+from ziggurat_foundations.permissions import ANY_PERMISSION
+from ziggurat_foundations.models.services.resource import ResourceService
 
 from testscaffold.models.entry import Entry
 from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (
-    DirectPermissionForm,
+    ResourcePermissionForm,
     EntryCreateForm
 )
-from testscaffold.grids import UserPermissionsGrid
+from testscaffold.grids import ResourceUserPermissionsGrid
 
 from testscaffold.views.shared.entries import ENTRIES_PER_PAGE, EntriesShared
 from testscaffold.views import BaseView
@@ -115,13 +117,18 @@ class AdminEntryViews(BaseView):
         breadcrumbs = tree_service.path_upper(
             resource.resource_id, db_session=self.request.dbsession)
 
-        choices = get_possible_parents(self.request)
-
-        permission_form = DirectPermissionForm(
+        permission_form = ResourcePermissionForm(
             request.POST, context={'request': request})
-        permissions_grid = UserPermissionsGrid(
-            resource.user_permissions, request=request)
+        choices = [(p, p) for p in resource.__possible_permissions__]
+        permission_form.perm_name.choices = choices
 
+        permissions = ResourceService.users_for_perm(
+            resource, perm_name=ANY_PERMISSION, skip_group_perms=True)
+
+        permissions_grid = ResourceUserPermissionsGrid(
+            permissions, request=request)
+
+        choices = get_possible_parents(self.request)
         resource_form = EntryCreateForm(
             request.POST, obj=resource,
             context={'request': request, 'modified_obj': resource})

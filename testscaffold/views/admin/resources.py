@@ -11,7 +11,7 @@ from ziggurat_foundations.models.services.user import UserService
 from testscaffold.validation.schemes import (UserResourcePermissionSchema,
                                              GroupResourcePermissionSchema)
 
-from testscaffold.views.shared.users import UsersShared
+from testscaffold.views.shared.resources import ResourcesShared
 from testscaffold.views import BaseView
 
 log = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ class AdminResourceRelationsView(BaseView):
 
     def __init__(self, request):
         super(AdminResourceRelationsView, self).__init__(request)
-        self.shared = UsersShared(request)
+        self.shared = ResourcesShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/users/edit.jinja2',
                  match_param=['object=resources', 'relation=user_permissions',
@@ -36,8 +36,6 @@ class AdminResourceRelationsView(BaseView):
         request = self.request
         resource = self.request.context.resource
         came_from = request.headers.get('Referer')
-        user = self.shared.user_get(request.matchdict['object_id'])
-
         schema = UserResourcePermissionSchema(
             context={'request': self.request,
                      'resource': resource})
@@ -66,16 +64,21 @@ class AdminResourceRelationsView(BaseView):
         request_method="POST")
     def permission_delete(self):
         request = self.request
-        user = self.shared.user_get(request.matchdict['object_id'])
-        permission = self.shared.permission_get(
-            user, request.GET.get('permission'))
+        resource = self.request.context.resource
+        user = UserService.by_user_name(
+            request.GET.get('user_name'), db_session=self.request.dbsession)
+        permission = self.shared.user_permission_get(
+            resource.resource_id, user.id, request.GET.get('perm_name'))
+
         back_url = request.route_url(
-            'admin_object', object='users', object_id=user.id,
+            'admin_object', object=resource.plural_type,
+            object_id=resource.resource_id,
             verb='GET')
 
         if request.method == "POST":
-            self.shared.permission_delete(user, permission)
-            return pyramid.httpexceptions.HTTPFound(location=back_url)
+            self.shared.user_permission_delete(
+                resource, user.id, request.GET.get('perm_name'))
+            return httpexceptions.HTTPFound(location=back_url)
 
         return {"parent_obj": user,
                 "member_obj": permission,

@@ -142,6 +142,10 @@ class DirectPermissionForm(ZigguratForm):
                                     choices=direct_permission_choices)
 
 
+class ResourcePermissionForm(ZigguratForm):
+    perm_name = wtforms.SelectField(_('Permission'), choices=None)
+
+
 class EntryCreateForm(ZigguratForm):
     resource_name = wtforms.StringField(
         _("Name"), filters=[strip_filter],

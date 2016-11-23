@@ -105,7 +105,7 @@ class TestFunctionalAPIGroupsPermissions(object):
         url_path = '/api/0.1/groups/{}/permissions'.format(group.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         permission = {
-            'permission': 'root_administration',
+            'perm_name': 'root_administration',
         }
         assert not list(group.permissions)
         full_app.post_json(url_path, permission, status=200, headers=headers)
@@ -123,7 +123,7 @@ class TestFunctionalAPIGroupsPermissions(object):
         url_path = '/api/0.1/groups/{}/permissions'.format(group.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         permission = {
-            'permission': 'c',
+            'perm_name': 'c',
         }
         full_app.delete(url_path, permission, status=404, headers=headers)
 
@@ -138,7 +138,7 @@ class TestFunctionalAPIGroupsPermissions(object):
         url_path = '/api/0.1/groups/{}/permissions'.format(group.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         permission = {
-            'permission': 'root_administration',
+            'perm_name': 'root_administration',
         }
         qs = parse.urlencode(permission)
         full_app.delete('{}?{}'.format(url_path, qs),

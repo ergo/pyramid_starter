@@ -71,14 +71,14 @@ class GroupsPermissionsAPI(object):
     def post(self):
         json_body = self.request.unsafe_json_body
         group = self.shared.group_get(self.request.matchdict['object_id'])
-        self.shared.permission_post(group, json_body['permission'])
+        self.shared.permission_post(group, json_body['perm_name'])
         return True
 
     @view_config(request_method="DELETE")
     def delete(self):
         group = self.shared.group_get(self.request.matchdict['object_id'])
         permission = self.shared.permission_get(
-            group, self.request.GET.get('permission'))
+            group, self.request.GET.get('perm_name'))
         self.shared.permission_delete(group, permission)
         return True
 
