@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: testscaffold 1.0\n"
-"POT-Creation-Date: 2016-11-18 20:41+0100\n"
-"PO-Revision-Date: 2016-11-18 20:41+0100\n"
+"POT-Creation-Date: 2016-11-23 18:59+0100\n"
+"PO-Revision-Date: 2016-11-23 19:03+0100\n"
 "Last-Translator: ergo <info@appenlight.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -35,17 +35,21 @@ msgid "Edit"
 msgstr "Edytuj"
 
 #: testscaffold/grids.py:26 testscaffold/grids.py:55 testscaffold/grids.py:79
-#: testscaffold/grids.py:99 testscaffold/grids.py:120
+#: testscaffold/grids.py:99 testscaffold/grids.py:120 testscaffold/grids.py:156
 #: testscaffold/templates/admin/relation_remove.jinja2:17
 msgid "Delete"
 msgstr "Usuń"
 
-#: testscaffold/views/index.py:51
+#: testscaffold/grids.py:141
+msgid "Resource owner"
+msgstr "Właściciel zasobu"
+
+#: testscaffold/views/index.py:59
 #, python-format
 msgid "${project} :: New password request"
 msgstr "${project} :: Żądanie zmiany hasła"
 
-#: testscaffold/views/index.py:63
+#: testscaffold/views/index.py:71
 msgid ""
 "Password reset email had been sent. Please check your mailbox for further "
 "instructions.If you can't see the message please check your spam box."
@@ -53,16 +57,16 @@ msgstr ""
 "Wysłano informacje potrzebne aby zmienić twoje hasło. Sprawdz swoją skrzynkę "
 "pocztową, jeśli nie widzisz wiadomości sprawdź skrzynkę spam."
 
-#: testscaffold/views/index.py:99
+#: testscaffold/views/index.py:107
 msgid "You can sign in with your new password."
 msgstr "Możesz się już logować za pomocą nowego hasła"
 
-#: testscaffold/views/index.py:166
+#: testscaffold/views/index.py:174
 #, python-format
 msgid "${project} :: Start information"
 msgstr "${project} :: Informacje startowe"
 
-#: testscaffold/views/index.py:176
+#: testscaffold/views/index.py:184
 msgid "You have successfully registered."
 msgstr "Poprawnie zarejestrowano użytkownika"
 
@@ -97,6 +101,14 @@ msgstr "Zalogowano"
 msgid "User created."
 msgstr "Stworzono użytkownika."
 
+#: testscaffold/views/admin/entries.py:35
+msgid "Root (/)"
+msgstr "Źródło (/)"
+
+#: testscaffold/views/admin/entries.py:94
+msgid "Entry created."
+msgstr "Stworzono wpis."
+
 #: testscaffold/views/admin/groups.py:59
 msgid "Group created."
 msgstr "Stworzono grupę."
@@ -129,35 +141,31 @@ msgstr "Uprawnienie nadano użytkownikowi"
 msgid "Permission withdrawn from user."
 msgstr "Uprawnienie odebrano użytkownikowi"
 
-#: testscaffold/views/shared/entries.py:60
-msgid "Entry removed."
-msgstr "Wpis usunięto"
-
-#: testscaffold/views/shared/groups.py:63
+#: testscaffold/views/shared/groups.py:70
 msgid "Group removed."
 msgstr "Grupa usunięta"
 
-#: testscaffold/views/shared/groups.py:76
+#: testscaffold/views/shared/groups.py:83
 msgid "Permission granted for group."
 msgstr "Uprawnienie dodane do grupy"
 
-#: testscaffold/views/shared/groups.py:90
+#: testscaffold/views/shared/groups.py:97
 msgid "Permission withdrawn from group."
 msgstr "Uprawenienie odebrane grupie"
 
-#: testscaffold/views/shared/groups.py:97
+#: testscaffold/views/shared/groups.py:104
 msgid "User added to group."
 msgstr "Użytkownik dodany do grupy"
 
-#: testscaffold/views/shared/groups.py:108
+#: testscaffold/views/shared/groups.py:115
 msgid "User removed from group."
 msgstr "Użytkownik usunięty z grupy"
 
-#: testscaffold/templates/layout.jinja2:45
+#: testscaffold/templates/layout.jinja2:44
 msgid "Some project name"
 msgstr "Nazwa projektu"
 
-#: testscaffold/templates/layout.jinja2:75
+#: testscaffold/templates/layout.jinja2:71
 msgid "No content"
 msgstr "Brak treści"
 
@@ -208,58 +216,55 @@ msgid "Admin panel"
 msgstr "Panel administracyjny"
 
 #: testscaffold/templates/admin/layout.jinja2:18
+msgid "Manage Entries"
+msgstr "Zarządzaj wpisami"
+
+#: testscaffold/templates/admin/layout.jinja2:21
 msgid "List users"
 msgstr "Lista użytkowników"
 
-#: testscaffold/templates/admin/layout.jinja2:21
+#: testscaffold/templates/admin/layout.jinja2:24
 msgid "List groups"
 msgstr "Lista grup"
 
-#: testscaffold/templates/admin/layout.jinja2:24
+#: testscaffold/templates/admin/layout.jinja2:27
+#: testscaffold/templates/admin/celery.jinja2:7
 msgid "Celery test"
 msgstr "Test Celery"
 
-#: testscaffold/templates/admin/celery.jinja2:8
-msgid ""
-"Celery\n"
-"                    test"
-msgstr "Test Celery"
-
-#: testscaffold/templates/admin/celery.jinja2:13
+#: testscaffold/templates/admin/celery.jinja2:10
 msgid ""
 "You can test celery integration\n"
 "                        here"
 msgstr "Możesz przetestować integrację z celery"
 
-#: testscaffold/templates/admin/celery.jinja2:19
+#: testscaffold/templates/admin/celery.jinja2:16
 msgid "Send task"
 msgstr "Wyślij zadanie"
 
-#: testscaffold/templates/admin/index.jinja2:8
-msgid ""
-"Application\n"
-"                    statistics"
+#: testscaffold/templates/admin/index.jinja2:7
+msgid "Application statistics"
 msgstr "Statystyki aplikacji"
 
-#: testscaffold/templates/admin/index.jinja2:12
+#: testscaffold/templates/admin/index.jinja2:9
 msgid "Registered users"
 msgstr "Zarejestrowani użytkownicy"
 
-#: testscaffold/templates/admin/index.jinja2:15
+#: testscaffold/templates/admin/index.jinja2:12
 msgid "Last registered"
 msgstr "Ostatnio zarejestrowano"
 
-#: testscaffold/templates/admin/index.jinja2:20
+#: testscaffold/templates/admin/index.jinja2:17
 msgid ""
 "No one registered yet\n"
 "                            "
 msgstr "Nikt się jeszcze nie zarejestrował"
 
-#: testscaffold/templates/admin/index.jinja2:26
+#: testscaffold/templates/admin/index.jinja2:23
 msgid "Last logged"
 msgstr "Ostatnio zalogowany"
 
-#: testscaffold/templates/admin/index.jinja2:31
+#: testscaffold/templates/admin/index.jinja2:28
 msgid ""
 "No one logged in yet\n"
 "                            "
@@ -285,86 +290,132 @@ msgstr "Cofnij"
 msgid "Confirm"
 msgstr "Potwierdź"
 
-#: testscaffold/templates/admin/users/edit.jinja2:12
-#: testscaffold/templates/admin/users/index.jinja2:15
-msgid "Create a new user"
-msgstr "Stwórz nowego użytkownika"
+#: testscaffold/templates/admin/entries/edit.jinja2:14
+msgid "Create new entry"
+msgstr "Stwórz nowy wpis"
 
-#: testscaffold/templates/admin/users/edit.jinja2:14
+#: testscaffold/templates/admin/entries/edit.jinja2:16
+#: testscaffold/templates/admin/users/edit.jinja2:13
 msgid "Editing "
 msgstr "Edycja"
 
-#: testscaffold/templates/admin/users/edit.jinja2:34
+#: testscaffold/templates/admin/entries/edit.jinja2:40
+#: testscaffold/templates/admin/users/edit.jinja2:32
 msgid "Create"
 msgstr "Stwórz"
 
-#: testscaffold/templates/admin/users/edit.jinja2:36
+#: testscaffold/templates/admin/entries/edit.jinja2:42
+#: testscaffold/templates/admin/users/edit.jinja2:34
 msgid "Update"
 msgstr "Aktualizuj"
 
-#: testscaffold/templates/admin/users/edit.jinja2:49
-#: testscaffold/templates/admin/groups/edit.jinja2:52
-msgid "Permissions"
-msgstr "Uprawnienie"
+#: testscaffold/templates/admin/entries/edit.jinja2:55
+msgid "User Permissions"
+msgstr "Uprawnienia użytkowników"
 
-#: testscaffold/templates/admin/users/edit.jinja2:58
+#: testscaffold/templates/admin/entries/edit.jinja2:65
+#: testscaffold/validation/forms.py:48
+msgid "User name"
+msgstr "Nazwa użytkownika"
+
+#: testscaffold/templates/admin/entries/edit.jinja2:75
+msgid ""
+"\n"
+"                            Loading"
+msgstr ""
+
+#: testscaffold/templates/admin/entries/edit.jinja2:77
+msgid ""
+"No\n"
+"                            Results Found"
+msgstr "Nie znaleziono"
+
+#: testscaffold/templates/admin/entries/edit.jinja2:83
+#: testscaffold/templates/admin/users/edit.jinja2:56
+#: testscaffold/templates/admin/groups/edit.jinja2:56
 msgid "Add"
 msgstr "Dodaj"
 
-#: testscaffold/templates/admin/users/index.jinja2:9
+#: testscaffold/templates/admin/entries/index.jinja2:8
+msgid "Manage entries"
+msgstr "Zarządzaj wpisami"
+
+#: testscaffold/templates/admin/entries/index.jinja2:14
+msgid "Create a new entry"
+msgstr "Stwórz nowy wpis"
+
+#: testscaffold/templates/admin/entries/index.jinja2:32
+msgid "Sub-elements:"
+msgstr "Podelement:"
+
+#: testscaffold/templates/admin/users/edit.jinja2:11
+#: testscaffold/templates/admin/users/index.jinja2:13
+msgid "Create a new user"
+msgstr "Stwórz nowego użytkownika"
+
+#: testscaffold/templates/admin/users/edit.jinja2:47
+#: testscaffold/templates/admin/groups/edit.jinja2:50
+msgid "Permissions"
+msgstr "Uprawnienie"
+
+#: testscaffold/templates/admin/users/index.jinja2:8
 msgid "Browse users"
 msgstr "Przeglądaj użytkowników"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:12
-#: testscaffold/templates/admin/groups/index.jinja2:15
+#: testscaffold/templates/admin/groups/edit.jinja2:11
+#: testscaffold/templates/admin/groups/index.jinja2:13
 msgid "Create a new group"
 msgstr "Stwórz nową grupę"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:14
+#: testscaffold/templates/admin/groups/edit.jinja2:13
 msgid "Editing"
 msgstr "Edytujesz"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:29
+#: testscaffold/templates/admin/groups/edit.jinja2:27
 msgid "Create group"
 msgstr "Stwórz grupę"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:31
+#: testscaffold/templates/admin/groups/edit.jinja2:29
 msgid "Update group"
 msgstr "Aktualizuj grupę"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:42
+#: testscaffold/templates/admin/groups/edit.jinja2:40
 msgid "Group Members"
 msgstr "Grupa usunięta"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:44
+#: testscaffold/templates/admin/groups/edit.jinja2:42
 msgid "Add/remove members"
 msgstr "Dodaj/Usuń użytkowników"
 
-#: testscaffold/templates/admin/groups/edit.jinja2:58
-msgid "Add Permission"
-msgstr "Uprawnienie"
-
-#: testscaffold/templates/admin/groups/index.jinja2:9
+#: testscaffold/templates/admin/groups/index.jinja2:8
 msgid "Groups"
 msgstr "Grupy"
 
 #: testscaffold/templates/admin/groups/users_list.jinja2:10
-msgid "Add a new user to"
-msgstr "Dodaj nowego użytkownika"
+msgid ""
+"Add a new user\n"
+"                to"
+msgstr "Dodaj nowego użytkownika do"
 
-#: testscaffold/templates/admin/groups/users_list.jinja2:18
-msgid "Assign user"
-msgstr "Przypisz użytkownika"
+#: testscaffold/templates/admin/groups/users_list.jinja2:23
+msgid ""
+"Assign\n"
+"                        user"
+msgstr "Dodaj użytkownika"
 
-#: testscaffold/templates/admin/groups/users_list.jinja2:19
-msgid "Loading"
-msgstr "Wczytuję"
-
-#: testscaffold/templates/admin/groups/users_list.jinja2:21
-msgid "No Results Found"
-msgstr "Nie znaleziono"
+#: testscaffold/templates/admin/groups/users_list.jinja2:25
+msgid ""
+"\n"
+"                        Loading"
+msgstr ""
 
 #: testscaffold/templates/admin/groups/users_list.jinja2:28
+msgid ""
+"No\n"
+"                        Results Found"
+msgstr "Nie znaleziono wyników"
+
+#: testscaffold/templates/admin/groups/users_list.jinja2:36
 msgid "Members of"
 msgstr "Przynależy do"
 
@@ -454,35 +505,76 @@ msgstr "Email już istnieje w bazie danych"
 msgid "Group already exists in database"
 msgstr "Grupa już istnieje w bazie danych"
 
-#: testscaffold/validation/forms.py:39
-msgid "User name"
-msgstr "Nazwa użytkownika"
+#: testscaffold/validation/schemes.py:201
+msgid "User not found"
+msgstr "Nie znaleziono użytkownika"
 
-#: testscaffold/validation/forms.py:45 testscaffold/validation/forms.py:65
-#: testscaffold/validation/forms.py:82 testscaffold/validation/forms.py:101
+#: testscaffold/validation/schemes.py:208
+#: testscaffold/validation/schemes.py:232
+msgid "Incorrect permission name for resource"
+msgstr "Nieprawidłowa nazwa uprawnienia dla tego zasobu"
+
+#: testscaffold/validation/schemes.py:225
+msgid "Group not found"
+msgstr "Nie znaleziono grupy"
+
+#: testscaffold/validation/forms.py:54 testscaffold/validation/forms.py:74
+#: testscaffold/validation/forms.py:91 testscaffold/validation/forms.py:110
 msgid "Password"
 msgstr "Hasło"
 
-#: testscaffold/validation/forms.py:51 testscaffold/validation/forms.py:74
+#: testscaffold/validation/forms.py:60 testscaffold/validation/forms.py:83
 msgid "Email"
 msgstr "Email"
 
-#: testscaffold/validation/forms.py:59
+#: testscaffold/validation/forms.py:68
 msgid "Login"
 msgstr "Nazwa użytkownika"
 
-#: testscaffold/validation/forms.py:88
+#: testscaffold/validation/forms.py:97
 msgid "Confirm password"
 msgstr "Potwierdź hasło"
 
-#: testscaffold/validation/forms.py:110
+#: testscaffold/validation/forms.py:119 testscaffold/validation/forms.py:151
 msgid "Name"
 msgstr "Nazwa"
 
-#: testscaffold/validation/forms.py:117
+#: testscaffold/validation/forms.py:126
 msgid "Description"
 msgstr "Opis"
 
-#: testscaffold/validation/forms.py:132
+#: testscaffold/validation/forms.py:141 testscaffold/validation/forms.py:146
 msgid "Permission"
 msgstr "Uprawnienie"
+
+#: testscaffold/validation/forms.py:156
+msgid "Note"
+msgstr "Wpis"
+
+#~ msgid "Entry removed."
+#~ msgstr "Wpis usunięto"
+
+#~ msgid ""
+#~ "Celery\n"
+#~ "                    test"
+#~ msgstr "Test Celery"
+
+#~ msgid ""
+#~ "Application\n"
+#~ "                    statistics"
+#~ msgstr "Statystyki aplikacji"
+
+#~ msgid "Add Permission"
+#~ msgstr "Uprawnienie"
+
+#~ msgid "Add a new user to"
+#~ msgstr "Dodaj nowego użytkownika"
+
+#~ msgid "Assign user"
+#~ msgstr "Przypisz użytkownika"
+
+#~ msgid "Loading"
+#~ msgstr "Wczytuję"
+
+#~ msgid "No Results Found"
+#~ msgstr "Nie znaleziono"
