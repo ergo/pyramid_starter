@@ -142,7 +142,7 @@ class AdminUserRelationsView(BaseView):
             user.permissions, request=request, user=user)
 
         if request.method == "POST" and permission_form.validate():
-            permission_name = permission_form.permission.data
+            permission_name = permission_form.perm_name.data
             self.shared.permission_post(user, permission_name)
             url = request.route_url('admin_object', object='users',
                                     object_id=user.id, verb='GET')
@@ -167,7 +167,7 @@ class AdminUserRelationsView(BaseView):
         request = self.request
         user = self.shared.user_get(request.matchdict['object_id'])
         permission = self.shared.permission_get(
-            user, request.GET.get('permission'))
+            user, request.GET.get('perm_name'))
         back_url = request.route_url(
             'admin_object', object='users', object_id=user.id,
             verb='GET')

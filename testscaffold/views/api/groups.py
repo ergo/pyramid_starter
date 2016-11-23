@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 import logging
 from pyramid.view import view_config, view_defaults
+from ziggurat_foundations.models.services.user import UserService
 
 from testscaffold.models.group import Group
 from testscaffold.views import BaseView
@@ -94,13 +95,14 @@ class GroupsUserRelationAPI(object):
     def post(self):
         json_body = self.request.unsafe_json_body
         group = self.shared.group_get(self.request.matchdict['object_id'])
-        user = self.shared.user_get(json_body.get('user_id'))
+        user = self.shared.user_get_by_username(json_body.get('user_name'))
         self.shared.user_post(group, user)
         return True
 
     @view_config(request_method="DELETE")
     def delete(self):
         group = self.shared.group_get(self.request.matchdict['object_id'])
-        user = self.shared.user_get(self.request.GET.get('user_id'))
+        user = self.shared.user_get_by_username(
+            self.request.GET.get('user_name'))
         self.shared.user_delete(group, user)
         return True

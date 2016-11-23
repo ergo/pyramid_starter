@@ -44,8 +44,8 @@ class UserCreateSchema(Schema):
         request = self.context['request']
         modified_obj = self.context.get('modified_obj')
         user = UserService.by_user_name(value, db_session=request.dbsession)
-        by_admin = request.has_permission('root_administrator')
-        if modified_obj and not by_admin:
+        by_admin = request.has_permission('root_administration')
+        if modified_obj and not by_admin and (modified_obj.user_name != value):
             msg = _('Only administrator can change usernames')
             raise validate.ValidationError(msg)
         if user:
@@ -189,14 +189,14 @@ class UserResourcePermissionSchema(Schema):
         strict = True
         ordered = True
 
-    user_id = fields.Int(required=True)
+    user_name = fields.Str(required=True)
 
     perm_name = fields.Str(required=True)
 
-    @validates('user_id')
-    def validate_user_id(self, value):
+    @validates('user_name')
+    def validate_user_name(self, value):
         request = self.context['request']
-        user = UserService.get(value, db_session=request.dbsession)
+        user = UserService.by_user_name(value, db_session=request.dbsession)
         if not user:
             raise validate.ValidationError(_('User not found'))
 

@@ -3,6 +3,9 @@
 {% import 'testscaffold:templates/partials/ziggurat_form.jinja2' as form %}
 
 {% block content %}
+    <script
+        src="{{ request.static_url('testscaffold:static/js/admin/users_list.js') }}"></script>
+
     <div class="col-md-9">
 
         <div class="panel panel-default">
@@ -18,9 +21,9 @@
             </div>
             <div class="panel-body">
 
-            <p class="breadcrumbs">
+                <p class="breadcrumbs">
 
-            </p>
+                </p>
 
                 {% if request.matchdict.get('verb') == 'POST' %}
                     <form
@@ -46,5 +49,49 @@
 
             </div>
         </div>
+
+        {% if request.matchdict.get('verb') in ['GET', 'PATCH'] %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans %}User Permissions{% endtrans %}
+                    </h3>
+                </div>
+                <div class="panel-body"
+                     data-ng-controller="UserListController as userCtrl">
+                    <form
+                        action="{{ request.route_url('admin_object_relation', object='resources', object_id=resource.resource_id, relation='user_permissions', verb='POST' ) }}"
+                        method="POST">
+
+                        <label for="user_name" id="label-user_name" class="control-label">
+                            {% trans %}User name{% endtrans %}
+                        </label>
+
+                        <input type="text" name="user_name"
+                               data-ng-model="userCtrl.selectedUser"
+                               placeholder="Users loaded via angularJS"
+                               data-uib-typeahead="user as user.user_name for user in userCtrl.getUsers($viewValue)"
+                               data-typeahead-loading="userCtrl.loadingUsers"
+                               data-typeahead-no-results="userCtrl.noResults"
+                               class="form-control">
+                        <i data-ng-show="userCtrl.loadingUsers"> {% trans %}
+                            Loading{% endtrans %} </i>
+                        <div data-ng-show="userCtrl.noResults"><i>{% trans %}No
+                            Results Found{% endtrans %}</i></div>
+
+
+                        {{ form.render_form(permission_form) }}
+                        <button type="submit" class="btn btn-default">
+                            {% trans %}Add{% endtrans %}
+                        </button>
+                    </form>
+
+                    <table class="table">
+                        {{ permissions_grid }}
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
 {% endblock content %}

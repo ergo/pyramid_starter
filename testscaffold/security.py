@@ -80,6 +80,10 @@ def object_security_factory(request):
 
     return RootFactory(request)
 
+def filter_admin_panel_perms(item):
+    if str(item[2]).startswith('admin_'):
+        return False
+    return True
 
 class RootFactory(object):
     """
@@ -94,10 +98,20 @@ class RootFactory(object):
         if getattr(request, 'user'):
             permissions = UserService.permissions(request.user,
                                                   db_session=request.dbsession)
+            has_admin_panel_access = False
+            panel_perms = ['admin_panel', ALL_PERMISSIONS]
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
                     permissions):
-                self.__acl__.append(
-                    rewrite_root_perm(outcome, perm_user, perm_name))
+                perm_tuple = rewrite_root_perm(outcome, perm_user, perm_name)
+                if perm_tuple[0] is Allow and perm_tuple[2] in panel_perms:
+                    has_admin_panel_access = True
+                self.__acl__.append(perm_tuple)
+
+            # users have special permission called `admin_panel`
+            # it should be prerequisite for other `admin*` permissions
+            # if it is not present let's deny other admin permissions
+            if not has_admin_panel_access:
+                self.__acl__ = list(filter(filter_admin_panel_perms, self.__acl__))
 
 
 class DefaultResourceFactory(object):

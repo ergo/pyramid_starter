@@ -44,6 +44,13 @@ class GroupsShared(object):
             raise pyramid.httpexceptions.HTTPNotFound()
         return user
 
+    def user_get_by_username(self, user_name):
+        request = self.request
+        user = UserService.by_user_name(user_name, db_session=request.dbsession)
+        if not user:
+            raise pyramid.httpexceptions.HTTPNotFound()
+        return user
+
     def permission_get(self, group, permission):
         permission = GroupPermissionService.by_group_and_perm(
             group.id, permission, db_session=self.request.dbsession)
@@ -62,20 +69,20 @@ class GroupsShared(object):
         self.request.session.flash(
             {'msg': self.translate(_('Group removed.')), 'level': 'success'})
 
-    def permission_post(self, group, permission):
+    def permission_post(self, group, perm_name):
         try:
-            self.permission_get(group, permission)
+            self.permission_get(group, perm_name)
         except pyramid.httpexceptions.HTTPNotFound:
             log.info('group_permission_post',
                      extra={'group_id': group.id,
                             'group_name': group.group_name,
-                            'permission': permission})
-            permission_inst = GroupPermission(perm_name=permission)
+                            'perm_name': perm_name})
+            permission_inst = GroupPermission(perm_name=perm_name)
             group.permissions.append(permission_inst)
             self.request.session.flash(
                 {'msg': self.translate(_('Permission granted for group.')),
                  'level': 'success'})
-        return permission
+        return permission_inst
 
     def permission_delete(self, group, permission):
         permission_inst = GroupPermissionService.by_group_and_perm(
@@ -84,7 +91,7 @@ class GroupsShared(object):
             log.info('group_permission_delete',
                      extra={'group_id': group.id,
                             'group_name': group.group_name,
-                            'permission': permission})
+                            'perm_name': permission.perm_name})
             group.permissions.remove(permission_inst)
             self.request.session.flash(
                 {'msg': self.translate(_('Permission withdrawn from group.')),

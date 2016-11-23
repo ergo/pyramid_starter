@@ -35,7 +35,7 @@ class TestFunctionalAPIResources(object):
         url_path = '/api/0.1/resources/{}/user_permissions'.format(-55)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         perm_dict = {
-            'user_id': user.id,
+            'user_name': user.user_name,
             'perm_name': 'blabla'
         }
         response = full_app.post_json(
@@ -53,13 +53,13 @@ class TestFunctionalAPIResources(object):
         url_path = '/api/0.1/resources/{}/user_permissions'.format(node_id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         perm_dict = {
-            'user_id': -9,
+            'user_name': 'safsaasf9jegegw',
             'perm_name': 'blabla'
         }
         response = full_app.post_json(
             url_path, perm_dict, status=422, headers=headers)
         assert 'perm_name' in response.json
-        assert 'user_id' in response.json
+        assert 'user_name' in response.json
 
     def test_user_permission_add_proper(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
@@ -72,9 +72,9 @@ class TestFunctionalAPIResources(object):
         node_id = resource.resource_id
         url_path = '/api/0.1/resources/{}/user_permissions'.format(node_id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
-        perm_name = 'editor'
+        perm_name = 'edit'
         perm_dict = {
-            'user_id': user.id,
+            'user_name': user.user_name,
             'perm_name': perm_name
         }
         response = full_app.post_json(url_path, perm_dict, status=200,
@@ -96,16 +96,16 @@ class TestFunctionalAPIResources(object):
                                     sqla_session=session)
 
         node_id = resource.resource_id
-        qs = parse.urlencode({'user_id': -99, 'perm_name': 'BLABLA'})
+        qs = parse.urlencode({'user_name': -99, 'perm_name': 'BLABLA'})
         url_path = '/api/0.1/resources/{}/user_permissions?{}'.format(
             node_id, qs)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         response = full_app.delete(url_path, status=422, headers=headers)
         assert 'perm_name' in response.json
-        assert 'user_id' in response.json
+        assert 'user_name' in response.json
 
     def test_user_permission_remove_proper(self, full_app, sqla_session):
-        perm_name = 'editor'
+        perm_name = 'edit'
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             user = create_user({'user_name': 'aaaa', 'email': 'foo'},
@@ -117,7 +117,7 @@ class TestFunctionalAPIResources(object):
             resource.user_permissions.append(perm_inst)
 
         node_id = resource.resource_id
-        qs = parse.urlencode({'user_id': user.id, 'perm_name': perm_name})
+        qs = parse.urlencode({'user_name': user.user_name, 'perm_name': perm_name})
         url_path = '/api/0.1/resources/{}/user_permissions?{}'.format(
             node_id, qs)
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -173,7 +173,7 @@ class TestFunctionalAPIResources(object):
         node_id = resource.resource_id
         url_path = '/api/0.1/resources/{}/group_permissions'.format(node_id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
-        perm_name = 'editor'
+        perm_name = 'edit'
         perm_dict = {
             'group_id': group.id,
             'perm_name': perm_name
@@ -205,7 +205,7 @@ class TestFunctionalAPIResources(object):
         assert 'group_id' in response.json
 
     def test_group_permission_remove_proper(self, full_app, sqla_session):
-        perm_name = 'editor'
+        perm_name = 'edit'
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group({'group_name': 'aaaa'}, sqla_session=session)

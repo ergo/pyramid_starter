@@ -210,7 +210,7 @@ class AdminGroupRelationsView(object):
             group.permissions, request=request, group=group)
 
         if request.method == "POST" and permission_form.validate():
-            permission_name = permission_form.permission.data
+            permission_name = permission_form.perm_name.data
             self.shared.permission_post(group, permission_name)
             url = request.route_url('admin_object', object='groups',
                                     object_id=group.id, verb='GET')
@@ -235,7 +235,7 @@ class AdminGroupRelationsView(object):
         request = self.request
         group = self.shared.group_get(request.matchdict['object_id'])
         permission = self.shared.permission_get(
-            group, request.GET.get('permission'))
+            group, request.GET.get('perm_name'))
         back_url = request.route_url(
             'admin_object', object='groups', object_id=group.id,
             verb='GET')

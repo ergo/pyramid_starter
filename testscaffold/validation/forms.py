@@ -22,6 +22,7 @@ def strip_filter(value):
 def empty_to_none(value):
     return int(value) if value else None
 
+
 _ = TranslationStringFactory('testscaffold')
 
 
@@ -129,16 +130,16 @@ class GroupUpdateForm(ZigguratForm):
         ])
 
 
-group_permission_choices = []
+direct_permission_choices = []
 
 for permission in User.__possible_permissions__:
-    group_permission_choices.append((permission,
+    direct_permission_choices.append((permission,
                                      permission.title().replace('_', ' '),))
 
 
 class DirectPermissionForm(ZigguratForm):
-    permission = wtforms.SelectField(_('Permission'),
-                                     choices=group_permission_choices)
+    perm_name = wtforms.SelectField(_('Permission'),
+                                    choices=direct_permission_choices)
 
 
 class EntryCreateForm(ZigguratForm):

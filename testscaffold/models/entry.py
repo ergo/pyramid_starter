@@ -13,7 +13,7 @@ class Entry(Resource):
     __tablename__ = 'entries'
     __mapper_args__ = {'polymorphic_identity': 'entry'}
 
-    __possible_permissions__ = ['editor']
+    __possible_permissions__ = ['view', 'edit']
 
     resource_id = sa.Column(sa.Integer(),
                             sa.ForeignKey('resources.resource_id',

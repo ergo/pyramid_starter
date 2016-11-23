@@ -86,20 +86,20 @@ class UsersShared(object):
             raise pyramid.httpexceptions.HTTPNotFound()
         return permission
 
-    def permission_post(self, user, permission):
+    def permission_post(self, user, perm_name):
         try:
-            self.permission_get(user, permission)
+            self.permission_get(user, perm_name)
         except pyramid.httpexceptions.HTTPNotFound:
             log.info('user_permission_post',
                      extra={'user_id': user.id,
                             'user_name': user.user_name,
-                            'permission': permission})
-            permission_inst = UserPermission(perm_name=permission)
+                            'perm_name': perm_name})
+            permission_inst = UserPermission(perm_name=perm_name)
             user.user_permissions.append(permission_inst)
             self.request.session.flash(
                 {'msg': self.translate(_('Permission granted for user.')),
                  'level': 'success'})
-        return permission
+        return permission_inst
 
     def permission_delete(self, user, permission):
         permission_inst = UserPermissionService.by_user_and_perm(
@@ -108,7 +108,7 @@ class UsersShared(object):
             log.info('user_permission_delete',
                      extra={'user_id': user.id,
                             'user_name': user.user_name,
-                            'permission': permission})
+                            'permission': permission.perm_name})
             user.user_permissions.remove(permission_inst)
             self.request.session.flash(
                 {'msg': self.translate(_('Permission withdrawn from user.')),

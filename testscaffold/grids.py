@@ -95,7 +95,7 @@ class GroupPermissionsGrid(ObjectGrid):
                 'admin_object_relation', object='groups',
                 object_id=self.additional_kw['group'].id, verb='DELETE',
                 relation='permissions',
-                _query={'permission': item.perm_name})
+                _query={'perm_name': item.perm_name})
             delete_link = HTML.a(translate(_('Delete')),
                                  class_='btn btn-danger',
                                  href=href)
@@ -116,7 +116,7 @@ class UserPermissionsGrid(ObjectGrid):
                 'admin_object_relation', object='users',
                 object_id=self.additional_kw['user'].id, verb='DELETE',
                 relation='permissions',
-                _query={'permission': item.perm_name})
+                _query={'perm_name': item.perm_name})
             delete_link = HTML.a(translate(_('Delete')),
                                  class_='btn btn-danger',
                                  href=href)

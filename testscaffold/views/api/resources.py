@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import logging
 
 from pyramid.view import view_config, view_defaults
+from ziggurat_foundations.models.services.user import UserService
 
 from testscaffold.views.shared.resources import ResourcesShared
 from testscaffold.util import safe_integer
@@ -30,8 +31,10 @@ class ResourcesUserPermissionsAPI(object):
             context={'request': self.request,
                      'resource': resource})
         data = schema.load(self.request.unsafe_json_body).data
+        user = UserService.by_user_name(
+            data['user_name'], db_session=self.request.dbsession)
         perm_inst = self.shared.user_permission_post(
-            resource, data['user_id'], data['perm_name'])
+            resource, user.id, data['perm_name'])
         self.request.dbsession.flush()
         return perm_inst.get_dict()
 
@@ -42,11 +45,13 @@ class ResourcesUserPermissionsAPI(object):
         schema = UserResourcePermissionSchema(
             context={'request': self.request,
                      'resource': resource})
-        params = {'user_id': self.request.GET.get('user_id'),
+        params = {'user_name': self.request.GET.get('user_name'),
                   'perm_name': self.request.GET.get('perm_name')}
         data = schema.load(params).data
+        user = UserService.by_user_name(
+            data['user_name'], db_session=self.request.dbsession)
         self.shared.user_permission_delete(
-            resource, data['user_id'], data['perm_name'])
+            resource, user.id, data['perm_name'],)
         return True
 
 

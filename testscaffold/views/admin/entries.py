@@ -7,7 +7,7 @@ import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
-from ziggurat_foundations import noop, noop
+from ziggurat_foundations import noop
 
 from testscaffold.models.entry import Entry
 from testscaffold.services.resource_tree_service import tree_service

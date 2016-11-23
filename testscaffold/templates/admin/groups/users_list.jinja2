@@ -1,37 +1,48 @@
 {% extends "testscaffold:templates/admin/layout.jinja2" %}
 
 {% block content %}
-<script src="{{request.static_url('testscaffold:static/js/admin/users_list.js')}}"></script>
+    <script
+        src="{{ request.static_url('testscaffold:static/js/admin/users_list.js') }}"></script>
 
-<div class="col-md-9">
+    <div class="col-md-9">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{% trans %}Add a new user to{% endtrans %} <strong>{{group}}</strong></h3>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Add a new user
+                    to{% endtrans %} <strong>{{ group }}</strong></h3>
+            </div>
+            <div class="panel-body"
+                 data-ng-controller="UserListController as userCtrl">
+                <form
+                    data-ng-submit="userCtrl.assignUserToGroup({{ group.id }})">
+                    <input type="text" name="user_name"
+                           data-ng-model="userCtrl.selectedUser"
+                           placeholder="Users loaded via angularJS"
+                           data-uib-typeahead="user as user.user_name for user in userCtrl.getUsers($viewValue)"
+                           data-typeahead-loading="userCtrl.loadingUsers"
+                           data-typeahead-no-results="userCtrl.noResults"
+                           class="form-control">
+                    <button type="submit" class="btn btn-info">{% trans %}Assign
+                        user{% endtrans %}</button>
+                    <i data-ng-show="userCtrl.loadingUsers"> {% trans %}
+                        Loading{% endtrans %} </i>
+
+                    <div data-ng-show="userCtrl.noResults"><i>{% trans %}No
+                        Results Found{% endtrans %}</i></div>
+                </form>
+            </div>
         </div>
-        <div class="panel-body" data-ng-controller="UserListController as userCtrl">
-            <form data-ng-submit="userCtrl.assignUserToGroup({{group.id}})">
-                <input type="text" data-ng-model="userCtrl.selectedUser" placeholder="Users loaded via angularJS"
-                       data-uib-typeahead="user as user.user_name for user in userCtrl.getUsers($viewValue)"
-                       data-typeahead-loading="userCtrl.loadingUsers"
-                       data-typeahead-no-results="userCtrl.noResults" class="form-control">
-                <button type="submit" class="btn btn-info">{% trans %}Assign user{% endtrans %}</button>
-                <i data-ng-show="userCtrl.loadingUsers"> {% trans %}Loading{% endtrans %} </i>
 
-                <div data-ng-show="userCtrl.noResults"><i>{% trans %}No Results Found{% endtrans %}</i></div>
-            </form>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans %}Members of{% endtrans %}
+                    <strong>{{ group }}</strong></h3>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    {{ user_grid }}
+                </table>
+            </div>
         </div>
     </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">{% trans %}Members of{% endtrans %} <strong>{{group}}</strong></h3>
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                {{user_grid}}
-            </table>
-        </div>
-    </div>
-</div>
 {% endblock content %}

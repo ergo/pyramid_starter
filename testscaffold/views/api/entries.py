@@ -6,7 +6,7 @@ import logging
 
 from pyramid.view import view_config, view_defaults
 
-from ziggurat_foundations import noop, noop
+from ziggurat_foundations import noop
 
 from testscaffold.models.entry import Entry
 from testscaffold.validation.schemes import EntryCreateSchema

@@ -163,9 +163,9 @@ class TestFunctionalAPIGroupsUsers(object):
         url_path = '/api/0.1/groups/{}/users'.format(group.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         assert not list(group.users)
-        full_app.post_json(url_path, {'user_id': user_a.id},
+        full_app.post_json(url_path, {'user_name': user_a.user_name},
                            status=200, headers=headers)
-        full_app.post_json(url_path, {'user_id': user_b.id},
+        full_app.post_json(url_path, {'user_name': user_b.user_name},
                            status=200, headers=headers)
         sqla_session.expire_all()
         assert len(group.users) == 2
@@ -198,7 +198,7 @@ class TestFunctionalAPIGroupsUsers(object):
 
         url_path = '/api/0.1/groups/{}/users'.format(group.id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
-        qs = parse.urlencode({'user_id': user_b.id})
+        qs = parse.urlencode({'user_name': user_b.user_name})
 
         assert len(group.users) == 2
         full_app.delete('{}?{}'.format(url_path, qs),
