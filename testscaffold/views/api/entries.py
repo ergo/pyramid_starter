@@ -6,7 +6,7 @@ import logging
 
 from pyramid.view import view_config, view_defaults
 
-from ziggurat_foundations import noop, noparent
+from ziggurat_foundations import noop, noop
 
 from testscaffold.models.entry import Entry
 from testscaffold.validation.schemes import EntryCreateSchema
@@ -56,8 +56,8 @@ class EntriesAPIView(BaseView):
         self.shared.populate_instance(resource, data)
         self.request.user.resources.append(resource)
         resource.persist(flush=True, db_session=self.request.dbsession)
-        position = data.get('ordering')
-        if position is not None:
+        position = data.get('ordering') or noop
+        if position is not noop:
             tree_service.set_position(
                 resource_id=resource.resource_id, to_position=position,
                 db_session=self.request.dbsession)
@@ -73,20 +73,26 @@ class EntriesAPIView(BaseView):
 
     @view_config(request_method="PATCH", permission='owner')
     def patch(self):
-        entry = self.shared.entry_get(self.request.matchdict['object_id'])
+        resource = self.shared.entry_get(self.request.matchdict['object_id'])
         schema = EntryCreateSchema(
-            context={'request': self.request, 'modified_obj': entry})
+            context={'request': self.request, 'modified_obj': resource})
         data = schema.load(self.request.unsafe_json_body, partial=True).data
         # we need to ensure we are not overwriting the values
         # before move_to_position is invoked
-        ordering = data.pop('ordering', noop)
-        parent_id = data.pop('parent_id', noparent)
-        self.shared.populate_instance(entry, data)
-        if ordering is not noop or parent_id is not noparent:
+        position = data.pop('ordering', None) or noop
+        parent_id = data.pop('parent_id', None) or noop
+        self.shared.populate_instance(
+            resource, data, exclude_keys=['ordering', 'parent_id'])
+        into_new_parent = parent_id != resource.parent_id and \
+                          parent_id is not noop
+        if position is not noop or into_new_parent:
+            if not position and into_new_parent:
+                position = tree_service.count_children(
+                    parent_id, db_session=self.request.dbsession) + 1
             tree_service.move_to_position(
-                resource_id=entry.resource_id, new_parent_id=parent_id,
-                to_position=ordering, db_session=self.request.dbsession)
-        return schema.dump(entry).data
+                resource_id=resource.resource_id, new_parent_id=parent_id,
+                to_position=position, db_session=self.request.dbsession)
+        return schema.dump(resource).data
 
     @view_config(request_method="DELETE", permission='owner')
     def delete(self):
@@ -102,5 +108,3 @@ class EntriesAPIView(BaseView):
         tree_service.delete_branch(
             instance.resource_id, db_session=self.request.dbsession)
         return True
-
-

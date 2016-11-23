@@ -42,7 +42,7 @@
         </div>
 
 
-        {% if request.matchdict.get('verb') == 'GET' %}
+        {% if request.matchdict.get('verb') in ['GET', 'PATCH'] %}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">

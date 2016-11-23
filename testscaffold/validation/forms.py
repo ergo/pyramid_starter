@@ -19,6 +19,9 @@ def strip_filter(value):
     return value.strip() if value else None
 
 
+def empty_to_none(value):
+    return int(value) if value else None
+
 _ = TranslationStringFactory('testscaffold')
 
 
@@ -149,7 +152,7 @@ class EntryCreateForm(ZigguratForm):
 
     parent_id = wtforms.SelectField(
         choices=(),
-        coerce=int,
+        coerce=empty_to_none,
         validators=[
-            validate_marshmallow_partial(EntryCreateSchema, 'parent_id')
+            wtforms.validators.Optional()
         ])

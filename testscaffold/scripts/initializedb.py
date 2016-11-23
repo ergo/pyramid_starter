@@ -38,7 +38,6 @@ def main(argv=sys.argv):
                                options=options)
 
     engine = get_engine(settings)
-    Base.metadata.create_all(engine)
 
     session_factory = get_session_factory(engine)
     dbsession = get_tm_session(session_factory, transaction.manager)

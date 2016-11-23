@@ -293,7 +293,7 @@ class TestFunctionalAPIEntries(object):
                                       headers=headers)
         assert expected in response.json['_schema'][0]
 
-    def test_entry_parent_no_order(self, full_app, sqla_session):
+    def test_entry_create_parent_no_order(self, full_app, sqla_session):
         from testscaffold.services.resource_tree_service import tree_service
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
@@ -317,6 +317,25 @@ class TestFunctionalAPIEntries(object):
         assert response.json['ordering'] == 5
         new_id = response.json['resource_id']
         assert [i for i in tree_struct.keys()] == [5, 6, 7, 8, new_id]
+
+    def test_entry_patch_same_parent(self, full_app, sqla_session):
+        from testscaffold.services.resource_tree_service import tree_service
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+
+        url_path = '/api/0.1/entries/{}'.format(1)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        entry_dict = {
+            'parent_id': -1
+        }
+        response = full_app.patch_json(url_path, entry_dict, status=200,
+                                       headers=headers)
+        result = tree_service.from_parent_deeper(
+            None, db_session=sqla_session)
+        tree_struct = tree_service.build_subtree_strut(result)['children']
+        pprint.pprint(tree_struct)
+        assert response.json['ordering'] == 1
 
     def test_entry_patch_order_same_branch(self, full_app, sqla_session):
         from testscaffold.services.resource_tree_service import tree_service
@@ -396,5 +415,28 @@ class TestFunctionalAPIEntries(object):
         pprint.pprint(tree_struct)
         assert response.json['ordering'] == position
         assert [i for i in tree_struct.keys()] == ordered_elems
+        assert [i['node'].ordering for i in tree_struct.values()] == [1, 2, 3,
+                                                                      4, 5]
+
+    def test_entry_patch_order_upper_branch_no_order(
+            self, full_app, sqla_session):
+        from testscaffold.services.resource_tree_service import tree_service
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+
+        url_path = '/api/0.1/entries/{}'.format(12)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        entry_dict = {
+            'parent_id': 1
+        }
+        response = full_app.patch_json(url_path, entry_dict, status=200,
+                                       headers=headers)
+        result = tree_service.from_parent_deeper(
+            1, db_session=sqla_session)
+        tree_struct = tree_service.build_subtree_strut(result)['children']
+        pprint.pprint(tree_struct)
+        assert response.json['ordering'] == 5
+        assert [i for i in tree_struct.keys()] == [5, 6, 7, 8, 12]
         assert [i['node'].ordering for i in tree_struct.values()] == [1, 2, 3,
                                                                       4, 5]

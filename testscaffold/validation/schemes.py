@@ -8,7 +8,7 @@ from ziggurat_foundations.exc import (
     ZigguratResourceTreeMissingException,
     ZigguratResourceTreePathException
 )
-from ziggurat_foundations import noparent
+from ziggurat_foundations import noop
 from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
 from testscaffold.services.resource_tree_service import tree_service
@@ -140,7 +140,7 @@ class ResourceCreateSchemaMixin(Schema):
     def validate_ordering(self, data):
         request = self.context['request']
         resource = self.context.get('modified_obj')
-        new_parent_id = data.get('parent_id') or noparent
+        new_parent_id = data.get('parent_id') or noop
         to_position = data.get('ordering')
         if to_position is None or to_position == 1:
             return
@@ -149,15 +149,15 @@ class ResourceCreateSchemaMixin(Schema):
 
         # reset if parent is same as old
         if resource and new_parent_id == resource.parent_id:
-            new_parent_id = noparent
+            new_parent_id = noop
 
-        if new_parent_id is noparent and resource:
+        if new_parent_id is noop and resource:
             same_branch = True
 
         if resource:
-            parent_id = resource.parent_id if new_parent_id is noparent else new_parent_id
+            parent_id = resource.parent_id if new_parent_id is noop else new_parent_id
         else:
-            parent_id = new_parent_id if new_parent_id is not noparent else None
+            parent_id = new_parent_id if new_parent_id is not noop else None
         try:
             tree_service.check_node_position(
                 parent_id, to_position, on_same_branch=same_branch,
