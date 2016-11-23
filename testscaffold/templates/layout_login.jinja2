@@ -9,10 +9,10 @@
 
                 <p>
                     {% if request.has_permission('admin_panel') %}
-                        <a href="{{request.route_url('admin_index')}}" class="btn btn-default">{% trans %}Administration panel{% endtrans %}</a>
+                        <a href="{{request.route_url('admin_index')}}" class="btn btn-secondary">{% trans %}Administration panel{% endtrans %}</a>
                     {% endif %}
 
-                    <a href="{{request.route_url('ziggurat.routes.sign_out')}}" class="btn btn-default">{% trans %}Sign out{% endtrans %}</a>
+                    <a href="{{request.route_url('ziggurat.routes.sign_out')}}" class="btn btn-secondary">{% trans %}Sign out{% endtrans %}</a>
 
                 </p>
             </div>
@@ -23,9 +23,9 @@
         <div class="row">
             <div class="col-md-6">
                 <h2>{% trans %}Login via social account{% endtrans %}</h2>
-                <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-default">Facebook</a>
-                <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-default">Google</a>
-                <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-default">Twitter</a>
+                <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-secondary">Facebook</a>
+                <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-secondary">Google</a>
+                <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-secondary">Twitter</a>
 
             </div>
             <div class="col-md-6">
@@ -36,8 +36,8 @@
                         {{form.render_form(layout_login_form)}}
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-default">{% trans %}Log In {% endtrans %}</button>
-                        <a href="{{request.route_url('register')}}" class="btn btn-default">{% trans %}Register here{% endtrans %}</a>
+                        <button type="submit" class="btn btn-secondary">{% trans %}Log In {% endtrans %}</button>
+                        <a href="{{request.route_url('register')}}" class="btn btn-secondary">{% trans %}Register here{% endtrans %}</a>
                         <a href="{{request.route_url('lost_password')}}">{% trans %}Forgot password?{% endtrans %}</a>
                     </div>
                 </form>

@@ -10,15 +10,15 @@
         <form action="{{request.route_url('ziggurat.routes.sign_in')}}"
               method="POST">
             {{form.render_form(login_form)}}
-            <button type="submit" class="btn btn-default">{% trans %}Log In{% endtrans %}</button>
+            <button type="submit" class="btn btn-secondary">{% trans %}Log In{% endtrans %}</button>
             <a href="{{request.route_url('lost_password')}}">{% trans %}Forgot password?{% endtrans %}</a>
 
         </form>
 
         <h2>{% trans %}Login via social account{% endtrans %}</h2>
-        <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-default">Facebook</a>
-        <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-default">Google</a>
-        <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-default">Twitter</a>
+        <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-secondary">Facebook</a>
+        <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-secondary">Google</a>
+        <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-secondary">Twitter</a>
 
     </div>
 
@@ -27,7 +27,7 @@
 
         <form action="{{request.route_url('register')}}" method="POST">
             {{form.render_form(registration_form)}}
-            <button type="submit" class="btn btn-default">{% trans %}Register{% endtrans %}</button>
+            <button type="submit" class="btn btn-secondary">{% trans %}Register{% endtrans %}</button>
         </form>
     </div>
 </div>

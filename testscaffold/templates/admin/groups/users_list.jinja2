@@ -6,12 +6,10 @@
 
     <div class="col-md-9">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans %}Add a new user
-                    to{% endtrans %} <strong>{{ group }}</strong></h3>
-            </div>
-            <div class="panel-body"
+        <div class="card">
+            <h4 class="card-header">{% trans %}Add a new user
+                to{% endtrans %} <strong>{{ group }}</strong></h4>
+            <div class="card-block"
                  data-ng-controller="UserListController as userCtrl">
                 <form
                     data-ng-submit="userCtrl.assignUserToGroup({{ group.id }})">
@@ -33,12 +31,12 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card">
+            <div class="card-header">
                 <h3 class="panel-title">{% trans %}Members of{% endtrans %}
                     <strong>{{ group }}</strong></h3>
             </div>
-            <div class="panel-body">
+            <div class="card-block">
                 <table class="table">
                     {{ user_grid }}
                 </table>

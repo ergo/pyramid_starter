@@ -3,12 +3,9 @@
 {% block content %}
     <div class="col-md-9">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans %}Application
-                    statistics{% endtrans %}</h3>
-            </div>
-            <div class="panel-body">
+        <div class="card">
+            <h4 class="card-header">{% trans %}Application statistics{% endtrans %}</h4>
+            <div class="card-block">
                 <p>{% trans %}Registered users{% endtrans %}:
                     <strong>{{ total_registered_users }}</strong></p>
 

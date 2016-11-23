@@ -5,9 +5,9 @@
 
         {% block header %}
             <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Menu</div>
-                    <div class="list-group">
+                <div class="card">
+                    <div class="card-header">Menu</div>
+                    <div class="list-group list-group-flush">
                         <a href="{{ request.route_url('/') }}"
                            class="list-group-item">{% trans %}Back to front page{% endtrans %}</a>
                         <a href="{{ request.route_url('admin_index') }}"

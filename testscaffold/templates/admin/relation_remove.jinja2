@@ -5,13 +5,13 @@
 {% block content %}
 <div class="col-md-9">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card">
+        <div class="card-header">
             <h3 class="panel-title">
                 {% trans %}Confirm operation{% endtrans %}
             </h3>
         </div>
-        <div class="panel-body text-center">
+        <div class="card-block text-center">
             <p>
             {% if member_obj is none %}
                 {% trans %}Delete{% endtrans %} <strong>{{parent_obj}}</strong>?

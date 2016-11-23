@@ -1,35 +1,35 @@
 {% macro render_paginator(paginator) %}
 {% set radius = 4 %}
-{% set link_map = paginator.link_map('~4~', curpage_attr={'class':"active"}, dotdot_attr={'class':"disabled"}) %}
-    <nav>
+{% set link_map = paginator.link_map('~4~', curpage_attr={'class':"page-item active"}, link_attr={'class':"page-item"},  dotdot_attr={'class':"page-item disabled"}) %}
+    <nav aria-label="Page navigation">
         <ul class="pagination">
             {% if paginator.radius < paginator.page %}
-                <li>
-                    <a href="{{ link_map['first_page']['href'] }}" aria-label="First">
+                <li class="page-item">
+                    <a href="{{ link_map['first_page']['href'] }}" aria-label="First" class="page-link">
                         <span aria-hidden="true"><i class="fa fa-chevron-circle-left"></i></span>
                     </a>
                 </li>
             {% endif %}
             {% if paginator.page > 1 %}
-                <li>
-                    <a href="{{ link_map['previous_page']['href'] }}" aria-label="Previous">
+                <li class="page-item">
+                    <a href="{{ link_map['previous_page']['href'] }}" aria-label="Previous" class="page-link">
                         <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
                     </a>
                 </li>
             {% endif %}
             {% for page in link_map['range_pages'] %}
-            <li class="{{ page['attrs'].get('class')}}"><a href="{{ page.href }}">{{ page.value }}</a></li>
+            <li class="{{ page['attrs'].get('class')}}"><a href="{{ page.href }}" class="page-link">{{ page.value }}</a></li>
             {% endfor %}
             {% if paginator.last_page and paginator.page < paginator.last_page %}
-                <li>
-                    <a href="{{ link_map['next_page']['href'] }}" aria-label="Next">
+                <li class="page-item">
+                    <a href="{{ link_map['next_page']['href'] }}" aria-label="Next" class="page-link">
                         <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
                     </a>
                 </li>
             {% endif %}
             {% if paginator.page < paginator.page_count - paginator.radius %}
-                <li>
-                    <a href="{{ link_map['last_page']['href'] }}" aria-label="last">
+                <li class="page-item">
+                    <a href="{{ link_map['last_page']['href'] }}" aria-label="last" class="page-link">
                         <span aria-hidden="true"><i class="fa fa-chevron-circle-right"></i></span>
                     </a>
                 </li>

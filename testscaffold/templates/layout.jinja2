@@ -12,8 +12,8 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
+          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
           crossorigin="anonymous">
     <link
         href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
@@ -38,25 +38,21 @@
 
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-light bg-faded">
     <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ request.route_url('/') }}">
-                {% trans %}Some project name{% endtrans %}
-            </a>
-        </div>
-
-        <ul class="nav navbar-nav navbar-right">
-            <li><a
+        <a class="navbar-brand" href="{{ request.route_url('/') }}">
+            {% trans %}Some project name{% endtrans %}
+        </a>
+        <ul class="nav navbar-nav float-xs-right">
+            <li class="nav-item"><a class="nav-link"
                 href="{{ request.route_url('language', language='en', _query={'came_from':request.current_route_url()}) }}">
                 EN</a>
             </li>
-            <li><a
+            <li class="nav-item"><a class="nav-link"
                 href="{{ request.route_url('language', language='pl', _query={'came_from':request.current_route_url()}) }}">
                 PL</a>
             </li>
         </ul>
-
     </div>
 </nav>
 

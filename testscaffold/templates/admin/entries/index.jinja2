@@ -4,12 +4,9 @@
 {% block content %}
     <div class="col-md-9">
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{% trans %}Manage
-                    entries{% endtrans %}</h3>
-            </div>
-            <div class="panel-body">
+        <div class="card">
+            <h4 class="card-header">{% trans %}Manage entries{% endtrans %}</h4>
+            <div class="card-block">
 
                 <p>
                     <a href="{{ request.route_url('admin_objects', object="entries", verb='POST') }}"
