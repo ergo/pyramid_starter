@@ -80,10 +80,12 @@ def object_security_factory(request):
 
     return RootFactory(request)
 
+
 def filter_admin_panel_perms(item):
     if str(item[2]).startswith('admin_'):
         return False
     return True
+
 
 class RootFactory(object):
     """
@@ -111,7 +113,9 @@ class RootFactory(object):
             # it should be prerequisite for other `admin*` permissions
             # if it is not present let's deny other admin permissions
             if not has_admin_panel_access:
-                self.__acl__ = list(filter(filter_admin_panel_perms, self.__acl__))
+                self.__acl__ = list(filter(
+                    filter_admin_panel_perms, self.__acl__
+                ))
 
 
 class DefaultResourceFactory(object):

@@ -13,7 +13,8 @@ from testscaffold.tests.utils import (
 )
 
 from testscaffold.models.user_resource_permission import UserResourcePermission
-from testscaffold.models.group_resource_permission import GroupResourcePermission
+from testscaffold.models.group_resource_permission import \
+    GroupResourcePermission
 from ziggurat_foundations.models.services.user_resource_permission import \
     UserResourcePermissionService
 from ziggurat_foundations.models.services.group_resource_permission import \
@@ -67,7 +68,8 @@ class TestFunctionalAPIResources(object):
             user = create_user(
                 {'user_name': 'aaaa', 'email': 'foo'}, sqla_session=session)
             resource = create_entry(
-                {'resource_name': 'entry-x', 'note': 'x'}, sqla_session=session)
+                {'resource_name': 'entry-x', 'note': 'x'},
+                sqla_session=session)
 
         node_id = resource.resource_id
         url_path = '/api/0.1/resources/{}/user_permissions'.format(node_id)
@@ -117,7 +119,8 @@ class TestFunctionalAPIResources(object):
             resource.user_permissions.append(perm_inst)
 
         node_id = resource.resource_id
-        qs = parse.urlencode({'user_name': user.user_name, 'perm_name': perm_name})
+        qs = parse.urlencode(
+            {'user_name': user.user_name, 'perm_name': perm_name})
         url_path = '/api/0.1/resources/{}/user_permissions?{}'.format(
             node_id, qs)
         headers = {str('x-testscaffold-auth-token'): str(token)}
@@ -168,7 +171,8 @@ class TestFunctionalAPIResources(object):
             admin, token = create_admin(session)
             group = create_group({'group_name': 'aaaa'}, sqla_session=session)
             resource = create_entry(
-                {'resource_name': 'entry-x', 'note': 'x'}, sqla_session=session)
+                {'resource_name': 'entry-x', 'note': 'x'},
+                sqla_session=session)
 
         node_id = resource.resource_id
         url_path = '/api/0.1/resources/{}/group_permissions'.format(node_id)

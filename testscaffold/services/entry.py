@@ -4,7 +4,8 @@ import logging
 import sqlalchemy as sa
 from testscaffold.models.entry import Entry
 from ziggurat_foundations.models.base import get_db_session
-from ziggurat_foundations.models.services.resource import ResourceService as RService
+from ziggurat_foundations.models.services.resource import \
+    ResourceService as RService
 from paginate_sqlalchemy import SqlalchemyOrmPage
 
 log = logging.getLogger(__name__)
