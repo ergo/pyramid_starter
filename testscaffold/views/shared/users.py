@@ -86,7 +86,7 @@ class UsersShared(object):
 
     def permission_post(self, user, perm_name):
         try:
-            self.permission_get(user, perm_name)
+            permission_inst = self.permission_get(user, perm_name)
         except pyramid.httpexceptions.HTTPNotFound:
             log.info('user_permission_post',
                      extra={'user_id': user.id,

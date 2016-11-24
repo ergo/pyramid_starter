@@ -3,10 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 import mock
 import pytest
-
-import logging
 from pyramid import testing
-from testscaffold.tests.utils import tmp_session_context, session_context
+
+from testscaffold.tests.utils import session_context
 
 
 def dummy_request(dbsession):

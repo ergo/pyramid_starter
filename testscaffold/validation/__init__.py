@@ -79,7 +79,7 @@ class ZigguratForm(Form):
         Used to translate our in-app form messages and field names
         It is required because for example marshmallow validator messages will
         lose metadata (is there any easy fix for that?)
-        :param entry:
+        :param string:
         :return:
         """
         request = self.context.get('request') or get_current_request()

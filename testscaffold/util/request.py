@@ -3,12 +3,12 @@ from __future__ import absolute_import, unicode_literals
 
 import copy
 
-from authomatic.providers import oauth2, oauth1
 from authomatic import Authomatic
+from authomatic.providers import oauth2, oauth1
 from pyramid.security import unauthenticated_userid
 
-from testscaffold.services.user import UserService
 from testscaffold.exceptions import JSONException
+from testscaffold.services.user import UserService
 
 
 def get_user(request):

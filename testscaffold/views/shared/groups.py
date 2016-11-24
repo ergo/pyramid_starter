@@ -71,7 +71,7 @@ class GroupsShared(object):
 
     def permission_post(self, group, perm_name):
         try:
-            self.permission_get(group, perm_name)
+            permission_inst = self.permission_get(group, perm_name)
         except pyramid.httpexceptions.HTTPNotFound:
             log.info('group_permission_post',
                      extra={'group_id': group.id,

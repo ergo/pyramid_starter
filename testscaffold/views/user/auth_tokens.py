@@ -28,6 +28,6 @@ class GroupsUserRelationAPI(object):
     @view_config(renderer='testscaffold:templates/user/auth_tokens.jinja2',
                  match_param=('object=user_self', 'relation=auth_tokens',
                               'verb=GET'))
-    def auth_tokens(request):
+    def auth_tokens(self):
         auth_tokens = []
         return {'auth_tokens': auth_tokens}

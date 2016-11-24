@@ -3,13 +3,6 @@ from __future__ import absolute_import, unicode_literals
 
 import pytest
 
-from six.moves.urllib import parse
-
-from testscaffold.tests.utils import (
-    create_user,
-    session_context,
-    create_admin)
-
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
                          'sqla_session')

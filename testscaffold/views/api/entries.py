@@ -78,8 +78,8 @@ class EntriesAPIView(BaseView):
         parent_id = data.pop('parent_id', None) or noop
         self.shared.populate_instance(
             resource, data, exclude_keys=['ordering', 'parent_id'])
-        into_new_parent = parent_id != resource.parent_id and \
-                          parent_id is not noop
+        into_new_parent = parent_id != resource.parent_id \
+                          and parent_id is not noop
         if position is not noop or into_new_parent:
             if not position and into_new_parent:
                 position = tree_service.count_children(

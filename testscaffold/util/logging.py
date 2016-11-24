@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import json
 import logging
+import sys
 
 EXCLUDED_LOG_VARS = ['threadName', 'name', 'thread', 'created', 'process',
                      'processName', 'args', 'module', 'filename',
@@ -49,7 +51,7 @@ class JSONFormatter(logging.Formatter):
                 record.exc_text = self.formatException(record.exc_info)
         if record.exc_text:
             if s[-1:] != "\n":
-                s = s + "\n"
+                s += "\n"
             try:
                 s = s + record.exc_text
             except UnicodeError:

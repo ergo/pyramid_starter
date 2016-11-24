@@ -77,7 +77,7 @@ def main(global_config, **settings):
         reify=True)
 
     config.add_view_predicate('context_type_class',
-                              'testscaffold.predicates.contextTypeClass')
+                              'testscaffold.predicates.ContextTypeClass')
 
     config.scan('testscaffold.events')
     config.scan('testscaffold.subscribers')

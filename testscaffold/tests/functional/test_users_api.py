@@ -2,7 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 
 import pytest
-
 from six.moves.urllib import parse
 
 from testscaffold.tests.utils import (

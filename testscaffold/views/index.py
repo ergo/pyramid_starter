@@ -68,7 +68,8 @@ class IndexViews(BaseView):
 
                 ev = EmailEvent(
                     request, recipients=[user.email], tmpl_vars=email_vars,
-                    tmpl_loc='testscaffold:templates/emails/lost_password.jinja2')
+                    tmpl_loc='testscaffold:templates/emails/'
+                             'lost_password.jinja2')
                 request.registry.notify(ev)
                 msg = {'msg': self.translate(
                     _('Password reset email had been sent. '
@@ -89,7 +90,8 @@ class IndexViews(BaseView):
                           'lost_password_generate.jinja2')
     def lost_password_generate(self):
         """
-        Shows new password form - perform time check and set new password for user
+        Shows new password form - perform time check and set
+        new password for user
         """
         request = self.request
         user = User.by_user_name_and_security_code(
@@ -152,8 +154,8 @@ class IndexViews(BaseView):
         social_data = request.session.get('zigg.social_auth')
         if request.method != 'POST' and social_data:
             log.info('social_auth', extra={'social_data': social_data})
-            form_data = {'email': social_data['user'].get('email')}
-            form_data['user_password'] = str(uuid.uuid4())
+            form_data = {'email': social_data['user'].get('email'),
+                         'user_password': str(uuid.uuid4())}
             # repopulate form this time from oauth data
             registration_form = UserCreateForm(context={'request': request},
                                                **form_data)

@@ -185,8 +185,8 @@ class TestFunctionalAPIEntries(object):
         pprint.pprint(tree_struct)
         assert tree_struct['node'].resource_id == -1
         l1_nodes = [n for n in tree_struct['children'].values()]
-        a_node = tree_struct['children'][1];
-        b_node = tree_struct['children'][2];
+        a_node = tree_struct['children'][1]
+        b_node = tree_struct['children'][2]
         ac_node = a_node['children'][7]
         l_a_nodes = [n for n in a_node['children'].values()]
         l_b_nodes = [n for n in b_node['children'].values()]

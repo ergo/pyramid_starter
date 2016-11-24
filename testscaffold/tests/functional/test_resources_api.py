@@ -1,9 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import pytest
-
 from six.moves.urllib import parse
+from ziggurat_foundations.models.services.group_resource_permission import \
+    GroupResourcePermissionService
+from ziggurat_foundations.models.services.user_resource_permission import \
+    UserResourcePermissionService
 
+from testscaffold.models.group_resource_permission import \
+    GroupResourcePermission
+from testscaffold.models.user_resource_permission import UserResourcePermission
 from testscaffold.tests.utils import (
     create_entry,
     session_context,
@@ -11,13 +18,6 @@ from testscaffold.tests.utils import (
     create_user,
     create_group,
 )
-
-from testscaffold.models.user_resource_permission import UserResourcePermission
-from testscaffold.models.group_resource_permission import GroupResourcePermission
-from ziggurat_foundations.models.services.user_resource_permission import \
-    UserResourcePermissionService
-from ziggurat_foundations.models.services.group_resource_permission import \
-    GroupResourcePermissionService
 
 
 @pytest.mark.usefixtures('full_app', 'with_migrations', 'clean_tables',
@@ -117,7 +117,8 @@ class TestFunctionalAPIResources(object):
             resource.user_permissions.append(perm_inst)
 
         node_id = resource.resource_id
-        qs = parse.urlencode({'user_name': user.user_name, 'perm_name': perm_name})
+        qs = parse.urlencode(
+            {'user_name': user.user_name, 'perm_name': perm_name})
         url_path = '/api/0.1/resources/{}/user_permissions?{}'.format(
             node_id, qs)
         headers = {str('x-testscaffold-auth-token'): str(token)}

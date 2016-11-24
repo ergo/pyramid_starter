@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from marshmallow import (Schema, fields, validate, validates, validates_schema)
 from pyramid.i18n import TranslationStringFactory
-
+from ziggurat_foundations import noop
 from ziggurat_foundations.exc import (
     ZigguratResourceOutOfBoundaryException,
     ZigguratResourceTreeMissingException,
     ZigguratResourceTreePathException
 )
-from ziggurat_foundations import noop
-from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
-from testscaffold.services.resource_tree_service import tree_service
+from ziggurat_foundations.models.services.user import UserService
 
-from marshmallow import (Schema, fields, validate, validates, pre_load,
-                         validates_schema)
+from testscaffold.services.resource_tree_service import tree_service
 
 _ = TranslationStringFactory('testscaffold')
 
@@ -155,7 +153,8 @@ class ResourceCreateSchemaMixin(Schema):
             same_branch = True
 
         if resource:
-            parent_id = resource.parent_id if new_parent_id is noop else new_parent_id
+            parent_id = resource.parent_id if \
+                new_parent_id is noop else new_parent_id
         else:
             parent_id = new_parent_id if new_parent_id is not noop else None
         try:

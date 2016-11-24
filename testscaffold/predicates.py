@@ -56,7 +56,7 @@ def auth_token_aware_csrf_view(view, info):
 auth_token_aware_csrf_view.options = ('require_csrf',)
 
 
-class contextTypeClass(object):
+class ContextTypeClass(object):
     """
     Passes only if context objects are of types specified in context properties
     """

@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
 
-from pyramid.security import Allow, Authenticated, ALL_PERMISSIONS
-from pyramid.exceptions import HTTPNotFound
 from pyramid.authentication import CallbackAuthenticationPolicy
+from pyramid.exceptions import HTTPNotFound
+from pyramid.security import Allow, ALL_PERMISSIONS
 from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import permission_to_pyramid_acls
 
-from testscaffold.util import safe_integer
 from testscaffold.services.auth_token import AuthTokenService
 from testscaffold.services.user import UserService
+from testscaffold.util import safe_integer
 
 log = logging.getLogger(__name__)
 
@@ -80,10 +81,12 @@ def object_security_factory(request):
 
     return RootFactory(request)
 
+
 def filter_admin_panel_perms(item):
     if str(item[2]).startswith('admin_'):
         return False
     return True
+
 
 class RootFactory(object):
     """
@@ -101,7 +104,7 @@ class RootFactory(object):
             has_admin_panel_access = False
             panel_perms = ['admin_panel', ALL_PERMISSIONS]
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                    permissions):
+                permissions):
                 perm_tuple = rewrite_root_perm(outcome, perm_user, perm_name)
                 if perm_tuple[0] is Allow and perm_tuple[2] in panel_perms:
                     has_admin_panel_access = True
@@ -111,7 +114,8 @@ class RootFactory(object):
             # it should be prerequisite for other `admin*` permissions
             # if it is not present let's deny other admin permissions
             if not has_admin_panel_access:
-                self.__acl__ = list(filter(filter_admin_panel_perms, self.__acl__))
+                self.__acl__ = list(
+                    filter(filter_admin_panel_perms, self.__acl__))
 
 
 class DefaultResourceFactory(object):
@@ -133,7 +137,7 @@ class DefaultResourceFactory(object):
             permissions = ResourceService.perms_for_user(
                 self.resource, request.user)
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                    permissions):
+                permissions):
                 self.__acl__.append(
                     rewrite_root_perm(outcome, perm_user, perm_name))
 
