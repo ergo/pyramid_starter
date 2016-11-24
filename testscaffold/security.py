@@ -104,7 +104,7 @@ class RootFactory(object):
             has_admin_panel_access = False
             panel_perms = ['admin_panel', ALL_PERMISSIONS]
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                permissions):
+                    permissions):
                 perm_tuple = rewrite_root_perm(outcome, perm_user, perm_name)
                 if perm_tuple[0] is Allow and perm_tuple[2] in panel_perms:
                     has_admin_panel_access = True
@@ -137,7 +137,7 @@ class DefaultResourceFactory(object):
             permissions = ResourceService.perms_for_user(
                 self.resource, request.user)
             for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                permissions):
+                    permissions):
                 self.__acl__.append(
                     rewrite_root_perm(outcome, perm_user, perm_name))
 

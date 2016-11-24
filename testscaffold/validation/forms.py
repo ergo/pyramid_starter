@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-import wtforms
 import marshmallow
-
+import wtforms
 from pyramid.i18n import TranslationStringFactory
 
+from testscaffold.models.user import User
 from testscaffold.validation import ZigguratForm
 from testscaffold.validation.schemes import (UserCreateSchema,
                                              UserEditSchema,
                                              GroupEditSchema,
                                              EntryCreateSchema)
-
-from testscaffold.models.user import User
 
 
 def strip_filter(value):
@@ -134,7 +132,7 @@ direct_permission_choices = []
 
 for permission in User.__possible_permissions__:
     direct_permission_choices.append((permission,
-                                     permission.title().replace('_', ' '),))
+                                      permission.title().replace('_', ' '),))
 
 
 class DirectPermissionForm(ZigguratForm):

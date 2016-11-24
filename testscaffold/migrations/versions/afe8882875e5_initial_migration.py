@@ -1,15 +1,15 @@
 """initial migration
 
 Revision ID: afe8882875e5
-Revises: 
+Revises:
 Create Date: 2016-04-03 11:26:28.732074
 
 """
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals, print_function
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = 'afe8882875e5'

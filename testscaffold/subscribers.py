@@ -2,12 +2,13 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
+
 from pyramid.events import subscriber, BeforeRender, NewRequest
 from pyramid.i18n import TranslationStringFactory
-from pyramid_mailer import get_mailer
-from pyramid_mailer.message import Message
 from pyramid.renderers import render
 from pyramid.threadlocal import get_current_request
+from pyramid_mailer import get_mailer
+from pyramid_mailer.message import Message
 from ziggurat_foundations.models.services.external_identity import \
     ExternalIdentityService
 

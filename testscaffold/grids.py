@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 from pyramid.i18n import TranslationStringFactory
 from webhelpers2.html import HTML
 from webhelpers2_grid import ObjectGrid

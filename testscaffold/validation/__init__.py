@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 from pyramid.exceptions import BadCSRFToken
 from pyramid.i18n import TranslationStringFactory
 from pyramid.threadlocal import get_current_request
-from wtforms.csrf.core import CSRF
 from wtforms import Form
+from wtforms.csrf.core import CSRF
 
 _ = TranslationStringFactory('wtforms')
 

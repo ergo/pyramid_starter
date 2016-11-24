@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+
 import datetime
 import warnings
 
-from pyramid_authstack import AuthenticationStackPolicy
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator, PHASE3_CONFIG
 from pyramid.renderers import JSON
+from pyramid_authstack import AuthenticationStackPolicy
 
 import testscaffold.util.cache_regions as cache_regions
 import testscaffold.util.encryption as encryption

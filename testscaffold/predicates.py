@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
 
 from pyramid.interfaces import IDefaultCSRFOptions
@@ -43,8 +44,8 @@ def auth_token_aware_csrf_view(view, info):
             if is_from_auth_token:
                 log.debug('ignoring CSRF check, auth token used')
             elif (request.method not in safe_methods and (
-                    getattr(request, 'exception',
-                            None) is None or explicit_val is not None)):
+                            getattr(request, 'exception', None) is None
+                    or explicit_val is not None)):
                 check_csrf_origin(request, raises=True)
                 check_csrf_token(request, token, header, raises=True)
             return view(context, request)
