@@ -15,9 +15,9 @@ def create_default_tree(db_session):
     root = create_entry(
         {'resource_id': -1, 'resource_name': 'root a',
          'ordering': 1}, sqla_session=db_session)
-    res_a = create_entry({'resource_id': 1, 'resource_name': 'a', 'ordering': 1,
-                          'parent_id': root.resource_id},
-                         sqla_session=db_session)
+    res_a = create_entry(
+        {'resource_id': 1, 'resource_name': 'a', 'ordering': 1,
+         'parent_id': root.resource_id}, sqla_session=db_session)
     res_aa = create_entry(
         {'resource_id': 5, 'resource_name': 'aa', 'ordering': 1,
          'parent_id': res_a.resource_id}, sqla_session=db_session)
@@ -41,16 +41,16 @@ def create_default_tree(db_session):
         {'resource_id': 8, 'resource_name': 'ad', 'ordering': 4,
          'parent_id': res_a.resource_id},
         sqla_session=db_session)
-    res_b = create_entry({'resource_id': 2, 'resource_name': 'b', 'ordering': 2,
-                          'parent_id': root.resource_id},
-                         sqla_session=db_session)
+    res_b = create_entry(
+        {'resource_id': 2, 'resource_name': 'b', 'ordering': 2,
+         'parent_id': root.resource_id}, sqla_session=db_session)
     res_ba = create_entry(
         {'resource_id': 4, 'resource_name': 'ba', 'ordering': 1,
          'parent_id': res_b.resource_id},
         sqla_session=db_session)
-    res_c = create_entry({'resource_id': 3, 'resource_name': 'c', 'ordering': 3,
-                          'parent_id': root.resource_id},
-                         sqla_session=db_session)
+    res_c = create_entry(
+        {'resource_id': 3, 'resource_name': 'c', 'ordering': 3,
+         'parent_id': root.resource_id}, sqla_session=db_session)
     res_d = create_entry(
         {'resource_id': 10, 'resource_name': 'd', 'ordering': 4,
          'parent_id': root.resource_id},
@@ -185,8 +185,8 @@ class TestFunctionalAPIEntries(object):
         pprint.pprint(tree_struct)
         assert tree_struct['node'].resource_id == -1
         l1_nodes = [n for n in tree_struct['children'].values()]
-        a_node = tree_struct['children'][1];
-        b_node = tree_struct['children'][2];
+        a_node = tree_struct['children'][1]
+        b_node = tree_struct['children'][2]
         ac_node = a_node['children'][7]
         l_a_nodes = [n for n in a_node['children'].values()]
         l_b_nodes = [n for n in b_node['children'].values()]
@@ -393,9 +393,10 @@ class TestFunctionalAPIEntries(object):
         (12, 2, [5, 12, 6, 7, 8]),
         (12, 5, [5, 6, 7, 8, 12]),
     ])
-    def test_entry_patch_order_upper_branch_nested(self, full_app, sqla_session,
-                                                   node_id, position,
-                                                   ordered_elems):
+    def test_entry_patch_order_upper_branch_nested(
+            self, full_app, sqla_session,
+            node_id, position,
+            ordered_elems):
         from testscaffold.services.resource_tree_service import tree_service
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)

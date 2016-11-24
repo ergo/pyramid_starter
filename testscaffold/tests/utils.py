@@ -2,9 +2,9 @@
 from __future__ import absolute_import, unicode_literals
 from contextlib import contextmanager
 from testscaffold.models import (
-    Group, 
-    GroupPermission, 
-    User, 
+    Group,
+    GroupPermission,
+    User,
     AuthToken,
     Entry,
     UserPermission)
@@ -38,6 +38,7 @@ def create_user(user_dict, permissions=None, sqla_session=None):
             user.user_permissions.append(permission_instance)
     user.persist(flush=True, db_session=sqla_session)
     return user
+
 
 def create_entry(entry_dict, sqla_session=None):
     entry = Entry(**entry_dict)

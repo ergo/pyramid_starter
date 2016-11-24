@@ -155,7 +155,8 @@ class ResourceCreateSchemaMixin(Schema):
             same_branch = True
 
         if resource:
-            parent_id = resource.parent_id if new_parent_id is noop else new_parent_id
+            parent_id = resource.parent_id \
+                if new_parent_id is noop else new_parent_id
         else:
             parent_id = new_parent_id if new_parent_id is not noop else None
         try:
