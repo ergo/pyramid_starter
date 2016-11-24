@@ -4,12 +4,12 @@ testscaffold README
 Getting Started
 ---------------
 
-    cd <directory containing this file>
-    $VENV/bin/pip install requirements.txt
-    $VENV/bin/pip install requirements-dev.txt
-    $VENV/bin/migrate_testscaffold_db development.ini
-    $VENV/bin/initialize_testscaffold_db development.ini
-    $VENV/bin/pserve development.ini
+- ``cd <directory containing this file>``
+- ``$VENV/bin/pip install -r requirements.txt``
+- ``$VENV/bin/pip install -r requirements-dev.txt``
+- ``$VENV/bin/migrate_testscaffold_db development.ini``
+- ``$VENV/bin/initialize_testscaffold_db development.ini``
+- ``$VENV/bin/pserve development.ini``
 
 Working with Translations
 -------------------------
