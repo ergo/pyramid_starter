@@ -1,20 +1,23 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
 import uuid
 from datetime import datetime, timedelta
+
 from pyramid.httpexceptions import HTTPFound
 from pyramid.i18n import TranslationStringFactory
 from pyramid.response import Response
 from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.view import view_config
+
 from testscaffold.events import EmailEvent, SocialAuthEvent
 from testscaffold.models.user import User
-from testscaffold.views import BaseView
 from testscaffold.validation.forms import (UserCreateForm,
                                            UserLoginForm,
                                            UserLostPasswordForm,
                                            UserNewPasswordForm)
+from testscaffold.views import BaseView
 
 log = logging.getLogger(__name__)
 

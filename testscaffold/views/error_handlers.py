@@ -1,6 +1,6 @@
-from pyramid.view import view_config
-from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.renderers import render_to_response
+from pyramid.security import NO_PERMISSION_REQUIRED
+from pyramid.view import view_config
 
 
 @view_config(context='testscaffold.exceptions.JSONException',

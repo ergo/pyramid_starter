@@ -2,18 +2,16 @@
 from __future__ import absolute_import
 
 import logging
-
 from datetime import datetime
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-
 from ziggurat_foundations.models.services.user_permission import \
     UserPermissionService
 
-from testscaffold.util import safe_integer
 from testscaffold.models.user_permission import UserPermission
 from testscaffold.services.user import UserService
+from testscaffold.util import safe_integer
 
 USERS_PER_PAGE = 50
 

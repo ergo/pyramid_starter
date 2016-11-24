@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 import sqlalchemy as sa
 from ziggurat_foundations.models.user import UserMixin
+
 from testscaffold.models.meta import Base
 
 

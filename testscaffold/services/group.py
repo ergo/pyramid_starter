@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
+
 from paginate_sqlalchemy import SqlalchemyOrmPage
 from ziggurat_foundations.models.base import get_db_session
-from testscaffold.models.group import Group
-from testscaffold.models.user import User
 from ziggurat_foundations.models.services.group import GroupService as GService
+
+from testscaffold.models.group import Group
 
 log = logging.getLogger(__name__)
 
 
 class GroupService(GService):
-
     @classmethod
     def get(cls, group_id, db_session=None):
         """ get group by primary key from session """

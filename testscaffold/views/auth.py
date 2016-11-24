@@ -2,16 +2,15 @@
 from __future__ import absolute_import
 
 import logging
-
 from datetime import datetime
+
 from authomatic.adapters import WebObAdapter
 from pyramid.httpexceptions import HTTPFound
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.view import view_config
-
-from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInSuccess
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInBadAuth
+from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInSuccess
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignOut
 from ziggurat_foundations.models.services.external_identity import \
     ExternalIdentityService

@@ -6,13 +6,13 @@ import logging
 from pyramid.view import view_config, view_defaults
 
 from testscaffold.models.user import User
+from testscaffold.util import safe_integer
+from testscaffold.util.request import gen_pagination_headers
 from testscaffold.validation.schemes import UserCreateSchema
 from testscaffold.validation.schemes import UserEditSchema
 from testscaffold.validation.schemes import UserSearchSchema
 from testscaffold.views import BaseView
 from testscaffold.views.shared.users import UsersShared
-from testscaffold.util import safe_integer
-from testscaffold.util.request import gen_pagination_headers
 
 log = logging.getLogger(__name__)
 

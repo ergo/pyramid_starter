@@ -2,18 +2,17 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
-import pyramid.httpexceptions as httpexceptions
 
+import pyramid.httpexceptions as httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
-from ziggurat_foundations.models.services.user import UserService
 from ziggurat_foundations.models.services.group import GroupService
+from ziggurat_foundations.models.services.user import UserService
 
 from testscaffold.validation.schemes import (UserResourcePermissionSchema,
                                              GroupResourcePermissionSchema)
-
-from testscaffold.views.shared.resources import ResourcesShared
 from testscaffold.views import BaseView
+from testscaffold.views.shared.resources import ResourcesShared
 
 log = logging.getLogger(__name__)
 

@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
+
 import sqlalchemy as sa
-from testscaffold.models.user import User
+from paginate_sqlalchemy import SqlalchemyOrmPage
 from ziggurat_foundations.models.base import get_db_session
 from ziggurat_foundations.models.services.user import UserService as UService
-from paginate_sqlalchemy import SqlalchemyOrmPage
+
+from testscaffold.models.user import User
 
 log = logging.getLogger(__name__)
 
 
 class UserService(UService):
-
     @classmethod
     def get(cls, user_id, db_session=None):
         """ get user by primary key from session """

@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
 from datetime import timedelta
+
+from celery import Celery
+from celery.bin import Option
+from celery.signals import task_prerun, task_retry, task_failure, task_success
+from celery.signals import task_revoked, user_preload_options
+from kombu.serialization import register
 from pyramid.paster import bootstrap
 from pyramid.request import Request
 from pyramid.scripting import prepare
 from pyramid.settings import asbool
-
-from celery import Celery
-from celery.bin import Option
-from celery.signals import worker_init, task_revoked, user_preload_options
-from celery.signals import task_prerun, task_retry, task_failure, task_success
-from kombu.serialization import register
 from pyramid.threadlocal import get_current_request
+
 from testscaffold.celery.encoders import json_dumps, json_loads
 
 log = logging.getLogger(__name__)

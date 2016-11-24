@@ -2,17 +2,14 @@
 
 from __future__ import absolute_import
 
-import logging
-
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations.models.services.user import UserService
 
-from testscaffold.views.shared.resources import ResourcesShared
-from testscaffold.util import safe_integer
 from testscaffold.validation.schemes import (
     UserResourcePermissionSchema,
     GroupResourcePermissionSchema,
 )
+from testscaffold.views.shared.resources import ResourcesShared
 
 
 @view_defaults(route_name='api_object_relation', renderer='json',
@@ -51,7 +48,7 @@ class ResourcesUserPermissionsAPI(object):
         user = UserService.by_user_name(
             data['user_name'], db_session=self.request.dbsession)
         self.shared.user_permission_delete(
-            resource, user.id, data['perm_name'],)
+            resource, user.id, data['perm_name'], )
         return True
 
 

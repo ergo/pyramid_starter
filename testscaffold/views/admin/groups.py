@@ -2,8 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
-import pyramid.httpexceptions
 
+import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
@@ -11,10 +11,9 @@ from testscaffold.grids import (
     GroupsGrid,
     UsersGroupsGrid,
     GroupPermissionsGrid)
-
-from testscaffold.util import safe_integer
 from testscaffold.models.group import Group
 from testscaffold.services.group import GroupService
+from testscaffold.util import safe_integer
 from testscaffold.validation.forms import GroupUpdateForm, DirectPermissionForm
 from testscaffold.views import BaseView
 from testscaffold.views.api.groups import GROUPS_PER_PAGE

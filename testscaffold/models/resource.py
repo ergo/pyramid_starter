@@ -2,13 +2,12 @@
 from __future__ import absolute_import, unicode_literals
 
 from pyramid.security import Allow, ALL_PERMISSIONS
-
 from ziggurat_foundations.models.resource import ResourceMixin
+
 from testscaffold.models.meta import Base
 
 
 class Resource(ResourceMixin, Base):
-
     @property
     def __acl__(self):
         acls = []

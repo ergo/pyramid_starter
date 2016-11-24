@@ -6,8 +6,8 @@ import logging
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 
-from testscaffold.util import safe_integer
 from testscaffold.services.entry import EntryService
+from testscaffold.util import safe_integer
 
 ENTRIES_PER_PAGE = 50
 

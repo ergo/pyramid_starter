@@ -2,15 +2,13 @@
 from __future__ import absolute_import, unicode_literals
 
 import zope.sqlalchemy
-
 from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import configure_mappers
+from sqlalchemy.orm import sessionmaker
 from ziggurat_foundations import ziggurat_model_init
 
-# import or define all models here to ensure they are attached to the
-# Base.metadata prior to any initialization routines
 from testscaffold.models.auth_token import AuthToken  # flake8: noqa
+from testscaffold.models.entry import Entry  # flake8: noqa
 from testscaffold.models.entry import Entry  # flake8: noqa
 from testscaffold.models.external_identity import \
     ExternalIdentity  # flake8: noqa
@@ -25,7 +23,6 @@ from testscaffold.models.user_group import UserGroup  # flake8: noqa
 from testscaffold.models.user_permission import UserPermission  # flake8: noqa
 from testscaffold.models.user_resource_permission import \
     UserResourcePermission  # flake8: noqa
-from testscaffold.models.entry import Entry  # flake8: noqa
 
 ziggurat_model_init(User, Group, UserGroup, GroupPermission, UserPermission,
                     UserResourcePermission, GroupResourcePermission, Resource,

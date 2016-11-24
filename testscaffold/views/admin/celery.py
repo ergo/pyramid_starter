@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
 from datetime import datetime, timedelta
 
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
+
 from testscaffold.celery.tasks import test_task
 from testscaffold.views import BaseView
 
@@ -15,7 +17,6 @@ _ = TranslationStringFactory('testscaffold')
 
 @view_defaults(route_name='admin_objects', permission='admin_panel')
 class CeleryAdminView(BaseView):
-
     @view_config(renderer='testscaffold:templates/admin/celery.jinja2',
                  match_param=('object=celery', 'verb=GET'))
     def index(self):

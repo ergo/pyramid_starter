@@ -2,8 +2,8 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
-import pyramid.httpexceptions
 
+import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
@@ -14,8 +14,8 @@ from testscaffold.validation.forms import (
     UserAdminCreateForm,
     UserAdminUpdateForm,
     DirectPermissionForm)
-from testscaffold.views.shared.users import UsersShared, USERS_PER_PAGE
 from testscaffold.views import BaseView
+from testscaffold.views.shared.users import UsersShared, USERS_PER_PAGE
 
 log = logging.getLogger(__name__)
 

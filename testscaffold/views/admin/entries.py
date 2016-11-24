@@ -2,31 +2,27 @@
 from __future__ import absolute_import, unicode_literals
 
 import logging
-import pyramid.httpexceptions
 
+import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
-
 from ziggurat_foundations import noop
-from ziggurat_foundations.permissions import ANY_PERMISSION
-from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.models.services.group import GroupService
+from ziggurat_foundations.models.services.resource import ResourceService
+from ziggurat_foundations.permissions import ANY_PERMISSION
 
-from testscaffold.models.group import Group
+from testscaffold.grids import (
+    ResourceUserPermissionsGrid,
+    ResourceGroupPermissionsGrid)
 from testscaffold.models.entry import Entry
 from testscaffold.services.resource_tree_service import tree_service
-from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (
     UserResourcePermissionForm,
     GroupResourcePermissionForm,
     EntryCreateForm
 )
-from testscaffold.grids import (
-    ResourceUserPermissionsGrid,
-    ResourceGroupPermissionsGrid)
-
-from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.views import BaseView
+from testscaffold.views.shared.entries import EntriesShared
 
 log = logging.getLogger(__name__)
 
@@ -139,8 +135,9 @@ class AdminEntryViews(BaseView):
             resource, perm_name=ANY_PERMISSION, limit_group_permissions=True)
         user_permissions = sorted([p for p in permissions if p.type == 'user'],
                                   key=lambda x: x.user.user_name)
-        group_permissions = sorted([p for p in permissions if p.type == 'group'],
-                                   key=lambda x: x.group.group_name)
+        group_permissions = sorted(
+            [p for p in permissions if p.type == 'group'],
+            key=lambda x: x.group.group_name)
 
         user_permissions_grid = ResourceUserPermissionsGrid(
             user_permissions, request=request)

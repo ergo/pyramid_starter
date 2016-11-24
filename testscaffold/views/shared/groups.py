@@ -1,8 +1,8 @@
 from __future__ import absolute_import
 
 import logging
-import pyramid.httpexceptions
 
+import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from ziggurat_foundations.models.services.group_permission import \
     GroupPermissionService

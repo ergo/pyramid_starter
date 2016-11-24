@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+
 import logging
+
 from pyramid.view import view_config, view_defaults
-from ziggurat_foundations.models.services.user import UserService
 
 from testscaffold.models.group import Group
+from testscaffold.validation.schemes import GroupEditSchema
 from testscaffold.views import BaseView
 from testscaffold.views.shared.groups import GroupsShared
-from testscaffold.validation.schemes import GroupEditSchema
 
 log = logging.getLogger(__name__)
 

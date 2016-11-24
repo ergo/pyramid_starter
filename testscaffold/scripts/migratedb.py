@@ -1,8 +1,10 @@
 from __future__ import print_function
+
 import os
 import sys
-from alembic.config import Config
+
 from alembic import command
+from alembic.config import Config
 from pyramid.paster import (
     get_appsettings,
     setup_logging,

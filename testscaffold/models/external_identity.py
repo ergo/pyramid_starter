@@ -2,9 +2,9 @@
 from __future__ import absolute_import, unicode_literals
 
 import sqlalchemy as sa
-
 from sqlalchemy.ext.declarative import declared_attr
 from ziggurat_foundations.models.external_identity import ExternalIdentityMixin
+
 from testscaffold.models.meta import Base
 from testscaffold.util.sqlalchemy import EncryptedUnicode
 

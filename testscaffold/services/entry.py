@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import logging
-import sqlalchemy as sa
-from testscaffold.models.entry import Entry
-from ziggurat_foundations.models.base import get_db_session
-from ziggurat_foundations.models.services.resource import ResourceService as RService
+
 from paginate_sqlalchemy import SqlalchemyOrmPage
+from ziggurat_foundations.models.base import get_db_session
+from ziggurat_foundations.models.services.resource import \
+    ResourceService as RService
+
+from testscaffold.models.entry import Entry
 
 log = logging.getLogger(__name__)
 
 
 class EntryService(RService):
-
     @classmethod
     def get(cls, entry_id, db_session=None):
         """ get entry by primary key from session """

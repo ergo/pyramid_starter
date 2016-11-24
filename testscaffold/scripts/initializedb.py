@@ -1,24 +1,21 @@
 import os
 import sys
-import transaction
 
+import transaction
 from pyramid.paster import (
     get_appsettings,
     setup_logging,
-    )
-
+)
 from pyramid.scripts.common import parse_vars
 
-from testscaffold.models.meta import Base
 from testscaffold.models import (
     get_engine,
     get_session_factory,
     get_tm_session,
-    )
-
-from testscaffold.models.user import User
+)
 from testscaffold.models.group import Group
 from testscaffold.models.group_permission import GroupPermission
+from testscaffold.models.user import User
 
 
 def usage(argv):

@@ -5,17 +5,16 @@ import logging
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-
+from ziggurat_foundations.models.services.group_resource_permission import \
+    GroupResourcePermissionService
 from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.models.services.user_resource_permission import \
     UserResourcePermissionService
-from ziggurat_foundations.models.services.group_resource_permission import \
-    GroupResourcePermissionService
 
-from testscaffold.util import safe_integer
-from testscaffold.models.user_resource_permission import UserResourcePermission
 from testscaffold.models.group_resource_permission import \
     GroupResourcePermission
+from testscaffold.models.user_resource_permission import UserResourcePermission
+from testscaffold.util import safe_integer
 
 ENTRIES_PER_PAGE = 50
 
