@@ -25,4 +25,4 @@ six>=1.10.0
 cryptography>=1.4
 webhelpers2_grid>=0.1
 appenlight_client
-requests>==2.10.0
+requests>=2.10.0
