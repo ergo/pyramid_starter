@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
+
 import pprint
 
 import pytest
@@ -165,6 +166,7 @@ class TestFunctionalAPIEntries(object):
         assert entry_dict['note'] == response.json['note']
 
     def test_entry_delete(self, full_app, sqla_session):
+        from testscaffold.services.resource_tree_service import tree_service
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             entry = create_entry({'resource_name': 'entry-x',
@@ -173,6 +175,24 @@ class TestFunctionalAPIEntries(object):
         url_path = '/api/0.1/entries/{}'.format(entry.resource_id)
         headers = {str('x-testscaffold-auth-token'): str(token)}
         full_app.delete_json(url_path, status=200, headers=headers)
+        result = tree_service.from_parent_deeper(None, db_session=sqla_session)
+        assert len(result.all()) == 0
+
+    def test_entry_delete_branch(
+            self, full_app, sqla_session):
+        from testscaffold.services.resource_tree_service import tree_service
+        with session_context(sqla_session) as session:
+            admin, token = create_admin(session)
+            create_default_tree(db_session=sqla_session)
+
+        url_path = '/api/0.1/entries/{}'.format(1)
+        headers = {str('x-testscaffold-auth-token'): str(token)}
+        full_app.delete_json(url_path, status=200, headers=headers)
+        result = tree_service.from_parent_deeper(None, db_session=sqla_session)
+        row_ids = [r.Resource.resource_id for r in result]
+        ordering = [r.Resource.ordering for r in result]
+        assert row_ids == [-1, 2, 4, 3, 10, 11, -2, -3]
+        assert ordering == [1, 1, 1, 2, 3, 4, 2, 3]
 
     def test_root_nesting(self, full_app, sqla_session):
         from testscaffold.services.resource_tree_service import tree_service

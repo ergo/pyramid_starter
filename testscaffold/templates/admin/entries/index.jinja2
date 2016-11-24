@@ -27,7 +27,11 @@
         <ul>
             {% for node in node_list.values() %}
                 <li>
-                    <a href="{{ request.route_url('admin_object', object="entries", object_id=node['node'].resource_id, verb='GET') }}"><strong>{{ node['node'].resource_name }}</strong></a>
+                    <span>{{ node['node'].ordering }}</span>
+                    <a href="{{ request.route_url('admin_object', object="entries",
+                    object_id=node['node'].resource_id, verb='GET') }}">
+                        <strong>{{ node['node'].resource_name }}</strong>
+                    </a>
                     {% if node['children'] %}
                         <div>{% trans %}Sub-elements:{% endtrans %}</div>
                         {{ render_tree_node(node['children']) }}

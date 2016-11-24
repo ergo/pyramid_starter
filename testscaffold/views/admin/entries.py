@@ -3,10 +3,11 @@ from __future__ import absolute_import, unicode_literals
 
 import logging
 
-import pyramid.httpexceptions
+import pyramid.httpexceptions as httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations import noop
+from ziggurat_foundations.exc import ZugguratTreeException
 from ziggurat_foundations.models.services.group import GroupService
 from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import ANY_PERMISSION
@@ -23,6 +24,7 @@ from testscaffold.validation.forms import (
 )
 from testscaffold.views import BaseView
 from testscaffold.views.shared.entries import EntriesShared
+from testscaffold.views.shared.resources import ResourcesShared
 
 log = logging.getLogger(__name__)
 
@@ -96,7 +98,7 @@ class AdminEntriesViews(BaseView):
                  'level': 'success'})
             location = request.route_url('admin_objects', object='entries',
                                          verb='GET')
-            return pyramid.httpexceptions.HTTPFound(location=location)
+            return httpexceptions.HTTPFound(location=location)
 
         return {"resource_form": resource_form}
 
@@ -106,6 +108,7 @@ class AdminEntryViews(BaseView):
     def __init__(self, request):
         super(AdminEntryViews, self).__init__(request)
         self.shared = EntriesShared(request)
+        self.shared_resources = ResourcesShared(request)
 
     @view_config(renderer='testscaffold:templates/admin/entries/edit.jinja2',
                  match_param=('object=entries', 'verb=GET'))
@@ -164,9 +167,16 @@ class AdminEntryViews(BaseView):
                 if not position and into_new_parent:
                     position = tree_service.count_children(
                         parent_id, db_session=self.request.dbsession) + 1
-                tree_service.move_to_position(
-                    resource_id=resource.resource_id, new_parent_id=parent_id,
-                    to_position=position, db_session=self.request.dbsession)
+                try:
+                    tree_service.move_to_position(
+                        resource_id=resource.resource_id,
+                        new_parent_id=parent_id,
+                        to_position=position, db_session=self.request.dbsession)
+                except ZugguratTreeException:
+                    request.session.flash(
+                        {'msg': self.translate(
+                            _('Incorrect tree parent or position')),
+                            'level': 'danger'})
 
         return {'breadcrumbs': breadcrumbs,
                 'resource': resource,
@@ -175,3 +185,28 @@ class AdminEntryViews(BaseView):
                 'group_permission_form': group_permission_form,
                 'group_permissions_grid': group_permissions_grid,
                 'user_permissions_grid': user_permissions_grid}
+
+    @view_config(
+        renderer='testscaffold:templates/admin/relation_remove.jinja2',
+        match_param=('object=entries', 'verb=DELETE'),
+        request_method='GET')
+    @view_config(
+        renderer='testscaffold:templates/admin/relation_remove.jinja2',
+        match_param=('object=entries', 'verb=DELETE'),
+        request_method='POST')
+    def delete(self):
+        request = self.request
+        resource = self.request.context.resource
+        back_url = request.route_url(
+            'admin_objects', object=resource.plural_type,
+            verb='GET')
+        if request.method == "POST":
+            tree_service.delete_branch(
+                resource.resource_id, db_session=self.request.dbsession)
+            return httpexceptions.HTTPFound(location=back_url)
+
+        return {"parent_obj": resource,
+                "member_obj": None,
+                "confirm_url": request.current_route_url(),
+                "back_url": back_url
+                }

@@ -8,11 +8,11 @@
 
     <div class="col-md-9">
         {% if request.matchdict.get('verb') != 'POST' %}
-        <ol class="breadcrumb">
-            {% for node in breadcrumbs |reverse %}
-                <li class="breadcrumb-item">{{ node.resource_name }}</li>
-            {% endfor %}
-        </ol>
+            <ol class="breadcrumb">
+                {% for node in breadcrumbs |reverse %}
+                    <li class="breadcrumb-item">{{ node.resource_name }}</li>
+                {% endfor %}
+            </ol>
         {% endif %}
         <div class="card">
             <h4 class="card-header">
@@ -44,6 +44,11 @@
                         {% trans %}Update{% endtrans %}
                     {% endif %}
                 </button>
+
+                {% if request.matchdict.get('verb') != 'POST' %}
+                <a href="{{ request.route_url('admin_object', object='entries', object_id=resource.resource_id, verb='DELETE') }}"
+                   class="btn btn-danger">{% trans %}Delete{% endtrans %}</a>
+                {% endif %}
                 </form>
 
 
@@ -61,7 +66,8 @@
                         action="{{ request.route_url('admin_object_relation', object='resources', object_id=resource.resource_id, relation='user_permissions', verb='POST' ) }}"
                         method="POST">
 
-                        <label for="user_name" id="label-user_name" class="control-label">
+                        <label for="user_name" id="label-user_name"
+                               class="control-label">
                             {% trans %}User name{% endtrans %}
                         </label>
 

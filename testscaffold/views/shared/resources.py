@@ -33,14 +33,6 @@ class ResourcesShared(object):
         self.translate = request.localizer.translate
         self.page = 1
 
-    def resource_get(self, resource_id):
-        request = self.request
-        resource = ResourceService.get(safe_integer(resource_id),
-                                       db_session=request.dbsession)
-        if not resource:
-            raise pyramid.httpexceptions.HTTPNotFound()
-        return resource
-
     def user_permission_post(self, resource, user_id, perm_name):
         perm_inst = UserResourcePermission(
             user_id=user_id,
