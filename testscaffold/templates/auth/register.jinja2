@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-6">
 
-        <h2>Login</h2>
+        <h3>Login</h3>
 
         <form action="{{request.route_url('ziggurat.routes.sign_in')}}"
               method="POST">
@@ -15,7 +15,7 @@
 
         </form>
 
-        <h2>{% trans %}Login via social account{% endtrans %}</h2>
+        <h3>{% trans %}Login via social account{% endtrans %}</h3>
         <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-secondary">Facebook</a>
         <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-secondary">Google</a>
         <a href="{{request.route_url('social_auth', provider='twitter')}}" class="btn btn-secondary">Twitter</a>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="col-md-6">
-        <h2>{% trans %}Register{% endtrans %}</h2>
+        <h3>{% trans %}Register{% endtrans %}</h3>
 
         <form action="{{request.route_url('register')}}" method="POST">
             {{form.render_form(registration_form)}}

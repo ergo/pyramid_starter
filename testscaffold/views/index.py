@@ -13,6 +13,7 @@ from pyramid.view import view_config
 
 from testscaffold.events import EmailEvent, SocialAuthEvent
 from testscaffold.models.user import User
+from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.validation.forms import (UserCreateForm,
                                            UserLoginForm,
                                            UserLostPasswordForm,
@@ -32,7 +33,11 @@ class IndexViews(BaseView):
         login_form = UserLoginForm(request.POST, context={'request': request})
         log.warning('index', extra={'foo': 'xxx'})
         log.info('locale', extra={'locale': request.locale_name})
-        return {'login_form': login_form}
+        result = tree_service.from_parent_deeper(
+            None, limit_depth=2, db_session=request.dbsession)
+        tree = tree_service.build_subtree_strut(result)
+        return {'login_form': login_form,
+                'menu_entries': tree['children']}
 
     @view_config(
         route_name='objects',

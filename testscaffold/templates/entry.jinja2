@@ -29,7 +29,24 @@
             </ul>
         </div>
         <div class="col-md-9">
-            <p>{% trans %}This is the index page content{% endtrans %}</p>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ request.route_url('/') }}">
+                        {% trans %}Index page{% endtrans %}
+                    </a>
+                </li>
+                {% for node in breadcrumbs |reverse %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ request.route_url('object',
+                        object_id=node.resource_id,
+                        object='entries', verb='GET') }}">
+                            {{ node.resource_name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+
+            <p>{{ resource.note }}</p>
         </div>
     </div>
 {% endblock content %}

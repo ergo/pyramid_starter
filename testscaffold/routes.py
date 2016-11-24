@@ -20,9 +20,11 @@ def includeme(config):
     config.add_route('social_auth', '/social_auth/{provider}')
 
     config.add_route('objects', '/{object}/verb/{verb}')
-    config.add_route('object', '/{object}/{object_id}/verb/{verb}')
+    config.add_route('object', '/{object}/{object_id}/verb/{verb}',
+                     factory='testscaffold.security.object_security_factory')
     config.add_route('object_relation',
-                     '/{object}/{object_id}/{relation}/verb/{verb}')
+                     '/{object}/{object_id}/{relation}/verb/{verb}',
+                     factory='testscaffold.security.object_security_factory')
 
     config.add_route('api_objects', '/api/{version}/{object}')
     config.add_route('api_object', '/api/{version}/{object}/{object_id}',
