@@ -54,9 +54,8 @@ def session_context(session):
     try:
         yield session
         session.commit()
-    except:
+    finally:
         session.rollback()
-        raise
 
 
 @contextmanager
@@ -65,6 +64,5 @@ def tmp_session_context(session):
     try:
         yield session
         session.rollback()
-    except:
+    finally:
         session.rollback()
-        raise

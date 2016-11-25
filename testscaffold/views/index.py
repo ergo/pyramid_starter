@@ -169,12 +169,13 @@ class IndexViews(BaseView):
             # insert new user here
             new_user = User()
             registration_form.populate_obj(new_user)
-            new_user.persist(flush=True, db_session=request.dbsession)
             new_user.regenerate_security_code()
             new_user.status = 1
             new_user.set_password(new_user.password)
             new_user.registration_ip = request.environ.get('REMOTE_ADDR')
-            log.info('register', extra={'new_user': new_user.user_name})
+            new_user.persist(flush=True, db_session=request.dbsession)
+            log.info('register', extra={'new_user': new_user.user_name,
+                                        'user_id': new_user.id})
 
             # bind 3rd party identity
             if social_data:
