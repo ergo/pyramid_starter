@@ -31,12 +31,14 @@ def validate_marshmallow_partial(schema, field_name=None):
     def _validator(form, field):
         if field_name:
             field = getattr(form, field_name)
-
         schema_inst = schema(context=form.context)
         try:
-            schema_inst.load({field.name: field.data}, partial=True)
+            schema_inst.load(form.data)
         except marshmallow.ValidationError as exc:
-            raise wtforms.ValidationError(', '.join(exc.messages[field.name]))
+            keys = list(exc.messages.keys())
+            if field.name in keys:
+                msg = ', '.join(exc.messages[field.name])
+                raise wtforms.ValidationError(msg)
 
     return _validator
 
@@ -159,8 +161,18 @@ class EntryCreateForm(ZigguratForm):
         _("Note"), filters=[strip_filter])
 
     parent_id = wtforms.SelectField(
+        _("Parent"),
         choices=(),
         coerce=empty_to_none,
         validators=[
-            wtforms.validators.Optional()
+            wtforms.validators.Optional(),
+            validate_marshmallow_partial(EntryCreateSchema)
+        ])
+
+
+class EntryUpdateForm(EntryCreateForm):
+    ordering = wtforms.IntegerField(
+        _("Position"),
+        validators=[
+            validate_marshmallow_partial(EntryCreateSchema)
         ])

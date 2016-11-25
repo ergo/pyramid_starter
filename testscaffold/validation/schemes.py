@@ -162,7 +162,7 @@ class ResourceCreateSchemaMixin(Schema):
                 parent_id, to_position, on_same_branch=same_branch,
                 db_session=request.dbsession)
         except ZigguratResourceOutOfBoundaryException as exc:
-            raise validate.ValidationError(str(exc))
+            raise validate.ValidationError(str(exc), 'ordering')
 
 
 class EntryCreateSchema(ResourceCreateSchemaMixin):

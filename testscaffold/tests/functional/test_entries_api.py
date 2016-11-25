@@ -111,7 +111,7 @@ class TestFunctionalAPIEntries(object):
     @pytest.mark.parametrize("test_input, error_keys", [
         ({}, ['resource_name']),
         ({'parent_id': 'v'}, ['resource_name', 'parent_id']),
-        ({'ordering': 5, 'resource_name': 'x'}, ['_schema', ]),
+        ({'ordering': 5, 'resource_name': 'x'}, ['ordering', ]),
         ({'parent_id': 5}, ['resource_name', 'parent_id']),
     ])
     def test_entry_create_bad_json(self, full_app, sqla_session,
@@ -311,7 +311,7 @@ class TestFunctionalAPIEntries(object):
         }
         response = full_app.post_json(url_path, entry_dict, status=422,
                                       headers=headers)
-        assert expected in response.json['_schema'][0]
+        assert expected in response.json['ordering'][0]
 
     def test_entry_create_parent_no_order(self, full_app, sqla_session):
         from testscaffold.services.resource_tree_service import tree_service

@@ -7,7 +7,6 @@ import pyramid.httpexceptions as httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations import noop
-from ziggurat_foundations.exc import ZugguratTreeException
 from ziggurat_foundations.models.services.group import GroupService
 from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import ANY_PERMISSION
@@ -20,7 +19,8 @@ from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.validation.forms import (
     UserResourcePermissionForm,
     GroupResourcePermissionForm,
-    EntryCreateForm
+    EntryCreateForm,
+    EntryUpdateForm,
 )
 from testscaffold.views import BaseView
 from testscaffold.views.shared.entries import EntriesShared
@@ -148,7 +148,7 @@ class AdminEntryViews(BaseView):
             group_permissions, request=request)
 
         parent_id_choices = get_possible_parents(self.request)
-        resource_form = EntryCreateForm(
+        resource_form = EntryUpdateForm(
             request.POST, obj=resource,
             context={'request': request, 'modified_obj': resource})
         resource_form.parent_id.choices = parent_id_choices
@@ -167,16 +167,10 @@ class AdminEntryViews(BaseView):
                 if not position and into_new_parent:
                     position = tree_service.count_children(
                         parent_id, db_session=self.request.dbsession) + 1
-                try:
-                    tree_service.move_to_position(
-                        resource_id=resource.resource_id,
-                        new_parent_id=parent_id,
-                        to_position=position, db_session=self.request.dbsession)
-                except ZugguratTreeException:
-                    request.session.flash(
-                        {'msg': self.translate(
-                            _('Incorrect tree parent or position')),
-                            'level': 'danger'})
+                tree_service.move_to_position(
+                    resource_id=resource.resource_id,
+                    new_parent_id=parent_id,
+                    to_position=position, db_session=self.request.dbsession)
 
         return {'breadcrumbs': breadcrumbs,
                 'resource': resource,
