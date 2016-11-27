@@ -14,6 +14,7 @@ from pyramid.view import view_config
 from testscaffold.events import EmailEvent, SocialAuthEvent
 from testscaffold.models.user import User
 from testscaffold.services.resource_tree_service import tree_service
+from testscaffold.services.user import UserService
 from testscaffold.validation.forms import (UserCreateForm,
                                            UserLoginForm,
                                            UserLostPasswordForm,
@@ -59,7 +60,8 @@ class IndexViews(BaseView):
         request = self.request
         form = UserLostPasswordForm(request.POST, context={'request': request})
         if request.method == 'POST' and form.validate():
-            user = User.by_email(form.email.data, db_session=request.dbsession)
+            user = UserService.by_email(form.email.data,
+                                        db_session=request.dbsession)
             if user:
                 user.regenerate_security_code()
                 user.security_code_date = datetime.utcnow()
@@ -99,7 +101,7 @@ class IndexViews(BaseView):
         new password for user
         """
         request = self.request
-        user = User.by_user_name_and_security_code(
+        user = UserService.by_user_name_and_security_code(
             request.params.get('user_name'),
             request.params.get(
                 'security_code'),
