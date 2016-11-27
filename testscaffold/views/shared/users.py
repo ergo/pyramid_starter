@@ -6,7 +6,7 @@ from datetime import datetime
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-from ziggurat_foundations.models.services.user_permission import \
+from testscaffold.services.user_permission import \
     UserPermissionService
 
 from testscaffold.models.user_permission import UserPermission

@@ -6,9 +6,9 @@ import logging
 from pyramid.authentication import CallbackAuthenticationPolicy
 from pyramid.exceptions import HTTPNotFound
 from pyramid.security import Allow, ALL_PERMISSIONS
-from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import permission_to_pyramid_acls
 
+from testscaffold.services.resource import ResourceService
 from testscaffold.services.auth_token import AuthTokenService
 from testscaffold.services.user import UserService
 from testscaffold.util import safe_integer

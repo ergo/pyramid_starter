@@ -3,14 +3,14 @@ from __future__ import absolute_import, unicode_literals, print_function
 
 import pytest
 from six.moves.urllib import parse
-from ziggurat_foundations.models.services.group_resource_permission import \
-    GroupResourcePermissionService
-from ziggurat_foundations.models.services.user_resource_permission import \
-    UserResourcePermissionService
 
 from testscaffold.models.group_resource_permission import \
     GroupResourcePermission
 from testscaffold.models.user_resource_permission import UserResourcePermission
+from testscaffold.services.group_resource_permission import \
+    GroupResourcePermissionService
+from testscaffold.services.user_resource_permission import \
+    UserResourcePermissionService
 from testscaffold.tests.utils import (
     create_entry,
     session_context,

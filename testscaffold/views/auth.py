@@ -12,7 +12,7 @@ from pyramid.view import view_config
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInBadAuth
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignInSuccess
 from ziggurat_foundations.ext.pyramid.sign_in import ZigguratSignOut
-from ziggurat_foundations.models.services.external_identity import \
+from testscaffold.services.external_identity import \
     ExternalIdentityService
 
 from testscaffold.events import SocialAuthEvent

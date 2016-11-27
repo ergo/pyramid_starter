@@ -4,12 +4,12 @@ import logging
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-from ziggurat_foundations.models.services.group_permission import \
-    GroupPermissionService
 
 from testscaffold.models.group import Group
 from testscaffold.models.group_permission import GroupPermission
 from testscaffold.services.group import GroupService
+from testscaffold.services.group_permission import \
+    GroupPermissionService
 from testscaffold.services.user import UserService
 
 log = logging.getLogger(__name__)

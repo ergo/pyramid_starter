@@ -9,10 +9,10 @@ from ziggurat_foundations.exc import (
     ZigguratResourceTreeMissingException,
     ZigguratResourceTreePathException
 )
-from ziggurat_foundations.models.services.group import GroupService
-from ziggurat_foundations.models.services.user import UserService
 
+from testscaffold.services.group import GroupService
 from testscaffold.services.resource_tree_service import tree_service
+from testscaffold.services.user import UserService
 
 _ = TranslationStringFactory('testscaffold')
 

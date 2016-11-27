@@ -5,10 +5,9 @@ import logging
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-from ziggurat_foundations.models.services.group_resource_permission import \
+from testscaffold.services.group_resource_permission import \
     GroupResourcePermissionService
-from ziggurat_foundations.models.services.resource import ResourceService
-from ziggurat_foundations.models.services.user_resource_permission import \
+from testscaffold.services.user_resource_permission import \
     UserResourcePermissionService
 
 from testscaffold.models.group_resource_permission import \

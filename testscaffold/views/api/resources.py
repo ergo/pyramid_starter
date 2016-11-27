@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 
 from pyramid.view import view_config, view_defaults
-from ziggurat_foundations.models.services.user import UserService
 
+from testscaffold.services.user import UserService
 from testscaffold.validation.schemes import (
     UserResourcePermissionSchema,
     GroupResourcePermissionSchema,

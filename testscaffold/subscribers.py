@@ -9,7 +9,7 @@ from pyramid.renderers import render
 from pyramid.threadlocal import get_current_request
 from pyramid_mailer import get_mailer
 from pyramid_mailer.message import Message
-from ziggurat_foundations.models.services.external_identity import \
+from testscaffold.services.external_identity import \
     ExternalIdentityService
 
 from testscaffold.events import EmailEvent, SocialAuthEvent

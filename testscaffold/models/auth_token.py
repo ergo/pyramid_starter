@@ -3,9 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 import sqlalchemy as sa
 from ziggurat_foundations.models.base import BaseModel
-from ziggurat_foundations.models.services.user import UserService
 
 from testscaffold.models.meta import Base
+from testscaffold.services.user import UserService
 
 
 class AuthToken(BaseModel, Base):

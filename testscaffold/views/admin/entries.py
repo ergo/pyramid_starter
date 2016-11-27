@@ -7,14 +7,14 @@ import pyramid.httpexceptions as httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations import noop
-from ziggurat_foundations.models.services.group import GroupService
-from ziggurat_foundations.models.services.resource import ResourceService
 from ziggurat_foundations.permissions import ANY_PERMISSION
 
 from testscaffold.grids import (
     ResourceUserPermissionsGrid,
     ResourceGroupPermissionsGrid)
 from testscaffold.models.entry import Entry
+from testscaffold.services.group import GroupService
+from testscaffold.services.resource import ResourceService
 from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.validation.forms import (
     UserResourcePermissionForm,
