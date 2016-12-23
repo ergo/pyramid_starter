@@ -1,4 +1,4 @@
-repoze.sendmail==4.1
+repoze.sendmail==4.3
 sqlalchemy>=1.0.12
 ziggurat_foundations>=0.7.0
 celery>=3.1.23
