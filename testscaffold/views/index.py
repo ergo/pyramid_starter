@@ -208,9 +208,12 @@ class IndexViews(BaseView):
                  permission=NO_PERMISSION_REQUIRED)
     def set_language_cookie(self):
         request = self.request
-        selected_language = request.matchdict.get('language', 'en')
-        came_from = request.params.get('came_from', '/')
-        resp = HTTPFound(location=request.route_url('/'))
+        resp = HTTPFound(
+            location=request.params.get('came_from', '/')
+        )
         request.response.set_cookie(
-            '_LOCALE_', selected_language, max_age=timedelta(days=365))
+            '_LOCALE_',
+            request.matchdict.get('language', 'en'),
+            max_age=timedelta(days=365)
+        )
         return request.response.merge_cookies(resp)
