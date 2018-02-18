@@ -67,7 +67,8 @@ def allow_root_access(request, context):
     Adds ALL_PERMISSIONS to every resource if user has 'root_permission'
     """
     if getattr(request, 'user'):
-        for perm in permission_to_pyramid_acls(request.user.permissions):
+        permissions = UserService.permissions(request.user)
+        for perm in permission_to_pyramid_acls(permissions):
             if perm[2] == 'root_administration':
                 context.__acl__.append(
                     (perm[0], perm[1], ALL_PERMISSIONS))
