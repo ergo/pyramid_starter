@@ -16,6 +16,7 @@ from testscaffold.models import (
 from testscaffold.models.group import Group
 from testscaffold.models.group_permission import GroupPermission
 from testscaffold.models.user import User
+from ziggurat_foundations.models.services.user import UserService
 
 
 def usage(argv):
@@ -41,7 +42,7 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         user = User(user_name="admin", email='foo@localhost')
-        user.set_password('admin')
+        UserService.set_password(user, 'admin')
         admin_object = Group(group_name='Administrators')
         group_permission = GroupPermission(perm_name='root_administration')
         dbsession.add(admin_object)
@@ -53,5 +54,5 @@ def main(argv=sys.argv):
         for x in range(1, 25):
             user = User(user_name="test{}".format(x),
                         email='foo{}@localhost'.format(x))
-            user.set_password('test')
+            UserService.set_password(user, 'test')
             test_group.users.append(user)
