@@ -9,7 +9,7 @@
         <div class="card">
             <h4 class="card-header">{% trans %}Add a new user
                 to{% endtrans %} <strong>{{ group }}</strong></h4>
-            <div class="card-block"
+            <div class="card-body"
                  data-ng-controller="UserListController as userCtrl">
                 <form
                     data-ng-submit="userCtrl.assignUserToGroup({{ group.id }})">
@@ -36,7 +36,7 @@
                 <h3 class="panel-title">{% trans %}Members of{% endtrans %}
                     <strong>{{ group }}</strong></h3>
             </div>
-            <div class="card-block">
+            <div class="card-body">
                 <table class="table">
                     {{ user_grid }}
                 </table>

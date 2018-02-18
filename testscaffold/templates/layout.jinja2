@@ -12,20 +12,20 @@
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css"
-          integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <link
-        href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
-        rel="stylesheet">
+            href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"
+            rel="stylesheet">
 
     <!-- Custom styles for this scaffold -->
     <link href="{{ request.static_url('testscaffold:static/theme.css') }}"
           rel="stylesheet">
     <script
-        src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+            src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     <script
-        src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.2/ui-bootstrap-tpls.min.js"></script>
+            src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.2/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript">
         var BASE_URL = '{{request.route_url('/')[:-1]}}';
         var API_BASE_URL = '{{request.route_url('api_objects', version='0.1', object='O')[:-2]}}';
@@ -36,27 +36,30 @@
 
 <body>
 
+<div class="container">
 
-<!-- Fixed navbar -->
-<nav class="navbar navbar-light bg-faded" id="top-nav">
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="top-nav">
         <a class="navbar-brand" href="{{ request.route_url('/') }}">
             {% trans %}Some project name{% endtrans %}
         </a>
-        <ul class="nav navbar-nav float-xs-right">
-            <li class="nav-item"><a class="nav-link"
-                href="{{ request.route_url('language', language='en', _query={'came_from':request.current_route_url()}) }}">
-                EN</a>
-            </li>
-            <li class="nav-item"><a class="nav-link"
-                href="{{ request.route_url('language', language='pl', _query={'came_from':request.current_route_url()}) }}">
-                PL</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-<div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarText" aria-controls="navbarText"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link"
+                                        href="{{ request.route_url('language', language='en', _query={'came_from':request.current_route_url()}) }}">
+                    EN</a>
+                </li>
+                <li class="nav-item"><a class="nav-link"
+                                        href="{{ request.route_url('language', language='pl', _query={'came_from':request.current_route_url()}) }}">
+                    PL</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
     {% include 'testscaffold:templates/layout_login.jinja2' %}
 

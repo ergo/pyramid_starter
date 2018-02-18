@@ -14,7 +14,7 @@
             <a href="{{request.route_url('lost_password')}}">{% trans %}Forgot password?{% endtrans %}</a>
 
         </form>
-
+        <br/>
         <h3>{% trans %}Login via social account{% endtrans %}</h3>
         <a href="{{request.route_url('social_auth', provider='facebook')}}" class="btn btn-secondary">Facebook</a>
         <a href="{{request.route_url('social_auth', provider='google')}}" class="btn btn-secondary">Google</a>

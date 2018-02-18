@@ -13,7 +13,7 @@
                 {% trans %}Editing{% endtrans %} <strong>{{group}}</strong>
             {% endif %}
         </h4>
-        <div class="card-block">
+        <div class="card-body">
 
             {% if request.matchdict.get('verb') == 'POST' %}
                 <form action="{{request.route_url('admin_objects', object='groups', verb='POST' )}}" method="POST">
@@ -36,7 +36,7 @@
 
     {% if request.matchdict.get('verb') == 'GET' %}
         <div class="card">
-            <div class="card-block">
+            <div class="card-body">
                 {% trans %}Group Members{% endtrans %}: <strong>{{group.users_dynamic.count()}}</strong>
                 <a href="{{request.route_url('admin_object_relation', object='groups', object_id=group.id, relation='users', verb='GET')}}"
                    class="btn btn-info">{% trans %}Add/remove members{%  endtrans %}</a>
@@ -50,7 +50,7 @@
                     {% trans %}Permissions{% endtrans %}
                 </h3>
             </div>
-            <div class="card-block">
+            <div class="card-body">
                 <form action="{{request.route_url('admin_object_relation', object='groups', object_id=group.id, relation='permissions', verb='POST' )}}" method="POST">
                     {{form.render_form(permission_form)}}
                     <button type="submit" class="btn btn-secondary">{% trans %}Add{% endtrans %}</button>

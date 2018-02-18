@@ -23,7 +23,7 @@
                     <strong>{{ resource.resource_name }}</strong>
                 {% endif %}
             </h4>
-            <div class="card-block">
+            <div class="card-body">
 
                 {% if request.matchdict.get('verb') == 'POST' %}
                     <form
@@ -60,7 +60,7 @@
                 <h4 class="card-header">
                     {% trans %}User Permissions{% endtrans %}
                 </h4>
-                <div class="card-block"
+                <div class="card-body"
                      data-ng-controller="UserListController as userCtrl">
                     <form
                         action="{{ request.route_url('admin_object_relation', object='resources', object_id=resource.resource_id, relation='user_permissions', verb='POST' ) }}"
@@ -100,7 +100,7 @@
                 <h4 class="card-header">
                     {% trans %}Group Permissions{% endtrans %}
                 </h4>
-                <div class="card-block">
+                <div class="card-body">
                     <form
                         action="{{ request.route_url('admin_object_relation',
                         object='resources', object_id=resource.resource_id,
