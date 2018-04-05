@@ -35,8 +35,9 @@ def main(global_config, **settings):
     config = Configurator(settings=settings,
                           authentication_policy=stacked_policy,
                           authorization_policy=authorization_policy,
-                          root_factory='testscaffold.security.RootFactory',
-                          default_permission='view')
+                          root_factory='testscaffold.security.RootFactory')
+    config.include("cornice")
+    # config.include('cornice_swagger')
     config.add_translation_dirs('testscaffold:locale/',
                                 'wtforms:locale/', )
 
@@ -54,7 +55,7 @@ def main(global_config, **settings):
     encryption.ENCRYPTION_SECRET = settings['encryption_secret']
     # CSRF is enabled by defualt
     # use X-XSRF-TOKEN for angular
-    config.set_default_csrf_options(require_csrf=True, header='X-XSRF-TOKEN')
+    # config.set_default_csrf_options(require_csrf=True, header='X-XSRF-TOKEN')
     config.add_view_deriver(
         'testscaffold.predicates.auth_token_aware_csrf_view',
         name='csrf_view')
