@@ -26,5 +26,4 @@ cryptography>=1.4
 webhelpers2_grid>=0.1
 appenlight_client
 requests>=2.10.0
-cornice=>3.2.0
-cornice_swagger
+pyramimd_apispec

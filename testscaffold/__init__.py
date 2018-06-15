@@ -36,8 +36,8 @@ def main(global_config, **settings):
                           authentication_policy=stacked_policy,
                           authorization_policy=authorization_policy,
                           root_factory='testscaffold.security.RootFactory')
-    config.include("cornice")
-    # config.include('cornice_swagger')
+    config.include('pyramid_apispec.views')
+    config.pyramid_apispec_add_explorer(permission=None)
     config.add_translation_dirs('testscaffold:locale/',
                                 'wtforms:locale/', )
 
