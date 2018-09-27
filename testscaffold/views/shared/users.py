@@ -8,7 +8,7 @@ import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from testscaffold.services.user_permission import \
     UserPermissionService
-
+from testscaffold.services.user import UserService
 from testscaffold.models.user_permission import UserPermission
 from testscaffold.services.user import UserService
 from testscaffold.util import safe_integer
@@ -64,7 +64,7 @@ class UsersShared(object):
                         'user_id': instance.id})
         if data.get('password'):
             # set hashed password
-            instance.set_password(data['password'])
+            UserService.set_password(instance, data['password'])
             self.request.session.flash(
                 {'msg': self.translate(_('User password updated.')),
                  'level': 'success'})
