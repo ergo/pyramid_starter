@@ -12,11 +12,15 @@ class AuthToken(BaseModel, Base):
     """
     Auth tokens that can be used to authenticate as specific users
     """
-    __tablename__ = 'auth_tokens'
+
+    __tablename__ = "auth_tokens"
 
     id = sa.Column(sa.Integer, primary_key=True, nullable=False)
-    token = sa.Column(sa.Unicode(40), nullable=False,
-                      default=lambda x: UserService.generate_random_string(40))
-    owner_id = sa.Column(sa.Integer,
-                         sa.ForeignKey('users.id', onupdate='CASCADE',
-                                       ondelete='CASCADE'))
+    token = sa.Column(
+        sa.Unicode(40),
+        nullable=False,
+        default=lambda x: UserService.generate_random_string(40),
+    )
+    owner_id = sa.Column(
+        sa.Integer, sa.ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE")
+    )

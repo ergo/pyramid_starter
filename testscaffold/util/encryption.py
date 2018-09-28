@@ -8,7 +8,7 @@ ENCRYPTION_SECRET = None
 
 def encrypt_fernet(value):
     f = Fernet(ENCRYPTION_SECRET)
-    return 'fernet${}'.format(f.encrypt(value))
+    return "fernet${}".format(f.encrypt(value))
 
 
 def decrypt_fernet(value):

@@ -8,9 +8,12 @@ class BaseView(object):
 
 
 def includeme(config):
-    config.scan('testscaffold.views')
-    includes = config.registry.settings.get('pyramid.includes', '')
-    if 'pyramid_debugtoolbar' not in includes:
-        config.add_view('testscaffold.views.error_handlers.error',
-                        context=Exception, permission=NO_PERMISSION_REQUIRED,
-                        renderer='json')
+    config.scan("testscaffold.views")
+    includes = config.registry.settings.get("pyramid.includes", "")
+    if "pyramid_debugtoolbar" not in includes:
+        config.add_view(
+            "testscaffold.views.error_handlers.error",
+            context=Exception,
+            permission=NO_PERMISSION_REQUIRED,
+            renderer="json",
+        )

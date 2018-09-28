@@ -5,11 +5,30 @@ import json
 import logging
 import sys
 
-EXCLUDED_LOG_VARS = ['threadName', 'name', 'thread', 'created', 'process',
-                     'processName', 'args', 'module', 'filename',
-                     'levelno', 'exc_text', 'pathname', 'lineno', 'msg',
-                     'exc_info', 'message', 'funcName', 'stack_info',
-                     'relativeCreated', 'levelname', 'msecs', 'asctime']
+EXCLUDED_LOG_VARS = [
+    "threadName",
+    "name",
+    "thread",
+    "created",
+    "process",
+    "processName",
+    "args",
+    "module",
+    "filename",
+    "levelno",
+    "exc_text",
+    "pathname",
+    "lineno",
+    "msg",
+    "exc_info",
+    "message",
+    "funcName",
+    "stack_info",
+    "relativeCreated",
+    "levelname",
+    "msecs",
+    "asctime",
+]
 
 
 class JSONFormatter(logging.Formatter):
@@ -29,7 +48,7 @@ class JSONFormatter(logging.Formatter):
         record.message = record.getMessage()
         log_dict = vars(record)
         keys = [k for k in log_dict.keys() if k not in EXCLUDED_LOG_VARS]
-        _json = {'message': record.message}
+        _json = {"message": record.message}
         _json.update({k: log_dict[k] for k in keys})
         record.message = json.dumps(_json, default=lambda x: str(x))
 
@@ -40,7 +59,7 @@ class JSONFormatter(logging.Formatter):
         except UnicodeDecodeError as e:
             # Issue 25664. The logger name may be Unicode. Try again ...
             try:
-                record.name = record.name.decode('utf-8')
+                record.name = record.name.decode("utf-8")
                 s = self._fmt % record.__dict__
             except UnicodeDecodeError:
                 raise e
@@ -61,7 +80,6 @@ class JSONFormatter(logging.Formatter):
                 # We also use replace for when there are multiple
                 # encodings, e.g. UTF-8 for the filesystem and latin-1
                 # for a script. See issue 13232.
-                s = s + record.exc_text.decode(sys.getfilesystemencoding(),
-                                               'replace')
+                s = s + record.exc_text.decode(sys.getfilesystemencoding(), "replace")
 
         return s

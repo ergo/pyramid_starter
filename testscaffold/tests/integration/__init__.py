@@ -12,9 +12,8 @@ def dummy_request(dbsession):
     from webob.multidict import MultiDict
     from pyramid.request import apply_request_extensions
 
-    req = testing.DummyRequest(base_url='http://testscaffold.com',
-                               dbsession=dbsession)
-    req.route_url = mock.Mock(return_value='/')
+    req = testing.DummyRequest(base_url="http://testscaffold.com", dbsession=dbsession)
+    req.route_url = mock.Mock(return_value="/")
     req.POST = MultiDict()
     req.GET = MultiDict()
     req.params = MultiDict()
@@ -23,10 +22,11 @@ def dummy_request(dbsession):
     return req
 
 
-@pytest.mark.usefixtures('with_migrations', 'clean_tables', 'minimal_setup')
+@pytest.mark.usefixtures("with_migrations", "clean_tables", "minimal_setup")
 class TestFixtureCleanup(object):
     def test_cleanup(self, sqla_session):
         from testscaffold.models.user import User
+
         with session_context(sqla_session) as session:
-            user = User(id=1, email='foasfsfao', user_name='barafsf')
+            user = User(id=1, email="foasfsfao", user_name="barafsf")
             user.persist(flush=True, db_session=session)

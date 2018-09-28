@@ -7,8 +7,15 @@ class EmailEvent(object):
     generated from specified template
     """
 
-    def __init__(self, request, recipients, tmpl_vars, tmpl_loc,
-                 send_immediately=False, fail_silently=False):
+    def __init__(
+        self,
+        request,
+        recipients,
+        tmpl_vars,
+        tmpl_loc,
+        send_immediately=False,
+        fail_silently=False,
+    ):
         self.request = request
         self.recipients = recipients
         self.tmpl_vars = tmpl_vars

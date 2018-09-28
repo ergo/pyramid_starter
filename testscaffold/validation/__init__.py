@@ -7,7 +7,7 @@ from pyramid.threadlocal import get_current_request
 from wtforms import Form
 from wtforms.csrf.core import CSRF
 
-_ = TranslationStringFactory('wtforms')
+_ = TranslationStringFactory("wtforms")
 
 
 class PyramidCSRF(CSRF):
@@ -16,7 +16,7 @@ class PyramidCSRF(CSRF):
     """
 
     def setup_form(self, form):
-        request = form.context.get('request')
+        request = form.context.get("request")
         if request:
             self.csrf_context = request
         else:
@@ -28,7 +28,7 @@ class PyramidCSRF(CSRF):
 
     def validate_csrf_token(self, form, field):
         if field.data != field.current_token:
-            raise BadCSRFToken('Invalid CSRF token')
+            raise BadCSRFToken("Invalid CSRF token")
 
 
 class PyramidTranslator(object):
@@ -57,11 +57,10 @@ class ZigguratForm(Form):
             """
             This will translate internal wtform validators for us
             """
-            request = form.context.get('request') or get_current_request()
+            request = form.context.get("request") or get_current_request()
             return PyramidTranslator(request)
 
-    def __init__(self, formdata=None, obj=None, prefix='', context=None,
-                 **kwargs):
+    def __init__(self, formdata=None, obj=None, prefix="", context=None, **kwargs):
         """
         :param formdata:
         :param obj:
@@ -83,5 +82,5 @@ class ZigguratForm(Form):
         :param string:
         :return:
         """
-        request = self.context.get('request') or get_current_request()
-        return request.localizer.translate(_(string), domain='testscaffold')
+        request = self.context.get("request") or get_current_request()
+        return request.localizer.translate(_(string), domain="testscaffold")

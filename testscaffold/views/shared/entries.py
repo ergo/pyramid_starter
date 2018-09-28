@@ -13,7 +13,7 @@ ENTRIES_PER_PAGE = 50
 
 log = logging.getLogger(__name__)
 
-_ = TranslationStringFactory('testscaffold')
+_ = TranslationStringFactory("testscaffold")
 
 
 class EntriesShared(object):
@@ -34,20 +34,21 @@ class EntriesShared(object):
             # url_maker gets passed to SqlalchemyOrmPage
             url_maker=lambda p: request.current_route_url(_query={"page": p}),
             filter_params=filter_params,
-            db_session=request.dbsession
+            db_session=request.dbsession,
         )
         return entry_paginator
 
     def populate_instance(self, instance, data, *args, **kwargs):
         # this is safe and doesn't overwrite entry_password with cleartext
         instance.populate_obj(data, *args, **kwargs)
-        log.info('entry_populate_instance',
-                 extra={'action': 'updated', 'entry_id': instance.resource_id})
+        log.info(
+            "entry_populate_instance",
+            extra={"action": "updated", "entry_id": instance.resource_id},
+        )
 
     def entry_get(self, entry_id):
         request = self.request
-        entry = EntryService.get(safe_integer(entry_id),
-                                 db_session=request.dbsession)
+        entry = EntryService.get(safe_integer(entry_id), db_session=request.dbsession)
         if not entry:
             raise pyramid.httpexceptions.HTTPNotFound()
         return entry

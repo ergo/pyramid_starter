@@ -9,14 +9,16 @@ from testscaffold.models import (
     User,
     AuthToken,
     Entry,
-    UserPermission)
+    UserPermission,
+)
 
 
 def create_admin(session):
     admin = create_user(
-        {'user_name': 'test', 'email': 'test@test.local'},
-        permissions=['root_administration'],
-        sqla_session=session)
+        {"user_name": "test", "email": "test@test.local"},
+        permissions=["root_administration"],
+        sqla_session=session,
+    )
     token = admin.auth_tokens[0].token
     return admin, token
 

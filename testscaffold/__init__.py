@@ -20,26 +20,29 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
 
-    settings.setdefault('jinja2.i18n.domain', 'testscaffold')
+    settings.setdefault("jinja2.i18n.domain", "testscaffold")
 
     stacked_policy = AuthenticationStackPolicy()
-    auth_tkt = AuthTktAuthenticationPolicy(settings['auth_tkt.seed'],
-                                           callback=groupfinder)
+    auth_tkt = AuthTktAuthenticationPolicy(
+        settings["auth_tkt.seed"], callback=groupfinder
+    )
     auth_token_policy = AuthTokenAuthenticationPolicy(callback=groupfinder)
 
-    stacked_policy.add_policy('auth_tkt', auth_tkt)
-    stacked_policy.add_policy('auth_token', auth_token_policy)
+    stacked_policy.add_policy("auth_tkt", auth_tkt)
+    stacked_policy.add_policy("auth_token", auth_token_policy)
     authorization_policy = ACLAuthorizationPolicy()
 
-    settings['jinja2.undefined'] = 'strict'
-    config = Configurator(settings=settings,
-                          authentication_policy=stacked_policy,
-                          authorization_policy=authorization_policy,
-                          root_factory='testscaffold.security.RootFactory')
-    config.include('pyramid_apispec.views')
-    config.pyramid_apispec_add_explorer(permission=None)
-    config.add_translation_dirs('testscaffold:locale/',
-                                'wtforms:locale/', )
+    settings["jinja2.undefined"] = "strict"
+    config = Configurator(
+        settings=settings,
+        authentication_policy=stacked_policy,
+        authorization_policy=authorization_policy,
+        root_factory="testscaffold.security.RootFactory",
+    )
+    config.include("pyramid_apispec.views")
+    config.pyramid_apispec_add_explorer(
+        spec_route_name="openapi_spec")
+    config.add_translation_dirs("testscaffold:locale/", "wtforms:locale/")
 
     # modify json renderer
     json_renderer = JSON(indent=4)
@@ -49,43 +52,43 @@ def main(global_config, **settings):
 
     json_renderer.add_adapter(datetime.datetime, datetime_adapter)
     json_renderer.add_adapter(datetime.date, datetime_adapter)
-    config.add_renderer('json', json_renderer)
+    config.add_renderer("json", json_renderer)
 
     # set crypto key used to store sensitive data like auth tokens
-    encryption.ENCRYPTION_SECRET = settings['encryption_secret']
+    encryption.ENCRYPTION_SECRET = settings["encryption_secret"]
     # CSRF is enabled by defualt
     # use X-XSRF-TOKEN for angular
     # config.set_default_csrf_options(require_csrf=True, header='X-XSRF-TOKEN')
     config.add_view_deriver(
-        'testscaffold.predicates.auth_token_aware_csrf_view',
-        name='csrf_view')
+        "testscaffold.predicates.auth_token_aware_csrf_view", name="csrf_view"
+    )
 
-    config.include('pyramid_mailer')
-    config.include('pyramid_jinja2')
-    config.include('pyramid_redis_sessions')
-    config.include('ziggurat_foundations.ext.pyramid.sign_in')
+    config.include("pyramid_mailer")
+    config.include("pyramid_jinja2")
+    config.include("pyramid_redis_sessions")
+    config.include("ziggurat_foundations.ext.pyramid.sign_in")
 
     # make request.user available
+    config.add_request_method("testscaffold.util.request:get_user", "user", reify=True)
     config.add_request_method(
-        'testscaffold.util.request:get_user', 'user', reify=True)
+        "testscaffold.util.request:safe_json_body", "safe_json_body", reify=True
+    )
     config.add_request_method(
-        'testscaffold.util.request:safe_json_body', 'safe_json_body',
-        reify=True)
+        "testscaffold.util.request:unsafe_json_body", "unsafe_json_body", reify=True
+    )
     config.add_request_method(
-        'testscaffold.util.request:unsafe_json_body', 'unsafe_json_body',
-        reify=True)
-    config.add_request_method(
-        'testscaffold.util.request:get_authomatic', 'authomatic',
-        reify=True)
+        "testscaffold.util.request:get_authomatic", "authomatic", reify=True
+    )
 
-    config.add_view_predicate('context_type_class',
-                              'testscaffold.predicates.ContextTypeClass')
+    config.add_view_predicate(
+        "context_type_class", "testscaffold.predicates.ContextTypeClass"
+    )
 
-    config.scan('testscaffold.events')
-    config.scan('testscaffold.subscribers')
-    config.include('testscaffold.models')
-    config.include('testscaffold.routes')
-    config.include('testscaffold.views')
+    config.scan("testscaffold.events")
+    config.scan("testscaffold.subscribers")
+    config.include("testscaffold.models")
+    config.include("testscaffold.routes")
+    config.include("testscaffold.views")
 
     # configure celery in later phase
     def wrap_config_celery():
@@ -97,7 +100,7 @@ def main(global_config, **settings):
     cache_regions.regions = cache_regions.CacheRegions(settings)
     config.registry.cache_regions = cache_regions.regions
 
-    if not config.registry.settings.get('testscaffold.ignore_warnings', True):
-        warnings.filterwarnings('default')
+    if not config.registry.settings.get("testscaffold.ignore_warnings", True):
+        warnings.filterwarnings("default")
 
     return config.make_wsgi_app()

@@ -12,9 +12,12 @@ from testscaffold.validation.schemes import (
 from testscaffold.views.shared.resources import ResourcesShared
 
 
-@view_defaults(route_name='api_object_relation', renderer='json',
-               match_param=('object=resources', 'relation=user_permissions',),
-               permission='owner')
+@view_defaults(
+    route_name="api_object_relation",
+    renderer="json",
+    match_param=("object=resources", "relation=user_permissions"),
+    permission="owner",
+)
 class ResourcesUserPermissionsAPI(object):
     def __init__(self, request):
         self.request = request
@@ -25,13 +28,15 @@ class ResourcesUserPermissionsAPI(object):
         resource = self.request.context.resource
 
         schema = UserResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
+            context={"request": self.request, "resource": resource}
+        )
         data = schema.load(self.request.unsafe_json_body).data
         user = UserService.by_user_name(
-            data['user_name'], db_session=self.request.dbsession)
+            data["user_name"], db_session=self.request.dbsession
+        )
         perm_inst = self.shared.user_permission_post(
-            resource, user.id, data['perm_name'])
+            resource, user.id, data["perm_name"]
+        )
         self.request.dbsession.flush()
         return perm_inst.get_dict()
 
@@ -40,21 +45,26 @@ class ResourcesUserPermissionsAPI(object):
         resource = self.request.context.resource
 
         schema = UserResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
-        params = {'user_name': self.request.GET.get('user_name'),
-                  'perm_name': self.request.GET.get('perm_name')}
+            context={"request": self.request, "resource": resource}
+        )
+        params = {
+            "user_name": self.request.GET.get("user_name"),
+            "perm_name": self.request.GET.get("perm_name"),
+        }
         data = schema.load(params).data
         user = UserService.by_user_name(
-            data['user_name'], db_session=self.request.dbsession)
-        self.shared.user_permission_delete(
-            resource, user.id, data['perm_name'], )
+            data["user_name"], db_session=self.request.dbsession
+        )
+        self.shared.user_permission_delete(resource, user.id, data["perm_name"])
         return True
 
 
-@view_defaults(route_name='api_object_relation', renderer='json',
-               match_param=('object=resources', 'relation=group_permissions',),
-               permission='owner')
+@view_defaults(
+    route_name="api_object_relation",
+    renderer="json",
+    match_param=("object=resources", "relation=group_permissions"),
+    permission="owner",
+)
 class ResourcesGroupPermissionsAPI(object):
     def __init__(self, request):
         self.request = request
@@ -65,11 +75,12 @@ class ResourcesGroupPermissionsAPI(object):
         resource = self.request.context.resource
 
         schema = GroupResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
+            context={"request": self.request, "resource": resource}
+        )
         data = schema.load(self.request.unsafe_json_body).data
         perm_inst = self.shared.group_permission_post(
-            resource, data['group_id'], data['perm_name'])
+            resource, data["group_id"], data["perm_name"]
+        )
         self.request.dbsession.flush()
         return perm_inst.get_dict()
 
@@ -78,11 +89,14 @@ class ResourcesGroupPermissionsAPI(object):
         resource = self.request.context.resource
 
         schema = GroupResourcePermissionSchema(
-            context={'request': self.request,
-                     'resource': resource})
-        params = {'group_id': self.request.GET.get('group_id'),
-                  'perm_name': self.request.GET.get('perm_name')}
+            context={"request": self.request, "resource": resource}
+        )
+        params = {
+            "group_id": self.request.GET.get("group_id"),
+            "perm_name": self.request.GET.get("perm_name"),
+        }
         data = schema.load(params).data
         self.shared.group_permission_delete(
-            resource, data['group_id'], data['perm_name'])
+            resource, data["group_id"], data["perm_name"]
+        )
         return True
