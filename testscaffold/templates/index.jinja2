@@ -22,6 +22,10 @@
                             {{ entry['node'].resource_name }}
                         </a>
                     {% endfor %}
+                    <a href="{{ request.route_url('pyramid_apispec.api_explorer_path') }}"
+                       class="list-group-item">
+                        {% trans %}Api Explorer{% endtrans %}
+                    </a>
                 </div>
             </div>
 
