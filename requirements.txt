@@ -12,7 +12,6 @@ pyramid_debugtoolbar
 pyramid_tm>=0.12.1
 pyramid_mailer>=0.14.1
 pyramid_redis_sessions>=1.0.1
-pyramid_authstack>=1.0.1
 transaction>=1.6.1
 zope.sqlalchemy>=0.7.7
 waitress>=1.0a1

@@ -2,18 +2,20 @@
 from __future__ import absolute_import
 
 import datetime
+import logging
 import warnings
 
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.config import Configurator, PHASE3_CONFIG
 from pyramid.renderers import JSON
-from pyramid_authstack import AuthenticationStackPolicy
 
 import testscaffold.util.cache_regions as cache_regions
 import testscaffold.util.encryption as encryption
 from testscaffold.celery import configure_celery
-from testscaffold.security import groupfinder, AuthTokenAuthenticationPolicy
+from testscaffold.security import groupfinder, AuthTokenAuthenticationPolicy, PyramidSelectorPolicy
+
+log = logging.getLogger(__name__)
 
 
 def main(global_config, **settings):
@@ -22,20 +24,34 @@ def main(global_config, **settings):
 
     settings.setdefault("jinja2.i18n.domain", "testscaffold")
 
-    stacked_policy = AuthenticationStackPolicy()
     auth_tkt = AuthTktAuthenticationPolicy(
         settings["auth_tkt.seed"], callback=groupfinder
     )
     auth_token_policy = AuthTokenAuthenticationPolicy(callback=groupfinder)
 
-    stacked_policy.add_policy("auth_tkt", auth_tkt)
-    stacked_policy.add_policy("auth_token", auth_token_policy)
     authorization_policy = ACLAuthorizationPolicy()
+
+    def policy_selector(request):
+        # default policy
+        policy = "auth_tkt"
+        # return API token policy if header is present
+        if request.headers.get("x-testscaffold-auth-token"):
+            policy = "auth_token_policy"
+        log.info("Policy used: {}".format(policy))
+        return policy
+
+    auth_policy = PyramidSelectorPolicy(
+        policy_selector=policy_selector,
+        policies={
+            "auth_tkt": auth_tkt,
+            "auth_token_policy": auth_token_policy
+        }
+    )
 
     settings["jinja2.undefined"] = "strict"
     config = Configurator(
         settings=settings,
-        authentication_policy=stacked_policy,
+        authentication_policy=auth_policy,
         authorization_policy=authorization_policy,
         root_factory="testscaffold.security.RootFactory",
     )
