@@ -138,6 +138,8 @@ class TestFunctionalAPIUsers(object):
 @pytest.mark.usefixtures("full_app", "with_migrations", "clean_tables", "sqla_session")
 class TestFunctionalAPIUsersPermissions(object):
     def test_permission_add(self, full_app, sqla_session):
+        from ziggurat_foundations.models.services.user import UserService
+
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             user = create_user(
@@ -148,11 +150,12 @@ class TestFunctionalAPIUsersPermissions(object):
         url_path = "/api/0.1/users/{}/permissions".format(user.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         permission = {"perm_name": "root_administration"}
-        assert not list(user.permissions)
+        permissions = UserService.permissions(user)
+        assert not list(permissions)
         full_app.post_json(url_path, permission, status=200, headers=headers)
         sqla_session.expire_all()
-        print(user.permissions)
-        assert user.permissions[0].perm_name == "root_administration"
+        permissions = UserService.permissions(user)
+        assert permissions[0].perm_name == "root_administration"
 
     def test_permission_delete_not_found(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
@@ -168,6 +171,7 @@ class TestFunctionalAPIUsersPermissions(object):
         full_app.delete(url_path, permission, status=404, headers=headers)
 
     def test_permission_delete(self, full_app, sqla_session):
+        from ziggurat_foundations.models.services.user import UserService
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             user = create_user(
@@ -182,4 +186,5 @@ class TestFunctionalAPIUsersPermissions(object):
         qs = parse.urlencode(permission)
         full_app.delete("{}?{}".format(url_path, qs), status=200, headers=headers)
         sqla_session.expire_all()
-        assert user.permissions[0].perm_name == "admin_panel"
+        permissions = UserService.permissions(user)
+        assert permissions[0].perm_name == "admin_panel"
