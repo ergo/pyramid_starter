@@ -24,4 +24,4 @@ six>=1.10.0
 cryptography>=1.4
 webhelpers2_grid>=0.1
 requests>=2.10.0
-pyramid_apispec>=0.3.0
+pyramid_apispec>=0.3.2

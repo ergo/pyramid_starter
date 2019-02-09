@@ -2,21 +2,20 @@
 from __future__ import absolute_import, unicode_literals
 
 import copy
+import logging
 
 from authomatic import Authomatic
 from authomatic.providers import oauth2, oauth1
-from pyramid.security import unauthenticated_userid
 
 from testscaffold.exceptions import JSONException
-from testscaffold.services.user import UserService
+
+log = logging.getLogger(__name__)
 
 
 def get_user(request):
-    userid = unauthenticated_userid(request)
-    if userid is not None:
-        # this should return None if the user doesn't exist
-        # in the database
-        return UserService.get(userid, db_session=request.dbsession)
+    user_id = request.authenticated_userid
+    if user_id:
+        return getattr(request, '_reified_user_obj', None)
 
 
 def safe_json_body(request):

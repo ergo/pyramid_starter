@@ -8,6 +8,7 @@ def api_spec(request):
     spec = APISpec(
         title='Some API',
         version='1.0.0',
+        openapi_version='2.0',
         plugins=[
             MarshmallowPlugin()
         ],

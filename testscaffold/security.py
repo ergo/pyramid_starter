@@ -19,10 +19,16 @@ log = logging.getLogger(__name__)
 
 
 def groupfinder(userid, request):
-    if userid and hasattr(request, "user") and request.user:
-        groups = ["group:%s" % g.id for g in request.user.groups]
+    # registers _reified_user_obj that will be used later by request.user property
+    # we cache it so we don't have to query the db more than once
+    if not getattr(request, '_reified_user_obj', None) and userid:
+        user = UserService.get(userid, db_session=request.dbsession)
+        request._reified_user_obj = user
+    elif userid:
+        user = request._reified_user_obj
+    if user:
+        groups = ["group:%s" % g.id for g in user.groups]
         return groups
-    return []
 
 
 @implementer(IAuthenticationPolicy)

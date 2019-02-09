@@ -14,6 +14,7 @@
                     <a href="{{request.route_url('ziggurat.routes.sign_out')}}" class="btn btn-secondary">{% trans %}Sign out{% endtrans %}</a>
 
                     {% trans %}You are logged as{% endtrans %}: <strong>{{request.user.user_name}}</strong>
+                    {% trans %}Effective principals{% endtrans %}: <strong>{{request.effective_principals}}</strong>
                 </p>
             </div>
         </div>
