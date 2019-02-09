@@ -155,9 +155,6 @@ class AuthTokenAuthenticationPolicy(CallbackAuthenticationPolicy):
                 extra={"found": False, "owner": None},
             )
 
-    def authenticated_userid(self, request):
-        return self.unauthenticated_userid(request)
-
 
 def rewrite_root_perm(outcome, perm_user, perm_name):
     """
