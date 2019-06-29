@@ -1,5 +1,5 @@
 testscaffold README
-==================
+===================
 
 Getting Started
 ---------------
@@ -33,3 +33,6 @@ compile translations
 
     msgfmt -o testscaffold/locale/en/LC_MESSAGES/testscaffold.mo \
           testscaffold/locale/en/LC_MESSAGES/testscaffold.po
+
+    msgfmt -o testscaffold/locale/pl/LC_MESSAGES/testscaffold.mo \
+          testscaffold/locale/pl/LC_MESSAGES/testscaffold.po
