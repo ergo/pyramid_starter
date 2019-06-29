@@ -1,8 +1,0 @@
-# required to fix message extractor bugs
-setuptools==27.3.1
-pytest
-pytest-cov
-webtest
-mock
-babel
-lingua
