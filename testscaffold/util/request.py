@@ -13,7 +13,8 @@ log = logging.getLogger(__name__)
 
 
 def get_user(request):
-    # call to `request.authenticated_userid` should set `_reified_user_obj`
+    # call to `request.authenticated_userid` will trigger grupfinder callback
+    # that should should set `_reified_user_obj`
     user_id = request.authenticated_userid
     if user_id:
         return getattr(request, '_reified_user_obj', None)

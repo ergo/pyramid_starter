@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 
 
 def groupfinder(userid, request):
-    # registers _reified_user_obj that will be used later by request.user property
+    # registers _reified_user_obj that will be grabbed later by request.user property
     # we cache it so we don't have to query the db more than once
     if not getattr(request, '_reified_user_obj', None) and userid:
         user = UserService.get(userid, db_session=request.dbsession)
