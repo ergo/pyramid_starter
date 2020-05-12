@@ -31,17 +31,17 @@ register(
 )
 
 CELERY_CONFIG = {
-    "CELERY_IMPORTS": ("testscaffold.celery.tasks",),
-    "CELERYD_TASK_TIME_LIMIT": 300,
-    "CELERYD_MAX_TASKS_PER_CHILD": 1000,
-    "CELERY_IGNORE_RESULT": True,
-    "CELERY_ACCEPT_CONTENT": ("date_json",),
-    "CELERY_TASK_SERIALIZER": "date_json",
-    "CELERY_RESULT_SERIALIZER": "date_json",
-    "BROKER_URL": None,
-    "CELERYD_CONCURRENCY": None,
-    "CELERY_TIMEZONE": None,
-    "CELERYBEAT_SCHEDULE": {"name": {"task": "task", "schedule": timedelta(seconds=5)}},
+    "imports": ("testscaffold.celery.tasks",),
+    "task_time_limit": 300,
+    "worker_max_tasks_per_child": 1000,
+    "task_ignore_result": True,
+    "accept_content": ("date_json",),
+    "task_serializer": "date_json",
+    "result_serializer": "date_json",
+    "broker_url": None,
+    "worker_concurrency": None,
+    "timezone": None,
+    "beat_schedule": {"name": {"task": "task", "schedule": timedelta(seconds=5)}},
 }
 
 celery = Celery()
@@ -88,12 +88,12 @@ def on_preload_parsed_wrapper(options, app, **kwargs):
 
 def configure_celery(pyramid_registry):
     settings = pyramid_registry.settings
-    CELERY_CONFIG["BROKER_URL"] = settings["celery.broker_url"]
-    CELERY_CONFIG["CELERYD_CONCURRENCY"] = settings["celery.concurrency"]
-    CELERY_CONFIG["CELERY_TIMEZONE"] = settings["celery.timezone"]
+    CELERY_CONFIG["broker_url"] = settings["celery.broker_url"]
+    CELERY_CONFIG["worker_concurrency"] = settings["celery.concurrency"]
+    CELERY_CONFIG["timezone"] = settings["celery.timezone"]
     if asbool(settings.get("celery.always_eager")):
-        CELERY_CONFIG["CELERY_ALWAYS_EAGER"] = True
-        CELERY_CONFIG["CELERY_EAGER_PROPAGATES_EXCEPTIONS"] = True
+        CELERY_CONFIG["task_always_eager"] = True
+        CELERY_CONFIG["task_eager_propagates"] = True
 
     celery.config_from_object(CELERY_CONFIG)
 
