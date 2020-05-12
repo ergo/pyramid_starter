@@ -17,7 +17,8 @@ REQUIREMENTS = [
     "redis>=2.10.3",
     "psycopg2-binary>=2.6",
     "paginate>=0.5.6",
-    "paginate_sqlalchemy>=0.2.0",
+    "paginate_sqlalchemy>=0.3.1",
+    "email-validator>=1.0"
     "pyramid>=1.7",
     "pyramid_jinja2>=2.6.2",
     "pyramid_debugtoolbar",
