@@ -41,7 +41,7 @@ CELERY_CONFIG = {
     "timezone": "UTC",
     "beat_schedule": {
         "heartbeat-celery-30-seconds": {
-            "task": "testscaffold.tasks.celery_beat_heartbeat",
+            "task": "testscaffold.celery.tasks.celery_beat_heartbeat",
             "schedule": 30.0,
         },
     },
