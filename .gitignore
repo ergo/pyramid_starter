@@ -91,3 +91,5 @@ ENV/
 
 .idea
 
+/rundir/config.ini
+/rundir/testing.ini

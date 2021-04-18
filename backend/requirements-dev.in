@@ -1,0 +1,11 @@
+# constraint by main requirements
+-c requirements.txt
+babel
+black
+lingua
+mock
+pip-tools
+pytest
+pytest-cov
+tox
+webtest

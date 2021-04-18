@@ -1,0 +1,153 @@
+version: '3.2'
+
+x-default-env: &app_default_env
+  APP_ENV: development
+  APP_INI_FILE: development.ini
+  USER_UID: 1000
+  USER_GID: 1000
+  TESTING_INI: testing.ini
+  TAG: "${TAG:-latest}"
+
+x-depends_on: &app_depends_on
+  depends_on:
+    - db
+    - redis
+    - rabbitmq
+    - statsd
+
+x-default-logging: &default_logging
+  logging:
+    driver: "json-file"
+    options:
+      max-file: "10"
+      max-size: "50m"
+      compress: "true"
+
+x-volumes: &app_volumes
+  - type: bind
+    source: ./backend/
+    target: /opt/application
+  - type: bind
+    source: ./rundir
+    target: /opt/rundir
+
+services:
+  app:
+    stdin_open: true
+    tty: true
+    build:
+      context: .
+      args:
+        TAG: "${TAG:-latest}"
+    image: "testscaffold:${TAG:-latest}"
+    ports:
+      - "6543:6543"
+    command: "pserve --reload /opt/rundir/config.ini"
+    restart: unless-stopped
+    environment:
+      <<: *app_default_env
+    volumes: *app_volumes
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    <<: *app_depends_on
+    <<: *default_logging
+  celery:
+    build:
+      context: .
+      args:
+        TAG: "${TAG:-latest}"
+    image: "testscaffold-celery:${TAG:-latest}"
+    command: "celery -A testscaffold.celery worker --ini=config.ini"
+    restart: unless-stopped
+    environment:
+      <<: *app_default_env
+    volumes: *app_volumes
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+      - statsd
+    <<: *default_logging
+  celery_beat:
+    build:
+      context: .
+      args:
+        TAG: "${TAG:-latest}"
+    command: "celery -A testscaffold.celery beat --ini=config.ini"
+    image: "testscaffold-beat:${TAG:-latest}"
+    restart: unless-stopped
+    environment:
+      <<: *app_default_env
+    volumes: *app_volumes
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    <<: *app_depends_on
+    <<: *default_logging
+  db:
+    image: postgres:13.1
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - type: bind
+        source: ./docker/postgres-entrypoint-initdb.d
+        target: /docker-entrypoint-initdb.d
+        read_only: true
+      - type: volume
+        source: pg_data
+        target: /var/lib/postgresql/data
+    <<: *default_logging
+  redis:
+    image: redis:6.0.8
+    command: "redis-server /usr/local/etc/redis/redis.conf"
+    restart: unless-stopped
+    volumes:
+      - type: bind
+        source: ./docker/redis/redis.conf
+        target: /usr/local/etc/redis/redis.conf
+        read_only: true
+    <<: *default_logging
+  rabbitmq:
+    image: rabbitmq:3.8.9-management
+    restart: unless-stopped
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "secret"
+      RABBITMQ_DEFAULT_USER: test
+      RABBITMQ_DEFAULT_PASS: test
+      RABBITMQ_DEFAULT_VHOST: test
+    volumes:
+      - type: bind
+        source: ./docker/rabbitmq/enabled_plugins
+        target: /etc/rabbitmq/enabled_plugins
+        read_only: true
+      # enable that if we want multiple users
+      # RABBITMQ_DEFAULT_USER_FILE=/run/secrets/xxx
+    <<: *default_logging
+  statsd:
+    image: prom/statsd-exporter
+    <<: *default_logging
+  # pg administration
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - type: bind
+        source: ./docker/pgadmin/servers.json
+        target: /pgadmin4/servers.json
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test
+      PGADMIN_DEFAULT_PASSWORD: test
+    <<: *default_logging
+volumes:
+  logvolume01: {}
+  rundir: {}
+  backend: {}
+  pg_data:
+    labels:
+      "keep": 1
+  mysql_data:
+    labels:
+      "keep": 1
