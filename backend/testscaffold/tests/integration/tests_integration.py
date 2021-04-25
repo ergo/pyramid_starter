@@ -59,7 +59,7 @@ class TestUsersAPI:
 
     def test_get_found(self, sqla_session):
         from testscaffold.views.api.users import UserAPIView
-        from testscaffold.models.user import User
+        from testscaffold.models.db import User
 
         with tmp_session_context(sqla_session) as session:
             request = dummy_request(session)
@@ -81,7 +81,7 @@ class TestUsersAPI:
 
     def test_patch_found_valid(self, sqla_session):
         from testscaffold.views.api.users import UserAPIView
-        from testscaffold.models.user import User
+        from testscaffold.models.db import User
 
         with tmp_session_context(sqla_session) as session:
             request = dummy_request(session)

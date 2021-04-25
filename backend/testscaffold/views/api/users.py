@@ -5,7 +5,7 @@ import logging
 
 from pyramid.view import view_config, view_defaults
 
-from testscaffold.models.user import User
+from testscaffold.models.db import User
 from testscaffold.util import safe_integer
 from testscaffold.util.request import gen_pagination_headers
 from testscaffold.validation.schemes import UserCreateSchema

@@ -2,7 +2,7 @@ import marshmallow
 import wtforms
 from pyramid.i18n import TranslationStringFactory
 
-from testscaffold.models.user import User
+from testscaffold.models.db import User
 from testscaffold.validation import ZigguratForm
 from testscaffold.validation.schemes import (
     UserCreateSchema,

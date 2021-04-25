@@ -9,7 +9,7 @@ from pyramid_mailer.message import Message
 from testscaffold.services.external_identity import ExternalIdentityService
 
 from testscaffold.events import EmailEvent, SocialAuthEvent
-from testscaffold.models.external_identity import ExternalIdentity
+from testscaffold.models.db import ExternalIdentity
 from testscaffold.validation.forms import UserLoginForm
 
 _ = TranslationStringFactory("testscaffold")

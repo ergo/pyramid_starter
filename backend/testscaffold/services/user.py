@@ -5,7 +5,7 @@ from paginate_sqlalchemy import SqlalchemyOrmPage
 from ziggurat_foundations.models.base import get_db_session
 from ziggurat_foundations.models.services.user import UserService as UService
 
-from testscaffold.models.user import User
+from testscaffold.models.db import User
 
 log = logging.getLogger(__name__)
 

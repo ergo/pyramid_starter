@@ -10,8 +10,8 @@ from testscaffold.services.group_resource_permission import (
 )
 from testscaffold.services.user_resource_permission import UserResourcePermissionService
 
-from testscaffold.models.group_resource_permission import GroupResourcePermission
-from testscaffold.models.user_resource_permission import UserResourcePermission
+from testscaffold.models.db import GroupResourcePermission
+from testscaffold.models.db import UserResourcePermission
 from testscaffold.util import safe_integer
 
 ENTRIES_PER_PAGE = 50

@@ -5,7 +5,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
 from testscaffold.grids import GroupsGrid, UsersGroupsGrid, GroupPermissionsGrid
-from testscaffold.models.group import Group
+from testscaffold.models.db import Group
 from testscaffold.services.group import GroupService
 from testscaffold.util import safe_integer
 from testscaffold.validation.forms import GroupUpdateForm, DirectPermissionForm

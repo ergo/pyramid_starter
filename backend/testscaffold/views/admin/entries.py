@@ -7,7 +7,7 @@ from ziggurat_foundations import noop
 from ziggurat_foundations.permissions import ANY_PERMISSION
 
 from testscaffold.grids import ResourceUserPermissionsGrid, ResourceGroupPermissionsGrid
-from testscaffold.models.entry import Entry
+from testscaffold.models.db import Entry
 from testscaffold.services.group import GroupService
 from testscaffold.services.resource import ResourceService
 from testscaffold.services.resource_tree_service import tree_service
@@ -20,6 +20,7 @@ from testscaffold.validation.forms import (
 from testscaffold.views import BaseView
 from testscaffold.views.shared.entries import EntriesShared
 from testscaffold.views.shared.resources import ResourcesShared
+
 
 log = logging.getLogger(__name__)
 

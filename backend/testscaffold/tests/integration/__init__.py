@@ -22,7 +22,7 @@ def dummy_request(dbsession):
 @pytest.mark.usefixtures("with_migrations", "clean_tables", "minimal_setup")
 class TestFixtureCleanup:
     def test_cleanup(self, sqla_session):
-        from testscaffold.models.user import User
+        from testscaffold.models.db import User
 
         with session_context(sqla_session) as session:
             user = User(id=1, email="foasfsfao", user_name="barafsf")

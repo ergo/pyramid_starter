@@ -5,7 +5,7 @@ import logging
 
 from pyramid.view import view_config, view_defaults
 
-from testscaffold.models.group import Group
+from testscaffold.models.db import Group
 from testscaffold.validation.schemes import GroupEditSchema
 from testscaffold.views import BaseView
 from testscaffold.views.shared.groups import GroupsShared

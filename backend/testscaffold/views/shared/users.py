@@ -8,7 +8,7 @@ import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
 from testscaffold.services.user_permission import UserPermissionService
 from testscaffold.services.user import UserService
-from testscaffold.models.user_permission import UserPermission
+from testscaffold.models.db import UserPermission
 from testscaffold.services.user import UserService
 from testscaffold.util import safe_integer
 

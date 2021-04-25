@@ -5,7 +5,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.view import view_config, view_defaults
 
 from testscaffold.grids import UsersGrid, UserPermissionsGrid
-from testscaffold.models.user import User
+from testscaffold.models.db import User
 from testscaffold.services.user import UserService
 from testscaffold.util import safe_integer
 from testscaffold.validation.forms import (

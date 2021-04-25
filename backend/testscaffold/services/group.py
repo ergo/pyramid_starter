@@ -4,7 +4,7 @@ from paginate_sqlalchemy import SqlalchemyOrmPage
 from ziggurat_foundations.models.base import get_db_session
 from ziggurat_foundations.models.services.group import GroupService as GService
 
-from testscaffold.models.group import Group
+from testscaffold.models.db import Group
 
 log = logging.getLogger(__name__)
 

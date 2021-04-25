@@ -2,7 +2,7 @@ import logging
 
 from ziggurat_foundations.models.base import get_db_session
 
-from testscaffold.models.auth_token import AuthToken
+from testscaffold.models.db import AuthToken
 
 log = logging.getLogger(__name__)
 

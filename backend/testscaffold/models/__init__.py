@@ -4,22 +4,17 @@ from sqlalchemy.orm import configure_mappers
 from sqlalchemy.orm import sessionmaker
 from ziggurat_foundations import ziggurat_model_init
 
-from testscaffold.models.auth_token import AuthToken  # flake8: noqa
-from testscaffold.models.entry import Entry  # flake8: noqa
-from testscaffold.models.entry import Entry  # flake8: noqa
-from testscaffold.models.external_identity import ExternalIdentity  # flake8: noqa
-from testscaffold.models.group import Group  # flake8: noqa
-from testscaffold.models.group_permission import GroupPermission  # flake8: noqa
-from testscaffold.models.group_resource_permission import (
-    GroupResourcePermission,
-)  # flake8: noqa
-from testscaffold.models.resource import Resource  # flake8: noqa
-from testscaffold.models.user import User  # flake8: noqa
-from testscaffold.models.user_group import UserGroup  # flake8: noqa
-from testscaffold.models.user_permission import UserPermission  # flake8: noqa
-from testscaffold.models.user_resource_permission import (
-    UserResourcePermission,
-)  # flake8: noqa
+from testscaffold.models.db import AuthToken  # flake8: noqa
+from testscaffold.models.db import Entry  # flake8: noqa
+from testscaffold.models.db import ExternalIdentity  # flake8: noqa
+from testscaffold.models.db import Group  # flake8: noqa
+from testscaffold.models.db import GroupPermission  # flake8: noqa
+from testscaffold.models.db import GroupResourcePermission  # flake8: noqa
+from testscaffold.models.db import Resource  # flake8: noqa
+from testscaffold.models.db import User  # flake8: noqa
+from testscaffold.models.db import UserGroup  # flake8: noqa
+from testscaffold.models.db import UserPermission  # flake8: noqa
+from testscaffold.models.db import UserResourcePermission  # flake8: noqa
 
 ziggurat_model_init(
     User,

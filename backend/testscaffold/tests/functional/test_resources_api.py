@@ -1,8 +1,8 @@
 import pytest
 from six.moves.urllib import parse
 
-from testscaffold.models.group_resource_permission import GroupResourcePermission
-from testscaffold.models.user_resource_permission import UserResourcePermission
+from testscaffold.models.db import GroupResourcePermission
+from testscaffold.models.db import UserResourcePermission
 from testscaffold.services.group_resource_permission import (
     GroupResourcePermissionService,
 )

@@ -7,7 +7,7 @@ import logging
 from pyramid.view import view_config, view_defaults
 from ziggurat_foundations import noop
 
-from testscaffold.models.entry import Entry
+from testscaffold.models.db import Entry
 from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.util import safe_integer
 from testscaffold.util.request import gen_pagination_headers

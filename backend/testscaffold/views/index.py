@@ -9,7 +9,7 @@ from pyramid.security import NO_PERMISSION_REQUIRED, remember
 from pyramid.view import view_config
 
 from testscaffold.events import EmailEvent, SocialAuthEvent
-from testscaffold.models.user import User
+from testscaffold.models.db import User
 from testscaffold.services.resource_tree_service import tree_service
 from testscaffold.services.user import UserService
 from testscaffold.validation.forms import (
