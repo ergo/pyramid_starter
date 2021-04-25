@@ -39,7 +39,7 @@ Finally fix permissions on generated files (sometimes they get generated as root
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     cd ../application; alembic -c ../rundir/config.ini revision -m "migration name"
 
-## to run db migrations
+## to run db alembic
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     migrate_testscaffold_db config.ini

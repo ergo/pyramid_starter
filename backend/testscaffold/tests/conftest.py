@@ -88,7 +88,7 @@ def with_migrations(app_settings):
     alembic_cfg.set_main_option("sqlalchemy.url", app_settings["sqlalchemy.url"])
     command.upgrade(alembic_cfg, "head")
     alembic_cfg = Config()
-    alembic_cfg.set_main_option("script_location", "testscaffold:migrations")
+    alembic_cfg.set_main_option("script_location", "testscaffold:alembic")
     alembic_cfg.set_main_option("sqlalchemy.url", app_settings["sqlalchemy.url"])
     command.upgrade(alembic_cfg, "head")
 

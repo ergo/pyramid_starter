@@ -17,6 +17,8 @@ pyramid_ipython
 pyramid_jinja2
 pyramid_mailer
 pyramid_tm
+plaster_pastedeploy
+pyramid_retry
 redis
 repoze.sendmail
 requests
