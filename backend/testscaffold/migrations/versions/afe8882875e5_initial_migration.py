@@ -22,9 +22,7 @@ def upgrade():
         sa.Column(
             "resource_id",
             sa.Integer(),
-            sa.ForeignKey(
-                "resources.resource_id", onupdate="CASCADE", ondelete="CASCADE"
-            ),
+            sa.ForeignKey("resources.resource_id", onupdate="CASCADE", ondelete="CASCADE"),
             primary_key=True,
         ),
         sa.Column("note", sa.UnicodeText()),
@@ -34,11 +32,7 @@ def upgrade():
         "auth_tokens",
         sa.Column("id", sa.Integer, nullable=False, primary_key=True),
         sa.Column("token", sa.Unicode),
-        sa.Column(
-            "owner_id",
-            sa.Integer,
-            sa.ForeignKey("users.id", onupdate="cascade", ondelete="cascade"),
-        ),
+        sa.Column("owner_id", sa.Integer, sa.ForeignKey("users.id", onupdate="cascade", ondelete="cascade"),),
     )
 
 

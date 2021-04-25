@@ -28,37 +28,15 @@ class GroupService(GService):
         return query.first()
 
     @classmethod
-    def get_paginator(
-        cls, page=1, item_count=None, items_per_page=50, db_session=None, **kwargs
-    ):
+    def get_paginator(cls, page=1, item_count=None, items_per_page=50, db_session=None, **kwargs):
         """ returns paginator over users belonging to the group"""
         db_session = get_db_session(db_session)
         query = db_session.query(Group)
         query = query.order_by(Group.group_name)
-        return SqlalchemyOrmPage(
-            query,
-            page=page,
-            item_count=item_count,
-            items_per_page=items_per_page,
-            **kwargs
-        )
+        return SqlalchemyOrmPage(query, page=page, item_count=item_count, items_per_page=items_per_page, **kwargs)
 
     @classmethod
-    def get_user_paginator(
-        cls,
-        group,
-        page=1,
-        item_count=None,
-        items_per_page=50,
-        db_session=None,
-        **kwargs
-    ):
+    def get_user_paginator(cls, group, page=1, item_count=None, items_per_page=50, db_session=None, **kwargs):
         """ returns paginator over users belonging to the group"""
         query = group.users_dynamic
-        return SqlalchemyOrmPage(
-            query,
-            page=page,
-            item_count=item_count,
-            items_per_page=items_per_page,
-            **kwargs
-        )
+        return SqlalchemyOrmPage(query, page=page, item_count=item_count, items_per_page=items_per_page, **kwargs)

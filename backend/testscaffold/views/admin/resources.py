@@ -36,21 +36,15 @@ class AdminResourceRelationsView(BaseView):
         request = self.request
         resource = self.request.context.resource
         came_from = request.headers.get("Referer")
-        schema = UserResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = UserResourcePermissionSchema(context={"request": self.request, "resource": resource})
         data = {
             "user_name": self.request.POST.get("user_name"),
             "perm_name": self.request.POST.get("perm_name"),
         }
         data = schema.load(data)
-        user = UserService.by_user_name(
-            data["user_name"], db_session=self.request.dbsession
-        )
+        user = UserService.by_user_name(data["user_name"], db_session=self.request.dbsession)
 
-        perm_inst = self.shared.user_permission_post(
-            resource, user.id, data["perm_name"]
-        )
+        perm_inst = self.shared.user_permission_post(resource, user.id, data["perm_name"])
         location = came_from or request.route_url("admin")
         return httpexceptions.HTTPFound(location=location)
 
@@ -67,24 +61,15 @@ class AdminResourceRelationsView(BaseView):
     def user_permission_delete(self):
         request = self.request
         resource = self.request.context.resource
-        user = UserService.by_user_name(
-            request.GET.get("user_name"), db_session=self.request.dbsession
-        )
-        permission = self.shared.user_permission_get(
-            resource.resource_id, user.id, request.GET.get("perm_name")
-        )
+        user = UserService.by_user_name(request.GET.get("user_name"), db_session=self.request.dbsession)
+        permission = self.shared.user_permission_get(resource.resource_id, user.id, request.GET.get("perm_name"))
 
         back_url = request.route_url(
-            "admin_object",
-            object=resource.plural_type,
-            object_id=resource.resource_id,
-            verb="GET",
+            "admin_object", object=resource.plural_type, object_id=resource.resource_id, verb="GET",
         )
 
         if request.method == "POST":
-            self.shared.user_permission_delete(
-                resource, user.id, request.GET.get("perm_name")
-            )
+            self.shared.user_permission_delete(resource, user.id, request.GET.get("perm_name"))
             return httpexceptions.HTTPFound(location=back_url)
 
         return {
@@ -102,9 +87,7 @@ class AdminResourceRelationsView(BaseView):
         request = self.request
         resource = self.request.context.resource
         came_from = request.headers.get("Referer")
-        schema = GroupResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = GroupResourcePermissionSchema(context={"request": self.request, "resource": resource})
         data = {
             "group_id": self.request.POST.get("group_id"),
             "perm_name": self.request.POST.get("perm_name"),
@@ -112,9 +95,7 @@ class AdminResourceRelationsView(BaseView):
         data = schema.load(data)
         group = GroupService.get(data["group_id"], db_session=self.request.dbsession)
 
-        perm_inst = self.shared.group_permission_post(
-            resource, group.id, data["perm_name"]
-        )
+        perm_inst = self.shared.group_permission_post(resource, group.id, data["perm_name"])
         location = came_from or request.route_url("admin")
         return httpexceptions.HTTPFound(location=location)
 
@@ -131,24 +112,15 @@ class AdminResourceRelationsView(BaseView):
     def group_permission_delete(self):
         request = self.request
         resource = self.request.context.resource
-        group = GroupService.get(
-            request.GET.get("group_id"), db_session=self.request.dbsession
-        )
-        permission = self.shared.group_permission_get(
-            resource.resource_id, group.id, request.GET.get("perm_name")
-        )
+        group = GroupService.get(request.GET.get("group_id"), db_session=self.request.dbsession)
+        permission = self.shared.group_permission_get(resource.resource_id, group.id, request.GET.get("perm_name"))
 
         back_url = request.route_url(
-            "admin_object",
-            object=resource.plural_type,
-            object_id=resource.resource_id,
-            verb="GET",
+            "admin_object", object=resource.plural_type, object_id=resource.resource_id, verb="GET",
         )
 
         if request.method == "POST":
-            self.shared.group_permission_delete(
-                resource, group.id, request.GET.get("perm_name")
-            )
+            self.shared.group_permission_delete(resource, group.id, request.GET.get("perm_name"))
             return httpexceptions.HTTPFound(location=back_url)
 
         return {

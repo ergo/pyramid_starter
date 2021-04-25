@@ -36,15 +36,7 @@ class UserService(UService):
         return db_session.query(User).count()
 
     @classmethod
-    def get_paginator(
-        cls,
-        page=1,
-        item_count=None,
-        items_per_page=50,
-        db_session=None,
-        filter_params=None,
-        **kwargs
-    ):
+    def get_paginator(cls, page=1, item_count=None, items_per_page=50, db_session=None, filter_params=None, **kwargs):
         """ returns paginator over users belonging to the group"""
         if filter_params is None:
             filter_params = {}
@@ -54,13 +46,7 @@ class UserService(UService):
         if user_name_like:
             query = query.filter(User.user_name.like(user_name_like + "%"))
         query = query.order_by(User.id)
-        return SqlalchemyOrmPage(
-            query,
-            page=page,
-            item_count=item_count,
-            items_per_page=items_per_page,
-            **kwargs
-        )
+        return SqlalchemyOrmPage(query, page=page, item_count=item_count, items_per_page=items_per_page, **kwargs)
 
     @classmethod
     def permission_info(cls, user):

@@ -27,16 +27,10 @@ class ResourcesUserPermissionsAPI:
     def post(self):
         resource = self.request.context.resource
 
-        schema = UserResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = UserResourcePermissionSchema(context={"request": self.request, "resource": resource})
         data = schema.load(self.request.unsafe_json_body)
-        user = UserService.by_user_name(
-            data["user_name"], db_session=self.request.dbsession
-        )
-        perm_inst = self.shared.user_permission_post(
-            resource, user.id, data["perm_name"]
-        )
+        user = UserService.by_user_name(data["user_name"], db_session=self.request.dbsession)
+        perm_inst = self.shared.user_permission_post(resource, user.id, data["perm_name"])
         self.request.dbsession.flush()
         return perm_inst.get_dict()
 
@@ -44,17 +38,13 @@ class ResourcesUserPermissionsAPI:
     def delete(self):
         resource = self.request.context.resource
 
-        schema = UserResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = UserResourcePermissionSchema(context={"request": self.request, "resource": resource})
         params = {
             "user_name": self.request.GET.get("user_name"),
             "perm_name": self.request.GET.get("perm_name"),
         }
         data = schema.load(params)
-        user = UserService.by_user_name(
-            data["user_name"], db_session=self.request.dbsession
-        )
+        user = UserService.by_user_name(data["user_name"], db_session=self.request.dbsession)
         self.shared.user_permission_delete(resource, user.id, data["perm_name"])
         return True
 
@@ -74,13 +64,9 @@ class ResourcesGroupPermissionsAPI:
     def post(self):
         resource = self.request.context.resource
 
-        schema = GroupResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = GroupResourcePermissionSchema(context={"request": self.request, "resource": resource})
         data = schema.load(self.request.unsafe_json_body)
-        perm_inst = self.shared.group_permission_post(
-            resource, data["group_id"], data["perm_name"]
-        )
+        perm_inst = self.shared.group_permission_post(resource, data["group_id"], data["perm_name"])
         self.request.dbsession.flush()
         return perm_inst.get_dict()
 
@@ -88,15 +74,11 @@ class ResourcesGroupPermissionsAPI:
     def delete(self):
         resource = self.request.context.resource
 
-        schema = GroupResourcePermissionSchema(
-            context={"request": self.request, "resource": resource}
-        )
+        schema = GroupResourcePermissionSchema(context={"request": self.request, "resource": resource})
         params = {
             "group_id": self.request.GET.get("group_id"),
             "perm_name": self.request.GET.get("perm_name"),
         }
         data = schema.load(params)
-        self.shared.group_permission_delete(
-            resource, data["group_id"], data["perm_name"]
-        )
+        self.shared.group_permission_delete(resource, data["group_id"], data["perm_name"])
         return True

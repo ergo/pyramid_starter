@@ -22,18 +22,11 @@ def hashgen(namespace, fn, to_str=str):
 
     def generate_key(*args, **kw):
         if kw:
-            raise ValueError(
-                "dogpile.cache's default key creation "
-                "function does not accept keyword arguments."
-            )
+            raise ValueError("dogpile.cache's default key creation " "function does not accept keyword arguments.")
         if has_self:
             args = args[1:]
 
-        return (
-            namespace
-            + "|"
-            + hashlib.sha1(" ".join(map(to_str, args)).encode("utf8")).hexdigest()
-        )
+        return namespace + "|" + hashlib.sha1(" ".join(map(to_str, args)).encode("utf8")).hexdigest()
 
     return generate_key
 
@@ -48,38 +41,26 @@ class CacheRegions:
 
         config_redis = {"arguments": dogpile_config}
 
-        self.redis_sec_1 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_sec_1 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=1, **copy.deepcopy(config_redis)
         )
 
-        self.redis_sec_5 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_sec_5 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=5, **copy.deepcopy(config_redis)
         )
 
-        self.redis_min_1 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_min_1 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=60, **copy.deepcopy(config_redis)
         )
-        self.redis_min_5 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_min_5 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=300, **copy.deepcopy(config_redis)
         )
 
-        self.redis_min_10 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_min_10 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=60, **copy.deepcopy(config_redis)
         )
 
-        self.redis_min_60 = make_region(
-            function_key_generator=hashgen, key_mangler=key_mangler
-        ).configure(
+        self.redis_min_60 = make_region(function_key_generator=hashgen, key_mangler=key_mangler).configure(
             "dogpile.cache.redis", expiration_time=3600, **copy.deepcopy(config_redis)
         )
 

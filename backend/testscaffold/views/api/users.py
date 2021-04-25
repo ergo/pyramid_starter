@@ -18,10 +18,7 @@ log = logging.getLogger(__name__)
 
 
 @view_defaults(
-    route_name="api_object",
-    renderer="json",
-    permission="admin_users",
-    match_param=("object=users",),
+    route_name="api_object", renderer="json", permission="admin_users", match_param=("object=users",),
 )
 class UserAPIView(BaseView):
     def __init__(self, request):
@@ -33,9 +30,7 @@ class UserAPIView(BaseView):
         schema = UserCreateSchema(context={"request": self.request})
         page = safe_integer(self.request.GET.get("page", 1))
         filter_params = UserSearchSchema().load(self.request.GET.mixed())
-        user_paginator = self.shared.collection_list(
-            page=page, filter_params=filter_params
-        )
+        user_paginator = self.shared.collection_list(page=page, filter_params=filter_params)
         headers = gen_pagination_headers(request=self.request, paginator=user_paginator)
         self.request.response.headers.update(headers)
         return schema.dump(user_paginator.items, many=True)

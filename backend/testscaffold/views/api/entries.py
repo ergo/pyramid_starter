@@ -20,10 +20,7 @@ log = logging.getLogger(__name__)
 
 
 @view_defaults(
-    route_name="api_object",
-    renderer="json",
-    permission="admin_users",
-    match_param=("object=entries",),
+    route_name="api_object", renderer="json", permission="admin_users", match_param=("object=entries",),
 )
 class EntriesAPIView(BaseView):
     """
@@ -40,12 +37,8 @@ class EntriesAPIView(BaseView):
         schema = EntryCreateSchema(context={"request": self.request})
         page = safe_integer(self.request.GET.get("page", 1))
         filter_params = self.request.GET.mixed()
-        entries_paginator = self.shared.collection_list(
-            page=page, filter_params=filter_params
-        )
-        headers = gen_pagination_headers(
-            request=self.request, paginator=entries_paginator
-        )
+        entries_paginator = self.shared.collection_list(page=page, filter_params=filter_params)
+        headers = gen_pagination_headers(request=self.request, paginator=entries_paginator)
         self.request.response.headers.update(headers)
         return schema.dump(entries_paginator.items, many=True)
 
@@ -60,46 +53,31 @@ class EntriesAPIView(BaseView):
         position = data.get("ordering") or noop
         if position is not noop:
             tree_service.set_position(
-                resource_id=resource.resource_id,
-                to_position=position,
-                db_session=self.request.dbsession,
+                resource_id=resource.resource_id, to_position=position, db_session=self.request.dbsession,
             )
         else:
             # this accounts for the newly inserted row so the total_children
             # will be max+1 position for new row
-            total_children = tree_service.count_children(
-                resource.parent_id, db_session=self.request.dbsession
-            )
+            total_children = tree_service.count_children(resource.parent_id, db_session=self.request.dbsession)
             tree_service.set_position(
-                resource_id=resource.resource_id,
-                to_position=total_children,
-                db_session=self.request.dbsession,
+                resource_id=resource.resource_id, to_position=total_children, db_session=self.request.dbsession,
             )
         return schema.dump(resource)
 
     @view_config(request_method="PATCH", permission="owner")
     def patch(self):
         resource = self.shared.entry_get(self.request.matchdict["object_id"])
-        schema = EntryCreateSchema(
-            context={"request": self.request, "modified_obj": resource}
-        )
+        schema = EntryCreateSchema(context={"request": self.request, "modified_obj": resource})
         data = schema.load(self.request.unsafe_json_body, partial=True)
         # we need to ensure we are not overwriting the values
         # before move_to_position is invoked
         position = data.pop("ordering", None) or noop
         parent_id = data.pop("parent_id", None) or noop
-        self.shared.populate_instance(
-            resource, data, exclude_keys=["ordering", "parent_id"]
-        )
+        self.shared.populate_instance(resource, data, exclude_keys=["ordering", "parent_id"])
         into_new_parent = parent_id != resource.parent_id and parent_id is not noop
         if position is not noop or into_new_parent:
             if not position and into_new_parent:
-                position = (
-                    tree_service.count_children(
-                        parent_id, db_session=self.request.dbsession
-                    )
-                    + 1
-                )
+                position = tree_service.count_children(parent_id, db_session=self.request.dbsession) + 1
             tree_service.move_to_position(
                 resource_id=resource.resource_id,
                 new_parent_id=parent_id,
@@ -113,17 +91,11 @@ class EntriesAPIView(BaseView):
         instance = self.shared.entry_get(self.request.matchdict["object_id"])
 
         log.info(
-            "resource_delete",
-            extra={
-                "resource_id": instance.resource_id,
-                "resource_name": instance.resource_name,
-            },
+            "resource_delete", extra={"resource_id": instance.resource_id, "resource_name": instance.resource_name,},
         )
         # self.request.session.flash(
         #     {'msg': self.translate(_('Resource removed.')),
         #      'level': 'success'})
 
-        tree_service.delete_branch(
-            instance.resource_id, db_session=self.request.dbsession
-        )
+        tree_service.delete_branch(instance.resource_id, db_session=self.request.dbsession)
         return True

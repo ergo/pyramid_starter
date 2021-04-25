@@ -4,13 +4,7 @@ class EmailEvent:
     """
 
     def __init__(
-        self,
-        request,
-        recipients,
-        tmpl_vars,
-        tmpl_loc,
-        send_immediately=False,
-        fail_silently=False,
+        self, request, recipients, tmpl_vars, tmpl_loc, send_immediately=False, fail_silently=False,
     ):
         self.request = request
         self.recipients = recipients

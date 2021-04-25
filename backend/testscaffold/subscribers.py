@@ -39,18 +39,12 @@ def handle_social_data(event):
 
     if not social_data["user"]["id"]:
         request.session.flash(
-            _(
-                "No external user id found? Perhaps permissions for "
-                "authentication are set incorrectly"
-            ),
-            "error",
+            _("No external user id found? Perhaps permissions for " "authentication are set incorrectly"), "error",
         )
         return False
 
     extng_id = ExternalIdentityService.by_external_id_and_provider(
-        social_data["user"]["id"],
-        social_data["credentials"].provider_name,
-        db_session=request.dbsession,
+        social_data["user"]["id"], social_data["credentials"].provider_name, db_session=request.dbsession,
     )
     update_identity = False
     # if current token doesn't match what we have in db - remove old one
@@ -61,12 +55,7 @@ def handle_social_data(event):
     if not extng_id or update_identity:
         if not update_identity:
             request.session.flash(
-                {
-                    "msg": _(
-                        "Your external identity is now " "connected with your account"
-                    ),
-                    "level": "warning",
-                }
+                {"msg": _("Your external identity is now " "connected with your account"), "level": "warning",}
             )
         ex_identity = ExternalIdentity()
         ex_identity.external_id = social_data["user"]["id"]
@@ -88,9 +77,7 @@ def add_globals(event):
     request.response.headers[str("x-flash-messages")] = json.dumps(flash_messages)
     # we only need to instantiate the form if user is unlogged
     if hasattr(request, "user") and not request.user:
-        event["layout_login_form"] = UserLoginForm(
-            request.POST, context={"request": request}
-        )
+        event["layout_login_form"] = UserLoginForm(request.POST, context={"request": request})
     else:
         event["layout_login_form"] = None
 
@@ -101,12 +88,8 @@ def new_request(event):
     event.request.response.headers[str("X-Frame-Options")] = str("SAMEORIGIN")
     event.request.response.headers[str("X-XSS-Protection")] = str("1; mode=block")
     if environ["wsgi.url_scheme"] == "https":
-        event.request.response.set_cookie(
-            "XSRF-TOKEN", event.request.session.get_csrf_token(), secure=True
-        )
+        event.request.response.set_cookie("XSRF-TOKEN", event.request.session.get_csrf_token(), secure=True)
     else:
-        event.request.response.set_cookie(
-            "XSRF-TOKEN", event.request.session.get_csrf_token()
-        )
+        event.request.response.set_cookie("XSRF-TOKEN", event.request.session.get_csrf_token())
     if event.request.user:
         event.request.response.headers[str("x-uid")] = str(event.request.user.id)

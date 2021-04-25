@@ -29,8 +29,7 @@ class AdminGroupsView(BaseView):
         self.shared = GroupsShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/groups/index.jinja2",
-        match_param=("object=groups", "verb=GET"),
+        renderer="testscaffold:templates/admin/groups/index.jinja2", match_param=("object=groups", "verb=GET"),
     )
     def collection_list(self):
         groups = self.shared.collection_list()
@@ -38,8 +37,7 @@ class AdminGroupsView(BaseView):
         return {"groups": groups, "groups_grid": groups_grid}
 
     @view_config(
-        renderer="testscaffold:templates/admin/groups/edit.jinja2",
-        match_param=("object=groups", "verb=POST"),
+        renderer="testscaffold:templates/admin/groups/edit.jinja2", match_param=("object=groups", "verb=POST"),
     )
     def groups_post(self):
         request = self.request
@@ -50,12 +48,9 @@ class AdminGroupsView(BaseView):
             self.shared.populate_instance(group, group_form.data)
             group.persist(flush=True, db_session=request.dbsession)
             log.info(
-                "groups_post",
-                extra={"group_id": group.id, "group_name": group.group_name},
+                "groups_post", extra={"group_id": group.id, "group_name": group.group_name},
             )
-            request.session.flash(
-                {"msg": self.translate(_("Group created.")), "level": "success"}
-            )
+            request.session.flash({"msg": self.translate(_("Group created.")), "level": "success"})
             location = request.route_url("admin_objects", object="groups", verb="GET")
             return pyramid.httpexceptions.HTTPFound(location=location)
 
@@ -73,31 +68,21 @@ class AdminGroupView:
         self.shared = GroupsShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/groups/edit.jinja2",
-        match_param=("object=groups", "verb=GET"),
+        renderer="testscaffold:templates/admin/groups/edit.jinja2", match_param=("object=groups", "verb=GET"),
     )
     @view_config(
-        renderer="testscaffold:templates/admin/groups/edit.jinja2",
-        match_param=("object=groups", "verb=PATCH"),
+        renderer="testscaffold:templates/admin/groups/edit.jinja2", match_param=("object=groups", "verb=PATCH"),
     )
     def group_get_patch(self):
         request = self.request
         group = self.shared.group_get(request.matchdict["object_id"])
-        group_form = GroupUpdateForm(
-            request.POST, obj=group, context={"request": request, "modified_obj": group}
-        )
-        permission_form = DirectPermissionForm(
-            request.POST, context={"request": request}
-        )
-        permissions_grid = GroupPermissionsGrid(
-            group.permissions, request=request, group=group
-        )
+        group_form = GroupUpdateForm(request.POST, obj=group, context={"request": request, "modified_obj": group})
+        permission_form = DirectPermissionForm(request.POST, context={"request": request})
+        permissions_grid = GroupPermissionsGrid(group.permissions, request=request, group=group)
         if request.method == "POST" and group_form.validate():
             self.shared.populate_instance(group, group_form.data)
             request.session.flash({"msg": _("Group updated."), "level": "success"})
-            url = request.route_url(
-                "admin_object", object="groups", object_id=group.id, verb="GET"
-            )
+            url = request.route_url("admin_object", object="groups", object_id=group.id, verb="GET")
             return pyramid.httpexceptions.HTTPFound(location=url)
 
         return {
@@ -185,11 +170,7 @@ class AdminGroupRelationsView:
         group = self.shared.group_get(request.matchdict["object_id"])
         user = self.shared.user_get(request.GET.get("user_id"))
         back_url = request.route_url(
-            "admin_object_relation",
-            object="groups",
-            object_id=group.id,
-            relation="users",
-            verb="GET",
+            "admin_object_relation", object="groups", object_id=group.id, relation="users", verb="GET",
         )
 
         if request.method == "POST":
@@ -210,22 +191,14 @@ class AdminGroupRelationsView:
     def permission_post(self):
         request = self.request
         group = self.shared.group_get(request.matchdict["object_id"])
-        group_form = GroupUpdateForm(
-            request.POST, obj=group, context={"request": request, "modified_obj": group}
-        )
-        permission_form = DirectPermissionForm(
-            request.POST, context={"request": request}
-        )
-        permissions_grid = GroupPermissionsGrid(
-            group.permissions, request=request, group=group
-        )
+        group_form = GroupUpdateForm(request.POST, obj=group, context={"request": request, "modified_obj": group})
+        permission_form = DirectPermissionForm(request.POST, context={"request": request})
+        permissions_grid = GroupPermissionsGrid(group.permissions, request=request, group=group)
 
         if request.method == "POST" and permission_form.validate():
             permission_name = permission_form.perm_name.data
             self.shared.permission_post(group, permission_name)
-            url = request.route_url(
-                "admin_object", object="groups", object_id=group.id, verb="GET"
-            )
+            url = request.route_url("admin_object", object="groups", object_id=group.id, verb="GET")
             return pyramid.httpexceptions.HTTPFound(location=url)
 
         return {
@@ -249,9 +222,7 @@ class AdminGroupRelationsView:
         request = self.request
         group = self.shared.group_get(request.matchdict["object_id"])
         permission = self.shared.permission_get(group, request.GET.get("perm_name"))
-        back_url = request.route_url(
-            "admin_object", object="groups", object_id=group.id, verb="GET"
-        )
+        back_url = request.route_url("admin_object", object="groups", object_id=group.id, verb="GET")
 
         if request.method == "POST":
             self.shared.permission_delete(group, permission)

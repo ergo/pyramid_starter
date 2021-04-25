@@ -53,40 +53,26 @@ class UsersShared:
     def populate_instance(self, instance, data, *args, **kwargs):
         # this is safe and doesn't overwrite user_password with cleartext
         instance.populate_obj(data, *args, **kwargs)
-        self.request.session.flash(
-            {"msg": self.translate(_("User updated.")), "level": "success"}
-        )
+        self.request.session.flash({"msg": self.translate(_("User updated.")), "level": "success"})
         log.info(
             "user_populate_instance",
-            extra={
-                "action": "updated",
-                "x": datetime.now(),
-                "y": datetime.utcnow().date(),
-                "user_id": instance.id,
-            },
+            extra={"action": "updated", "x": datetime.now(), "y": datetime.utcnow().date(), "user_id": instance.id,},
         )
         if data.get("password"):
             # set hashed password
             UserService.set_password(instance, data["password"])
-            self.request.session.flash(
-                {"msg": self.translate(_("User password updated.")), "level": "success"}
-            )
+            self.request.session.flash({"msg": self.translate(_("User password updated.")), "level": "success"})
         log.info("user_GET_PATCH", extra={"action": "password_updated"})
 
     def delete(self, instance):
         log.info(
-            "user_delete",
-            extra={"user_id": instance.id, "user_name": instance.user_name},
+            "user_delete", extra={"user_id": instance.id, "user_name": instance.user_name},
         )
         instance.delete(self.request.dbsession)
-        self.request.session.flash(
-            {"msg": self.translate(_("User removed.")), "level": "success"}
-        )
+        self.request.session.flash({"msg": self.translate(_("User removed.")), "level": "success"})
 
     def permission_get(self, user, permission):
-        permission = UserPermissionService.by_user_and_perm(
-            user.id, permission, db_session=self.request.dbsession
-        )
+        permission = UserPermissionService.by_user_and_perm(user.id, permission, db_session=self.request.dbsession)
         if not permission:
             raise pyramid.httpexceptions.HTTPNotFound()
         return permission
@@ -97,19 +83,12 @@ class UsersShared:
         except pyramid.httpexceptions.HTTPNotFound:
             log.info(
                 "user_permission_post",
-                extra={
-                    "user_id": user.id,
-                    "user_name": user.user_name,
-                    "perm_name": perm_name,
-                },
+                extra={"user_id": user.id, "user_name": user.user_name, "perm_name": perm_name,},
             )
             permission_inst = UserPermission(perm_name=perm_name)
             user.user_permissions.append(permission_inst)
             self.request.session.flash(
-                {
-                    "msg": self.translate(_("Permission granted for user.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("Permission granted for user.")), "level": "success",}
             )
         return permission_inst
 
@@ -120,16 +99,9 @@ class UsersShared:
         if permission_inst:
             log.info(
                 "user_permission_delete",
-                extra={
-                    "user_id": user.id,
-                    "user_name": user.user_name,
-                    "permission": permission.perm_name,
-                },
+                extra={"user_id": user.id, "user_name": user.user_name, "permission": permission.perm_name,},
             )
             user.user_permissions.remove(permission_inst)
             self.request.session.flash(
-                {
-                    "msg": self.translate(_("Permission withdrawn from user.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("Permission withdrawn from user.")), "level": "success",}
             )

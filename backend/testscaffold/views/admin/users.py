@@ -28,22 +28,18 @@ class AdminUsersViews(BaseView):
         self.shared = UsersShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/users/index.jinja2",
-        match_param=("object=users", "verb=GET"),
+        renderer="testscaffold:templates/admin/users/index.jinja2", match_param=("object=users", "verb=GET"),
     )
     def collection_list(self):
         page = safe_integer(self.request.GET.get("page", 1))
         user_paginator = self.shared.collection_list(page=page)
         start_number = (USERS_PER_PAGE * (self.shared.page - 1) + 1) or 1
-        user_grid = UsersGrid(
-            user_paginator, start_number=start_number, request=self.request
-        )
+        user_grid = UsersGrid(user_paginator, start_number=start_number, request=self.request)
 
         return {"user_paginator": user_paginator, "user_grid": user_grid}
 
     @view_config(
-        renderer="testscaffold:templates/admin/users/edit.jinja2",
-        match_param=("object=users", "verb=POST"),
+        renderer="testscaffold:templates/admin/users/edit.jinja2", match_param=("object=users", "verb=POST"),
     )
     def post(self):
         request = self.request
@@ -52,12 +48,8 @@ class AdminUsersViews(BaseView):
             user = User()
             self.shared.populate_instance(user, user_form.data)
             user.persist(flush=True, db_session=request.dbsession)
-            log.info(
-                "users_post", extra={"user_id": user.id, "user_name": user.user_name}
-            )
-            request.session.flash(
-                {"msg": self.translate(_("User created.")), "level": "success"}
-            )
+            log.info("users_post", extra={"user_id": user.id, "user_name": user.user_name})
+            request.session.flash({"msg": self.translate(_("User created.")), "level": "success"})
             location = request.route_url("admin_objects", object="users", verb="GET")
             return pyramid.httpexceptions.HTTPFound(location=location)
 
@@ -71,26 +63,18 @@ class AdminUserViews(BaseView):
         self.shared = UsersShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/users/edit.jinja2",
-        match_param=("object=users", "verb=GET"),
+        renderer="testscaffold:templates/admin/users/edit.jinja2", match_param=("object=users", "verb=GET"),
     )
     @view_config(
-        renderer="testscaffold:templates/admin/users/edit.jinja2",
-        match_param=("object=users", "verb=PATCH"),
+        renderer="testscaffold:templates/admin/users/edit.jinja2", match_param=("object=users", "verb=PATCH"),
     )
     def get_patch(self):
         request = self.request
         user = self.shared.user_get(self.request.matchdict["object_id"])
-        permission_form = DirectPermissionForm(
-            request.POST, context={"request": request}
-        )
-        permissions_grid = UserPermissionsGrid(
-            user.user_permissions, request=request, user=user
-        )
+        permission_form = DirectPermissionForm(request.POST, context={"request": request})
+        permissions_grid = UserPermissionsGrid(user.user_permissions, request=request, user=user)
 
-        user_form = UserAdminUpdateForm(
-            request.POST, obj=user, context={"request": request, "modified_obj": user}
-        )
+        user_form = UserAdminUpdateForm(request.POST, obj=user, context={"request": request, "modified_obj": user})
 
         if request.method == "POST" and user_form.validate():
             self.shared.populate_instance(user, user_form.data)
@@ -146,22 +130,14 @@ class AdminUserRelationsView(BaseView):
     def permission_post(self):
         request = self.request
         user = self.shared.user_get(request.matchdict["object_id"])
-        user_form = UserAdminUpdateForm(
-            request.POST, obj=user, context={"request": request, "modified_obj": user}
-        )
-        permission_form = DirectPermissionForm(
-            request.POST, context={"request": request}
-        )
-        permissions_grid = UserPermissionsGrid(
-            UserService.permissions(user), request=request, user=user
-        )
+        user_form = UserAdminUpdateForm(request.POST, obj=user, context={"request": request, "modified_obj": user})
+        permission_form = DirectPermissionForm(request.POST, context={"request": request})
+        permissions_grid = UserPermissionsGrid(UserService.permissions(user), request=request, user=user)
 
         if request.method == "POST" and permission_form.validate():
             permission_name = permission_form.perm_name.data
             self.shared.permission_post(user, permission_name)
-            url = request.route_url(
-                "admin_object", object="users", object_id=user.id, verb="GET"
-            )
+            url = request.route_url("admin_object", object="users", object_id=user.id, verb="GET")
             return pyramid.httpexceptions.HTTPFound(location=url)
 
         return {
@@ -185,9 +161,7 @@ class AdminUserRelationsView(BaseView):
         request = self.request
         user = self.shared.user_get(request.matchdict["object_id"])
         permission = self.shared.permission_get(user, request.GET.get("perm_name"))
-        back_url = request.route_url(
-            "admin_object", object="users", object_id=user.id, verb="GET"
-        )
+        back_url = request.route_url("admin_object", object="users", object_id=user.id, verb="GET")
 
         if request.method == "POST":
             self.shared.permission_delete(user, permission)

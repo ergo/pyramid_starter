@@ -15,8 +15,7 @@ class TestFunctionalAPIUsers:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_user(
-                {"user_name": "test2", "email": "test@test.local2"},
-                sqla_session=session,
+                {"user_name": "test2", "email": "test@test.local2"}, sqla_session=session,
             )
 
         url_path = "/api/0.1/users"
@@ -29,15 +28,11 @@ class TestFunctionalAPIUsers:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_user(
-                {"user_name": "test2", "email": "test@test.local2"},
-                sqla_session=session,
+                {"user_name": "test2", "email": "test@test.local2"}, sqla_session=session,
             )
+            create_user({"user_name": "foo", "email": "test2@test.local2"}, sqla_session=session)
             create_user(
-                {"user_name": "foo", "email": "test2@test.local2"}, sqla_session=session
-            )
-            create_user(
-                {"user_name": "barbaz", "email": "test3@test.local2"},
-                sqla_session=session,
+                {"user_name": "barbaz", "email": "test3@test.local2"}, sqla_session=session,
             )
 
         url_path = "/api/0.1/users?user_name_like=bar"
@@ -103,10 +98,7 @@ class TestFunctionalAPIUsers:
     def test_user_patch(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            user = create_user(
-                {"user_name": "testX", "email": "testX@test.local"},
-                sqla_session=session,
-            )
+            user = create_user({"user_name": "testX", "email": "testX@test.local"}, sqla_session=session,)
 
         url_path = "/api/0.1/users/{}".format(user.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
@@ -123,10 +115,7 @@ class TestFunctionalAPIUsers:
     def test_user_delete(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            user = create_user(
-                {"user_name": "testX", "email": "testX@test.local"},
-                sqla_session=session,
-            )
+            user = create_user({"user_name": "testX", "email": "testX@test.local"}, sqla_session=session,)
         url_path = "/api/0.1/users/{}".format(user.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         full_app.delete_json(url_path, status=200, headers=headers)
@@ -139,10 +128,7 @@ class TestFunctionalAPIUsersPermissions:
 
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            user = create_user(
-                {"user_name": "testX", "email": "testX@test.local"},
-                sqla_session=session,
-            )
+            user = create_user({"user_name": "testX", "email": "testX@test.local"}, sqla_session=session,)
 
         url_path = "/api/0.1/users/{}/permissions".format(user.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
@@ -157,10 +143,7 @@ class TestFunctionalAPIUsersPermissions:
     def test_permission_delete_not_found(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            user = create_user(
-                {"user_name": "testX", "email": "testX@test.local"},
-                sqla_session=session,
-            )
+            user = create_user({"user_name": "testX", "email": "testX@test.local"}, sqla_session=session,)
 
         url_path = "/api/0.1/users/{}/permissions".format(user.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}

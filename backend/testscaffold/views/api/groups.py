@@ -16,10 +16,7 @@ GROUPS_PER_PAGE = 50
 
 
 @view_defaults(
-    route_name="api_object",
-    renderer="json",
-    match_param="object=groups",
-    permission="admin_groups",
+    route_name="api_object", renderer="json", match_param="object=groups", permission="admin_groups",
 )
 class GroupsAPIView(BaseView):
     def __init__(self, request):
@@ -50,9 +47,7 @@ class GroupsAPIView(BaseView):
     @view_config(request_method="PATCH")
     def patch(self):
         group = self.shared.group_get(self.request.matchdict["object_id"])
-        schema = GroupEditSchema(
-            context={"request": self.request, "modified_obj": group}
-        )
+        schema = GroupEditSchema(context={"request": self.request, "modified_obj": group})
         data = schema.load(self.request.unsafe_json_body)
         self.shared.populate_instance(group, data)
         return schema.dump(group)
@@ -85,9 +80,7 @@ class GroupsPermissionsAPI:
     @view_config(request_method="DELETE")
     def delete(self):
         group = self.shared.group_get(self.request.matchdict["object_id"])
-        permission = self.shared.permission_get(
-            group, self.request.GET.get("perm_name")
-        )
+        permission = self.shared.permission_get(group, self.request.GET.get("perm_name"))
         self.shared.permission_delete(group, permission)
         return True
 

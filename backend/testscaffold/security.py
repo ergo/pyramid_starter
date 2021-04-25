@@ -67,9 +67,7 @@ class PyramidSelectorPolicy:
 
     def _get_policy(self, request, policy_key):
         if policy_key not in self.policies:
-            raise ValueError(
-                "Policy {} is not found in PyramidSelectorPolicy".format(policy_key)
-            )
+            raise ValueError("Policy {} is not found in PyramidSelectorPolicy".format(policy_key))
         request.matched_auth_policy = policy_key
         return self.policies[policy_key]
 
@@ -149,8 +147,7 @@ class AuthTokenAuthenticationPolicy(CallbackAuthenticationPolicy):
                 )
                 return auth_token.owner_id
             log.info(
-                "AuthTokenAuthenticationPolicy.unauthenticated_userid",
-                extra={"found": False, "owner": None},
+                "AuthTokenAuthenticationPolicy.unauthenticated_userid", extra={"found": False, "owner": None},
             )
 
 
@@ -201,14 +198,10 @@ class RootFactory:
         self.__acl__ = []
         # general page factory - append custom non resource permissions
         if getattr(request, "user"):
-            permissions = UserService.permissions(
-                request.user, db_session=request.dbsession
-            )
+            permissions = UserService.permissions(request.user, db_session=request.dbsession)
             has_admin_panel_access = False
             panel_perms = ["admin_panel", ALL_PERMISSIONS]
-            for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                permissions
-            ):
+            for outcome, perm_user, perm_name in permission_to_pyramid_acls(permissions):
                 perm_tuple = rewrite_root_perm(outcome, perm_user, perm_name)
                 if perm_tuple[0] is Allow and perm_tuple[2] in panel_perms:
                     has_admin_panel_access = True
@@ -225,9 +218,7 @@ class DefaultResourceFactory:
     def __init__(self, request):
         self.__acl__ = []
         resource_id = safe_integer(request.matchdict.get("object_id"))
-        self.resource = ResourceService.by_resource_id(
-            resource_id, db_session=request.dbsession
-        )
+        self.resource = ResourceService.by_resource_id(resource_id, db_session=request.dbsession)
         if not self.resource:
             raise HTTPNotFound()
 
@@ -239,9 +230,7 @@ class DefaultResourceFactory:
             # this is a big performance optimization - we fetch only data
             # needed to check one specific user
             permissions = ResourceService.perms_for_user(self.resource, request.user)
-            for outcome, perm_user, perm_name in permission_to_pyramid_acls(
-                permissions
-            ):
+            for outcome, perm_user, perm_name in permission_to_pyramid_acls(permissions):
                 self.__acl__.append(rewrite_root_perm(outcome, perm_user, perm_name))
 
         allow_root_access(request, context=self)

@@ -51,9 +51,7 @@ class GroupsShared:
         return user
 
     def permission_get(self, group, permission):
-        permission = GroupPermissionService.by_group_and_perm(
-            group.id, permission, db_session=self.request.dbsession
-        )
+        permission = GroupPermissionService.by_group_and_perm(group.id, permission, db_session=self.request.dbsession)
         if not permission:
             raise pyramid.httpexceptions.HTTPNotFound()
         return permission
@@ -64,13 +62,10 @@ class GroupsShared:
 
     def delete(self, instance):
         log.info(
-            "group_delete",
-            extra={"group_id": instance.id, "group_name": instance.group_name},
+            "group_delete", extra={"group_id": instance.id, "group_name": instance.group_name},
         )
         instance.delete(self.request.dbsession)
-        self.request.session.flash(
-            {"msg": self.translate(_("Group removed.")), "level": "success"}
-        )
+        self.request.session.flash({"msg": self.translate(_("Group removed.")), "level": "success"})
 
     def permission_post(self, group, perm_name):
         try:
@@ -78,19 +73,12 @@ class GroupsShared:
         except pyramid.httpexceptions.HTTPNotFound:
             log.info(
                 "group_permission_post",
-                extra={
-                    "group_id": group.id,
-                    "group_name": group.group_name,
-                    "perm_name": perm_name,
-                },
+                extra={"group_id": group.id, "group_name": group.group_name, "perm_name": perm_name,},
             )
             permission_inst = GroupPermission(perm_name=perm_name)
             group.permissions.append(permission_inst)
             self.request.session.flash(
-                {
-                    "msg": self.translate(_("Permission granted for group.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("Permission granted for group.")), "level": "success",}
             )
         return permission_inst
 
@@ -101,26 +89,17 @@ class GroupsShared:
         if permission_inst:
             log.info(
                 "group_permission_delete",
-                extra={
-                    "group_id": group.id,
-                    "group_name": group.group_name,
-                    "perm_name": permission.perm_name,
-                },
+                extra={"group_id": group.id, "group_name": group.group_name, "perm_name": permission.perm_name,},
             )
             group.permissions.remove(permission_inst)
             self.request.session.flash(
-                {
-                    "msg": self.translate(_("Permission withdrawn from group.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("Permission withdrawn from group.")), "level": "success",}
             )
 
     def user_post(self, group, user):
         if user not in group.users:
             group.users.append(user)
-            self.request.session.flash(
-                {"msg": self.translate(_("User added to group.")), "level": "success"}
-            )
+            self.request.session.flash({"msg": self.translate(_("User added to group.")), "level": "success"})
             log.info(
                 "group_user_post",
                 extra={
@@ -135,10 +114,7 @@ class GroupsShared:
         if user in group.users:
             group.users.remove(user)
             self.request.session.flash(
-                {
-                    "msg": self.translate(_("User removed from group.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("User removed from group.")), "level": "success",}
             )
             log.info(
                 "group_user_delete",

@@ -18,6 +18,7 @@ from ziggurat_foundations.models.user_resource_permission import UserResourcePer
 from testscaffold.util.sqlalchemy import EncryptedUnicode
 from testscaffold.models.meta import Base
 
+
 class AuthToken(BaseModel, Base):
     """
     Auth tokens that can be used to authenticate as specific users
@@ -26,14 +27,8 @@ class AuthToken(BaseModel, Base):
     __tablename__ = "auth_tokens"
 
     id = sa.Column(sa.Integer, primary_key=True, nullable=False)
-    token = sa.Column(
-        sa.Unicode(40),
-        nullable=False,
-        default=lambda x: ZUserService.generate_random_string(40),
-    )
-    owner_id = sa.Column(
-        sa.Integer, sa.ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE")
-    )
+    token = sa.Column(sa.Unicode(40), nullable=False, default=lambda x: ZUserService.generate_random_string(40),)
+    owner_id = sa.Column(sa.Integer, sa.ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"))
 
 
 class ExternalIdentity(ExternalIdentityMixin, Base):
@@ -104,9 +99,7 @@ class User(UserMixin, Base):
         if exclude_keys is None:
             exclude_keys = ["user_password", "security_code", "security_code_date"]
 
-        user_dict = super(User, self).get_dict(
-            exclude_keys=exclude_keys, include_keys=include_keys
-        )
+        user_dict = super(User, self).get_dict(exclude_keys=exclude_keys, include_keys=include_keys)
         return user_dict
 
 
@@ -137,9 +130,7 @@ class Entry(Resource):
     plural_type = "entries"
 
     resource_id = sa.Column(
-        sa.Integer(),
-        sa.ForeignKey("resources.resource_id", onupdate="CASCADE", ondelete="CASCADE"),
-        primary_key=True,
+        sa.Integer(), sa.ForeignKey("resources.resource_id", onupdate="CASCADE", ondelete="CASCADE"), primary_key=True,
     )
 
     note = sa.Column(sa.UnicodeText())

@@ -21,6 +21,4 @@ def test_task(subreddit, dt, d, td):
 @celery_app.task
 def celery_beat_heartbeat():
     log.info("heartbeating celery")
-    celery_app.pyramid["request"].registry.statsd_client.increment(
-        "heartbeat", 1, tags=["type:celery_beat"]
-    )
+    celery_app.pyramid["request"].registry.statsd_client.increment("heartbeat", 1, tags=["type:celery_beat"])

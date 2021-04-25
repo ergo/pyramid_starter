@@ -40,15 +40,9 @@ def minimal_setup(app_settings):
     config.include("testscaffold.models")
     # make request.user available
     config.add_request_method("testscaffold.util.request:get_user", "user", reify=True)
-    config.add_request_method(
-        "testscaffold.util.request:safe_json_body", "safe_json_body", reify=True
-    )
-    config.add_request_method(
-        "testscaffold.util.request:unsafe_json_body", "unsafe_json_body", reify=True
-    )
-    config.add_request_method(
-        "testscaffold.util.request:get_authomatic", "authomatic", reify=True
-    )
+    config.add_request_method("testscaffold.util.request:safe_json_body", "safe_json_body", reify=True)
+    config.add_request_method("testscaffold.util.request:unsafe_json_body", "unsafe_json_body", reify=True)
+    config.add_request_method("testscaffold.util.request:get_authomatic", "authomatic", reify=True)
 
 
 @pytest.fixture()

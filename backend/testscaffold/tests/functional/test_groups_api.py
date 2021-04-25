@@ -15,12 +15,8 @@ class TestFunctionalAPIGroups:
     def test_groups_list(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            create_group(
-                {"group_name": "test", "description": "foo"}, sqla_session=session
-            )
-            create_group(
-                {"group_name": "test2", "description": "foo2"}, sqla_session=session
-            )
+            create_group({"group_name": "test", "description": "foo"}, sqla_session=session)
+            create_group({"group_name": "test2", "description": "foo2"}, sqla_session=session)
 
         url_path = "/api/0.1/groups"
         headers = {str("x-testscaffold-auth-token"): str(token)}
@@ -66,9 +62,7 @@ class TestFunctionalAPIGroups:
     def test_group_patch(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            group = create_group(
-                {"group_name": "testX", "description": "testX"}, sqla_session=session
-            )
+            group = create_group({"group_name": "testX", "description": "testX"}, sqla_session=session)
 
         url_path = "/api/0.1/groups/{}".format(group.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
@@ -77,9 +71,7 @@ class TestFunctionalAPIGroups:
             "group_name": "some-new_groupCHANGED",
             "description": "changed",
         }
-        response = full_app.patch_json(
-            url_path, group_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, group_dict, status=200, headers=headers)
         assert response.json["id"] == group.id
         assert group_dict["group_name"] == response.json["group_name"]
         assert group_dict["description"] == response.json["description"]
@@ -112,9 +104,7 @@ class TestFunctionalAPIGroupsPermissions:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group(
-                {"group_name": "test"},
-                permissions=["root_administration", "admin_panel"],
-                sqla_session=session,
+                {"group_name": "test"}, permissions=["root_administration", "admin_panel"], sqla_session=session,
             )
 
         url_path = "/api/0.1/groups/{}/permissions".format(group.id)
@@ -126,9 +116,7 @@ class TestFunctionalAPIGroupsPermissions:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group(
-                {"group_name": "test"},
-                permissions=["root_administration", "admin_panel"],
-                sqla_session=session,
+                {"group_name": "test"}, permissions=["root_administration", "admin_panel"], sqla_session=session,
             )
 
         url_path = "/api/0.1/groups/{}/permissions".format(group.id)
@@ -146,22 +134,14 @@ class TestFunctionalAPIGroupsUsers:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group({"group_name": "test"}, sqla_session=session)
-            user_a = create_user(
-                {"user_name": "aaaa", "email": "foo"}, sqla_session=session
-            )
-            user_b = create_user(
-                {"user_name": "bbbb", "email": "foo2"}, sqla_session=session
-            )
+            user_a = create_user({"user_name": "aaaa", "email": "foo"}, sqla_session=session)
+            user_b = create_user({"user_name": "bbbb", "email": "foo2"}, sqla_session=session)
 
         url_path = "/api/0.1/groups/{}/users".format(group.id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         assert not list(group.users)
-        full_app.post_json(
-            url_path, {"user_name": user_a.user_name}, status=200, headers=headers
-        )
-        full_app.post_json(
-            url_path, {"user_name": user_b.user_name}, status=200, headers=headers
-        )
+        full_app.post_json(url_path, {"user_name": user_a.user_name}, status=200, headers=headers)
+        full_app.post_json(url_path, {"user_name": user_b.user_name}, status=200, headers=headers)
         sqla_session.expire_all()
         assert len(group.users) == 2
 
@@ -169,9 +149,7 @@ class TestFunctionalAPIGroupsUsers:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group(
-                {"group_name": "test"},
-                permissions=["root_administration", "admin_panel"],
-                sqla_session=session,
+                {"group_name": "test"}, permissions=["root_administration", "admin_panel"], sqla_session=session,
             )
 
         url_path = "/api/0.1/groups/{}/users".format(group.id)
@@ -182,16 +160,10 @@ class TestFunctionalAPIGroupsUsers:
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             group = create_group(
-                {"group_name": "test"},
-                permissions=["root_administration", "admin_panel"],
-                sqla_session=session,
+                {"group_name": "test"}, permissions=["root_administration", "admin_panel"], sqla_session=session,
             )
-            user_a = create_user(
-                {"user_name": "aaaa", "email": "foo"}, sqla_session=session
-            )
-            user_b = create_user(
-                {"user_name": "bbbb", "email": "foo2"}, sqla_session=session
-            )
+            user_a = create_user({"user_name": "aaaa", "email": "foo"}, sqla_session=session)
+            user_b = create_user({"user_name": "bbbb", "email": "foo2"}, sqla_session=session)
             group.users.append(user_a)
             group.users.append(user_b)
 

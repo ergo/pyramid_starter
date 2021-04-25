@@ -5,9 +5,7 @@ import logging
 
 import pyramid.httpexceptions
 from pyramid.i18n import TranslationStringFactory
-from testscaffold.services.group_resource_permission import (
-    GroupResourcePermissionService,
-)
+from testscaffold.services.group_resource_permission import GroupResourcePermissionService
 from testscaffold.services.user_resource_permission import UserResourcePermissionService
 
 from testscaffold.models.db import GroupResourcePermission
@@ -38,10 +36,7 @@ class ResourcesShared:
 
     def user_permission_get(self, resource_id, user_id, perm_name):
         perm_inst = UserResourcePermissionService.get(
-            resource_id=resource_id,
-            user_id=user_id,
-            perm_name=perm_name,
-            db_session=self.request.dbsession,
+            resource_id=resource_id, user_id=user_id, perm_name=perm_name, db_session=self.request.dbsession,
         )
         if not perm_inst:
             raise pyramid.httpexceptions.HTTPNotFound()
@@ -49,10 +44,7 @@ class ResourcesShared:
 
     def group_permission_get(self, resource_id, group_id, perm_name):
         perm_inst = GroupResourcePermissionService.get(
-            resource_id=resource_id,
-            group_id=group_id,
-            perm_name=perm_name,
-            db_session=self.request.dbsession,
+            resource_id=resource_id, group_id=group_id, perm_name=perm_name, db_session=self.request.dbsession,
         )
         if not perm_inst:
             raise pyramid.httpexceptions.HTTPNotFound()
@@ -70,10 +62,7 @@ class ResourcesShared:
 
     def group_permission_delete(self, resource, group_id, perm_name):
         perm_inst = GroupResourcePermissionService.get(
-            resource_id=resource.resource_id,
-            group_id=group_id,
-            perm_name=perm_name,
-            db_session=self.request.dbsession,
+            resource_id=resource.resource_id, group_id=group_id, perm_name=perm_name, db_session=self.request.dbsession,
         )
         resource.group_permissions.remove(perm_inst)
         return True

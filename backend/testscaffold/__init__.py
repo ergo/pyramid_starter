@@ -32,9 +32,7 @@ def main(global_config, **settings):
 
     settings.setdefault("jinja2.i18n.domain", "testscaffold")
 
-    auth_tkt = AuthTktAuthenticationPolicy(
-        settings["auth_tkt.seed"], callback=groupfinder
-    )
+    auth_tkt = AuthTktAuthenticationPolicy(settings["auth_tkt.seed"], callback=groupfinder)
     auth_token_policy = AuthTokenAuthenticationPolicy(callback=groupfinder)
 
     authorization_policy = ACLAuthorizationPolicy()
@@ -49,16 +47,13 @@ def main(global_config, **settings):
         return policy
 
     auth_policy = PyramidSelectorPolicy(
-        policy_selector=policy_selector,
-        policies={"auth_tkt": auth_tkt, "auth_token_policy": auth_token_policy},
+        policy_selector=policy_selector, policies={"auth_tkt": auth_tkt, "auth_token_policy": auth_token_policy},
     )
 
     settings["jinja2.undefined"] = "strict"
 
     try:
-        logging_integration = LoggingIntegration(
-            event_level=None,  # Do NOT send errors as events
-        )
+        logging_integration = LoggingIntegration(event_level=None,)  # Do NOT send errors as events
         sentry_sdk.init(
             dsn=settings.get("sentry.dsn"),
             integrations=[
@@ -98,9 +93,7 @@ def main(global_config, **settings):
         # CSRF is enabled by defualt
         # use X-XSRF-TOKEN for angular
         # config.set_default_csrf_options(require_csrf=True, header='X-XSRF-TOKEN')
-        config.add_view_deriver(
-            "testscaffold.predicates.auth_token_aware_csrf_view", name="csrf_view"
-        )
+        config.add_view_deriver("testscaffold.predicates.auth_token_aware_csrf_view", name="csrf_view")
 
         config.include("pyramid_mailer")
         config.include("pyramid_jinja2")
@@ -108,22 +101,12 @@ def main(global_config, **settings):
         config.include("ziggurat_foundations.ext.pyramid.sign_in")
 
         # make request.user available
-        config.add_request_method(
-            "testscaffold.util.request:get_user", "user", reify=True
-        )
-        config.add_request_method(
-            "testscaffold.util.request:safe_json_body", "safe_json_body", reify=True
-        )
-        config.add_request_method(
-            "testscaffold.util.request:unsafe_json_body", "unsafe_json_body", reify=True
-        )
-        config.add_request_method(
-            "testscaffold.util.request:get_authomatic", "authomatic", reify=True
-        )
+        config.add_request_method("testscaffold.util.request:get_user", "user", reify=True)
+        config.add_request_method("testscaffold.util.request:safe_json_body", "safe_json_body", reify=True)
+        config.add_request_method("testscaffold.util.request:unsafe_json_body", "unsafe_json_body", reify=True)
+        config.add_request_method("testscaffold.util.request:get_authomatic", "authomatic", reify=True)
 
-        config.add_view_predicate(
-            "context_type_class", "testscaffold.predicates.ContextTypeClass"
-        )
+        config.add_view_predicate("context_type_class", "testscaffold.predicates.ContextTypeClass")
 
         config.scan("testscaffold.events")
         config.scan("testscaffold.subscribers")

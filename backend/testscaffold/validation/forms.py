@@ -46,26 +46,17 @@ class UserCreateForm(ZigguratForm):
     user_name = wtforms.StringField(
         _("User name"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserCreateSchema),
-        ],
+        validators=[wtforms.validators.InputRequired(), validate_marshmallow_partial(UserCreateSchema),],
     )
     password = wtforms.PasswordField(
         _("Password"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserCreateSchema),
-        ],
+        validators=[wtforms.validators.InputRequired(), validate_marshmallow_partial(UserCreateSchema),],
     )
     email = wtforms.StringField(
         _("Email"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserCreateSchema),
-        ],
+        validators=[wtforms.validators.InputRequired(), validate_marshmallow_partial(UserCreateSchema),],
     )
 
 
@@ -73,27 +64,19 @@ class UserLoginForm(ZigguratForm):
     login = wtforms.StringField(
         _("Login"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            wtforms.validators.Length(min=3),
-        ],
+        validators=[wtforms.validators.InputRequired(), wtforms.validators.Length(min=3),],
     )
 
     password = wtforms.PasswordField(
         _("Password"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            wtforms.validators.Length(min=3),
-        ],
+        validators=[wtforms.validators.InputRequired(), wtforms.validators.Length(min=3),],
     )
 
 
 class UserLostPasswordForm(ZigguratForm):
     email = wtforms.StringField(
-        _("Email"),
-        filters=[strip_filter],
-        validators=[wtforms.validators.InputRequired(), wtforms.validators.Email()],
+        _("Email"), filters=[strip_filter], validators=[wtforms.validators.InputRequired(), wtforms.validators.Email()],
     )
 
 
@@ -101,18 +84,12 @@ class UserNewPasswordForm(ZigguratForm):
     password = wtforms.PasswordField(
         _("Password"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(UserEditSchema),
-        ],
+        validators=[wtforms.validators.InputRequired(), validate_marshmallow_partial(UserEditSchema),],
     )
     password_confirm = wtforms.PasswordField(
         _("Confirm password"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            wtforms.validators.EqualTo("password"),
-        ],
+        validators=[wtforms.validators.InputRequired(), wtforms.validators.EqualTo("password"),],
     )
 
 
@@ -132,16 +109,11 @@ class GroupUpdateForm(ZigguratForm):
     group_name = wtforms.StringField(
         _("Name"),
         filters=[strip_filter],
-        validators=[
-            wtforms.validators.InputRequired(),
-            validate_marshmallow_partial(GroupEditSchema),
-        ],
+        validators=[wtforms.validators.InputRequired(), validate_marshmallow_partial(GroupEditSchema),],
     )
 
     description = wtforms.TextAreaField(
-        _("Description"),
-        filters=[strip_filter],
-        validators=[wtforms.validators.InputRequired()],
+        _("Description"), filters=[strip_filter], validators=[wtforms.validators.InputRequired()],
     )
 
 
@@ -177,14 +149,9 @@ class EntryCreateForm(ZigguratForm):
         _("Parent"),
         choices=(),
         coerce=empty_to_none,
-        validators=[
-            wtforms.validators.Optional(),
-            validate_marshmallow_partial(EntryCreateSchema),
-        ],
+        validators=[wtforms.validators.Optional(), validate_marshmallow_partial(EntryCreateSchema),],
     )
 
 
 class EntryUpdateForm(EntryCreateForm):
-    ordering = wtforms.IntegerField(
-        _("Position"), validators=[validate_marshmallow_partial(EntryCreateSchema)]
-    )
+    ordering = wtforms.IntegerField(_("Position"), validators=[validate_marshmallow_partial(EntryCreateSchema)])

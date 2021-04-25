@@ -14,16 +14,13 @@ class UserPage:
         self.request = request
 
     @view_config(
-        renderer="testscaffold:templates/user/index.jinja2",
-        match_param=("object=user_self", "verb=GET"),
+        renderer="testscaffold:templates/user/index.jinja2", match_param=("object=user_self", "verb=GET"),
     )
     def index(self):
         return {"user": self.request.user}
 
 
-@view_defaults(
-    route_name="object_relation", renderer="json", permission="authenticated"
-)
+@view_defaults(route_name="object_relation", renderer="json", permission="authenticated")
 class GroupsUserRelationAPI:
     def __init__(self, request):
         self.request = request

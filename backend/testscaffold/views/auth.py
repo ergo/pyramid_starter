@@ -28,9 +28,7 @@ class AuthView(BaseView):
         request = self.request
         user = request.context.user
         user.last_login_date = datetime.utcnow()
-        return self.shared_sign_in(
-            user, request.context.headers, request.context.came_from
-        )
+        return self.shared_sign_in(user, request.context.headers, request.context.came_from)
 
     @view_config(context=ZigguratSignInBadAuth, permission=NO_PERMISSION_REQUIRED)
     def bad_auth(self):
@@ -42,19 +40,13 @@ class AuthView(BaseView):
             "level": "danger",
         }
         request.session.flash(msg)
-        return HTTPFound(
-            location=request.route_url("register"), headers=request.context.headers
-        )
+        return HTTPFound(location=request.route_url("register"), headers=request.context.headers)
 
     @view_config(context=ZigguratSignOut, permission=NO_PERMISSION_REQUIRED)
     def sign_out(self):
         request = self.request
-        request.session.flash(
-            {"msg": self.translate(_("Signed out")), "level": "success"}
-        )
-        return HTTPFound(
-            location=request.route_url("/"), headers=request.context.headers
-        )
+        request.session.flash({"msg": self.translate(_("Signed out")), "level": "success"})
+        return HTTPFound(location=request.route_url("/"), headers=request.context.headers)
 
     @view_config(route_name="social_auth", permission=NO_PERMISSION_REQUIRED)
     def social_auth(self):
@@ -78,12 +70,7 @@ class AuthView(BaseView):
         request.session.pop("zigg.social_auth", None)
         log.error("social_auth", extra={"error": result.error.message})
         msg = {
-            "msg": self.translate(
-                _(
-                    "Something went wrong when accessing third party "
-                    "provider - please try again"
-                )
-            ),
+            "msg": self.translate(_("Something went wrong when accessing third party " "provider - please try again")),
             "level": "danger",
         }
         request.session.flash(msg)
@@ -120,9 +107,7 @@ class AuthView(BaseView):
             log.info("social_auth", extra={"user_found": False})
 
             user = ExternalIdentityService.user_by_external_id_and_provider(
-                social_data["user"]["id"],
-                social_data["credentials"].provider_name,
-                db_session=request.dbsession,
+                social_data["user"]["id"], social_data["credentials"].provider_name, db_session=request.dbsession,
             )
             # user tokens are already found in our db
             if user:
@@ -154,9 +139,7 @@ class AuthView(BaseView):
             came_from = request.route_url("/")
 
         log.info("shared_sign_in", extra={"user": user})
-        request.session.flash(
-            {"msg": self.translate(_("Signed in")), "level": "success"}
-        )
+        request.session.flash({"msg": self.translate(_("Signed in")), "level": "success"})
         # if social data is still present bind the account
         social_data = request.session.get("zigg.social_auth")
         if social_data:

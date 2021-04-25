@@ -42,8 +42,7 @@ class EntriesShared:
         # this is safe and doesn't overwrite entry_password with cleartext
         instance.populate_obj(data, *args, **kwargs)
         log.info(
-            "entry_populate_instance",
-            extra={"action": "updated", "entry_id": instance.resource_id},
+            "entry_populate_instance", extra={"action": "updated", "entry_id": instance.resource_id},
         )
 
     def entry_get(self, entry_id):

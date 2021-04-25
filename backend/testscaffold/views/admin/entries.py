@@ -32,12 +32,7 @@ def get_possible_parents(request):
 
     choices = [("", request.localizer.translate(_("Root (/)")))]
     for row in result:
-        choices.append(
-            (
-                row.Resource.resource_id,
-                "{} {}".format("--" * row.depth, row.Resource.resource_name),
-            )
-        )
+        choices.append((row.Resource.resource_id, "{} {}".format("--" * row.depth, row.Resource.resource_name),))
     return choices
 
 
@@ -48,8 +43,7 @@ class AdminEntriesViews(BaseView):
         self.shared = EntriesShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/entries/index.jinja2",
-        match_param=("object=entries", "verb=GET"),
+        renderer="testscaffold:templates/admin/entries/index.jinja2", match_param=("object=entries", "verb=GET"),
     )
     def collection_list(self):
         result = tree_service.from_parent_deeper(db_session=self.request.dbsession)
@@ -58,8 +52,7 @@ class AdminEntriesViews(BaseView):
         return {"entries_tree": entries_tree}
 
     @view_config(
-        renderer="testscaffold:templates/admin/entries/edit.jinja2",
-        match_param=("object=entries", "verb=POST"),
+        renderer="testscaffold:templates/admin/entries/edit.jinja2", match_param=("object=entries", "verb=POST"),
     )
     def post(self):
         request = self.request
@@ -70,41 +63,27 @@ class AdminEntriesViews(BaseView):
         if request.method == "POST" and resource_form.validate():
             resource = Entry()
             position = resource_form.data.get("ordering")
-            self.shared.populate_instance(
-                resource, resource_form.data, exclude_keys=["ordering"]
-            )
+            self.shared.populate_instance(resource, resource_form.data, exclude_keys=["ordering"])
             request.user.resources.append(resource)
             resource.persist(flush=True, db_session=request.dbsession)
 
             if position is not None:
                 tree_service.set_position(
-                    resource_id=resource.resource_id,
-                    to_position=position,
-                    db_session=self.request.dbsession,
+                    resource_id=resource.resource_id, to_position=position, db_session=self.request.dbsession,
                 )
             else:
                 # this accounts for the newly inserted row so the total_children
                 # will be max+1 position for new row
-                total_children = tree_service.count_children(
-                    resource.parent_id, db_session=self.request.dbsession
-                )
+                total_children = tree_service.count_children(resource.parent_id, db_session=self.request.dbsession)
                 tree_service.set_position(
-                    resource_id=resource.resource_id,
-                    to_position=total_children,
-                    db_session=self.request.dbsession,
+                    resource_id=resource.resource_id, to_position=total_children, db_session=self.request.dbsession,
                 )
 
             log.info(
                 "entries_post",
-                extra={
-                    "type": "entry",
-                    "resource_id": resource.resource_id,
-                    "resource_name": resource.resource_name,
-                },
+                extra={"type": "entry", "resource_id": resource.resource_id, "resource_name": resource.resource_name,},
             )
-            request.session.flash(
-                {"msg": self.translate(_("Entry created.")), "level": "success"}
-            )
+            request.session.flash({"msg": self.translate(_("Entry created.")), "level": "success"})
             location = request.route_url("admin_objects", object="entries", verb="GET")
             return httpexceptions.HTTPFound(location=location)
 
@@ -119,28 +98,20 @@ class AdminEntryViews(BaseView):
         self.shared_resources = ResourcesShared(request)
 
     @view_config(
-        renderer="testscaffold:templates/admin/entries/edit.jinja2",
-        match_param=("object=entries", "verb=GET"),
+        renderer="testscaffold:templates/admin/entries/edit.jinja2", match_param=("object=entries", "verb=GET"),
     )
     @view_config(
-        renderer="testscaffold:templates/admin/entries/edit.jinja2",
-        match_param=("object=entries", "verb=PATCH"),
+        renderer="testscaffold:templates/admin/entries/edit.jinja2", match_param=("object=entries", "verb=PATCH"),
     )
     def get_patch(self):
         request = self.request
         resource = self.request.context.resource
 
-        breadcrumbs = tree_service.path_upper(
-            resource.resource_id, db_session=self.request.dbsession
-        )
+        breadcrumbs = tree_service.path_upper(resource.resource_id, db_session=self.request.dbsession)
 
-        user_permission_form = UserResourcePermissionForm(
-            request.POST, context={"request": request}
-        )
+        user_permission_form = UserResourcePermissionForm(request.POST, context={"request": request})
 
-        group_permission_form = GroupResourcePermissionForm(
-            request.POST, context={"request": request}
-        )
+        group_permission_form = GroupResourcePermissionForm(request.POST, context={"request": request})
         groups = GroupService.base_query(db_session=request.dbsession)
         group_permission_form.group_id.choices = [(g.id, g.group_name) for g in groups]
 
@@ -148,29 +119,16 @@ class AdminEntryViews(BaseView):
         user_permission_form.perm_name.choices = choices
         group_permission_form.perm_name.choices = choices
 
-        permissions = ResourceService.users_for_perm(
-            resource, perm_name=ANY_PERMISSION, limit_group_permissions=True
-        )
-        user_permissions = sorted(
-            [p for p in permissions if p.type == "user"], key=lambda x: x.user.user_name
-        )
-        group_permissions = sorted(
-            [p for p in permissions if p.type == "group"],
-            key=lambda x: x.group.group_name,
-        )
+        permissions = ResourceService.users_for_perm(resource, perm_name=ANY_PERMISSION, limit_group_permissions=True)
+        user_permissions = sorted([p for p in permissions if p.type == "user"], key=lambda x: x.user.user_name)
+        group_permissions = sorted([p for p in permissions if p.type == "group"], key=lambda x: x.group.group_name,)
 
-        user_permissions_grid = ResourceUserPermissionsGrid(
-            user_permissions, request=request
-        )
-        group_permissions_grid = ResourceGroupPermissionsGrid(
-            group_permissions, request=request
-        )
+        user_permissions_grid = ResourceUserPermissionsGrid(user_permissions, request=request)
+        group_permissions_grid = ResourceGroupPermissionsGrid(group_permissions, request=request)
 
         parent_id_choices = get_possible_parents(self.request)
         resource_form = EntryUpdateForm(
-            request.POST,
-            obj=resource,
-            context={"request": request, "modified_obj": resource},
+            request.POST, obj=resource, context={"request": request, "modified_obj": resource},
         )
         resource_form.parent_id.choices = parent_id_choices
 
@@ -179,18 +137,11 @@ class AdminEntryViews(BaseView):
             position = resource_form.data.get("ordering", noop)
             # we need to not change_parent_id or order of element
             # to not confuse tree manager
-            self.shared.populate_instance(
-                resource, resource_form.data, exclude_keys=["parent_id", "ordering"]
-            )
+            self.shared.populate_instance(resource, resource_form.data, exclude_keys=["parent_id", "ordering"])
             into_new_parent = parent_id != resource.parent_id and parent_id is not noop
             if position is not noop or into_new_parent:
                 if not position and into_new_parent:
-                    position = (
-                        tree_service.count_children(
-                            parent_id, db_session=self.request.dbsession
-                        )
-                        + 1
-                    )
+                    position = tree_service.count_children(parent_id, db_session=self.request.dbsession) + 1
                 tree_service.move_to_position(
                     resource_id=resource.resource_id,
                     new_parent_id=parent_id,
@@ -221,13 +172,9 @@ class AdminEntryViews(BaseView):
     def delete(self):
         request = self.request
         resource = self.request.context.resource
-        back_url = request.route_url(
-            "admin_objects", object=resource.plural_type, verb="GET"
-        )
+        back_url = request.route_url("admin_objects", object=resource.plural_type, verb="GET")
         if request.method == "POST":
-            tree_service.delete_branch(
-                resource.resource_id, db_session=self.request.dbsession
-            )
+            tree_service.delete_branch(resource.resource_id, db_session=self.request.dbsession)
             return httpexceptions.HTTPFound(location=back_url)
 
         return {

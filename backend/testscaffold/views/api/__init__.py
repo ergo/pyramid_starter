@@ -6,12 +6,7 @@ from pyramid_apispec.helpers import add_pyramid_paths
 
 @view_config(route_name="openapi_spec", renderer="json")
 def api_spec(request):
-    spec = APISpec(
-        title="Some API",
-        version="1.0.0",
-        openapi_version="2.0",
-        plugins=[MarshmallowPlugin()],
-    )
+    spec = APISpec(title="Some API", version="1.0.0", openapi_version="2.0", plugins=[MarshmallowPlugin()],)
 
     # inspect the `foo_route` and generate operations from docstring
     add_pyramid_paths(spec, "api_object", request=request)

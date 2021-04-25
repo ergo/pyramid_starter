@@ -13,9 +13,7 @@ from testscaffold.services.user import UserService
 
 _ = TranslationStringFactory("testscaffold")
 
-user_regex_error = _(
-    "Username can only consist of " "alphanumerical characters, hypens and underscores"
-)
+user_regex_error = _("Username can only consist of " "alphanumerical characters, hypens and underscores")
 
 
 class BaseTestScaffoldSchema(Schema):
@@ -29,16 +27,10 @@ class UserCreateSchema(BaseTestScaffoldSchema):
 
     id = fields.Int(dump_only=True)
     user_name = fields.Str(
-        required=True,
-        validate=(
-            validate.Length(3),
-            validate.Regexp("^[\w-]*$", error=user_regex_error),
-        ),
+        required=True, validate=(validate.Length(3), validate.Regexp("^[\w-]*$", error=user_regex_error),),
     )
     password = fields.Str(required=True, validate=(validate.Length(3)))
-    email = fields.Str(
-        required=True, validate=(validate.Email(error=_("Not a valid email")))
-    )
+    email = fields.Str(required=True, validate=(validate.Email(error=_("Not a valid email"))))
     status = fields.Int(dump_only=True)
     last_login_date = fields.DateTime(dump_only=True)
     registered_date = fields.DateTime(dump_only=True)
@@ -105,9 +97,7 @@ class ResourceCreateSchemaMixin(BaseTestScaffoldSchema):
     resource_id = fields.Int(dump_only=True)
     resource_type = fields.Str(dump_only=True)
     parent_id = fields.Int()
-    resource_name = fields.Str(
-        required=True, validate=(validate.Length(min=1, max=100))
-    )
+    resource_name = fields.Str(required=True, validate=(validate.Length(min=1, max=100)))
     ordering = fields.Int()
     owner_user_id = fields.Int(dump_only=True)
     owner_group_id = fields.Int(dump_only=True)
@@ -124,9 +114,7 @@ class ResourceCreateSchemaMixin(BaseTestScaffoldSchema):
             return True
 
         try:
-            tree_service.check_node_parent(
-                resource_id, new_parent_id, db_session=request.dbsession
-            )
+            tree_service.check_node_parent(resource_id, new_parent_id, db_session=request.dbsession)
         except ZigguratResourceTreeMissingException as exc:
             raise validate.ValidationError(str(exc))
         except ZigguratResourceTreePathException as exc:
@@ -156,10 +144,7 @@ class ResourceCreateSchemaMixin(BaseTestScaffoldSchema):
             parent_id = new_parent_id if new_parent_id is not noop else None
         try:
             tree_service.check_node_position(
-                parent_id,
-                to_position,
-                on_same_branch=same_branch,
-                db_session=request.dbsession,
+                parent_id, to_position, on_same_branch=same_branch, db_session=request.dbsession,
             )
         except ZigguratResourceOutOfBoundaryException as exc:
             raise validate.ValidationError(str(exc), "ordering")

@@ -27,18 +27,14 @@ _ = TranslationStringFactory("testscaffold")
 
 class IndexViews(BaseView):
     @view_config(
-        route_name="/",
-        renderer="testscaffold:templates/index.jinja2",
-        permission=NO_PERMISSION_REQUIRED,
+        route_name="/", renderer="testscaffold:templates/index.jinja2", permission=NO_PERMISSION_REQUIRED,
     )
     def index(self):
         request = self.request
         login_form = UserLoginForm(request.POST, context={"request": request})
         log.warning("index", extra={"foo": "xxx"})
         log.info("locale", extra={"locale": request.locale_name})
-        result = tree_service.from_parent_deeper(
-            None, limit_depth=2, db_session=request.dbsession
-        )
+        result = tree_service.from_parent_deeper(None, limit_depth=2, db_session=request.dbsession)
         tree = tree_service.build_subtree_strut(result)
         return {"login_form": login_form, "menu_entries": tree["children"]}
 
@@ -69,12 +65,7 @@ class IndexViews(BaseView):
             if user:
                 user.regenerate_security_code()
                 user.security_code_date = datetime.utcnow()
-                title = self.translate(
-                    _(
-                        "${project} :: New password request",
-                        mapping={"project": "testscaffold"},
-                    )
-                )
+                title = self.translate(_("${project} :: New password request", mapping={"project": "testscaffold"},))
                 email_vars = {"user": user, "request": request, "email_title": title}
 
                 ev = EmailEvent(
@@ -114,9 +105,7 @@ class IndexViews(BaseView):
         """
         request = self.request
         user = UserService.by_user_name_and_security_code(
-            request.params.get("user_name"),
-            request.params.get("security_code"),
-            db_session=request.dbsession,
+            request.params.get("user_name"), request.params.get("security_code"), db_session=request.dbsession,
         )
         delta = 0
         if user:
@@ -138,10 +127,7 @@ class IndexViews(BaseView):
             return Response("Security code expired")
 
     @view_config(
-        route_name="register",
-        renderer="json",
-        permission=NO_PERMISSION_REQUIRED,
-        xhr=True,
+        route_name="register", renderer="json", permission=NO_PERMISSION_REQUIRED, xhr=True,
     )
     @view_config(
         route_name="register",
@@ -183,9 +169,7 @@ class IndexViews(BaseView):
                 "user_password": str(uuid.uuid4()),
             }
             # repopulate form this time from oauth data
-            registration_form = UserCreateForm(
-                context={"request": request}, **form_data
-            )
+            registration_form = UserCreateForm(context={"request": request}, **form_data)
 
         if request.method == "POST" and registration_form.validate():
             # insert new user here
@@ -197,17 +181,14 @@ class IndexViews(BaseView):
             new_user.registration_ip = request.environ.get("REMOTE_ADDR")
             new_user.persist(flush=True, db_session=request.dbsession)
             log.info(
-                "register",
-                extra={"new_user": new_user.user_name, "user_id": new_user.id},
+                "register", extra={"new_user": new_user.user_name, "user_id": new_user.id},
             )
 
             # bind 3rd party identity
             if social_data:
                 request.registry.notify(SocialAuthEvent(request, new_user, social_data))
 
-            title = _(
-                "${project} :: Start information", mapping={"project": "testscaffold"}
-            )
+            title = _("${project} :: Start information", mapping={"project": "testscaffold"})
             email_vars = {"user": new_user, "email_title": self.translate(title)}
             ev = EmailEvent(
                 request,
@@ -217,24 +198,17 @@ class IndexViews(BaseView):
             )
             request.registry.notify(ev)
             request.session.flash(
-                {
-                    "msg": self.translate(_("You have successfully registered.")),
-                    "level": "success",
-                }
+                {"msg": self.translate(_("You have successfully registered.")), "level": "success",}
             )
             headers = remember(request, new_user.id)
             return HTTPFound(location=request.route_url("/"), headers=headers)
         return {"registration_form": registration_form, "login_form": login_form}
 
-    @view_config(
-        route_name="language", renderer="json", permission=NO_PERMISSION_REQUIRED
-    )
+    @view_config(route_name="language", renderer="json", permission=NO_PERMISSION_REQUIRED)
     def set_language_cookie(self):
         request = self.request
         resp = HTTPFound(location=request.params.get("came_from", "/"))
         request.response.set_cookie(
-            "_LOCALE_",
-            request.matchdict.get("language", "en"),
-            max_age=timedelta(days=365),
+            "_LOCALE_", request.matchdict.get("language", "en"), max_age=timedelta(days=365),
         )
         return request.response.merge_cookies(resp)

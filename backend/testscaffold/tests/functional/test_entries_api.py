@@ -6,126 +6,57 @@ from testscaffold.tests.utils import create_entry, session_context, create_admin
 
 
 def create_default_tree(db_session):
-    root = create_entry(
-        {"resource_id": -1, "resource_name": "root a", "ordering": 1},
-        sqla_session=db_session,
-    )
+    root = create_entry({"resource_id": -1, "resource_name": "root a", "ordering": 1}, sqla_session=db_session,)
     res_a = create_entry(
-        {
-            "resource_id": 1,
-            "resource_name": "a",
-            "ordering": 1,
-            "parent_id": root.resource_id,
-        },
+        {"resource_id": 1, "resource_name": "a", "ordering": 1, "parent_id": root.resource_id,},
         sqla_session=db_session,
     )
     res_aa = create_entry(
-        {
-            "resource_id": 5,
-            "resource_name": "aa",
-            "ordering": 1,
-            "parent_id": res_a.resource_id,
-        },
+        {"resource_id": 5, "resource_name": "aa", "ordering": 1, "parent_id": res_a.resource_id,},
         sqla_session=db_session,
     )
     res_ab = create_entry(
-        {
-            "resource_id": 6,
-            "resource_name": "ab",
-            "ordering": 2,
-            "parent_id": res_a.resource_id,
-        },
+        {"resource_id": 6, "resource_name": "ab", "ordering": 2, "parent_id": res_a.resource_id,},
         sqla_session=db_session,
     )
     res_ac = create_entry(
-        {
-            "resource_id": 7,
-            "resource_name": "ac",
-            "ordering": 3,
-            "parent_id": res_a.resource_id,
-        },
+        {"resource_id": 7, "resource_name": "ac", "ordering": 3, "parent_id": res_a.resource_id,},
         sqla_session=db_session,
     )
     res_aca = create_entry(
-        {
-            "resource_id": 9,
-            "resource_name": "aca",
-            "ordering": 1,
-            "parent_id": res_ac.resource_id,
-        },
+        {"resource_id": 9, "resource_name": "aca", "ordering": 1, "parent_id": res_ac.resource_id,},
         sqla_session=db_session,
     )
     res_acaa = create_entry(
-        {
-            "resource_id": 12,
-            "resource_name": "aca",
-            "ordering": 1,
-            "parent_id": res_aca.resource_id,
-        },
+        {"resource_id": 12, "resource_name": "aca", "ordering": 1, "parent_id": res_aca.resource_id,},
         sqla_session=db_session,
     )
     res_ad = create_entry(
-        {
-            "resource_id": 8,
-            "resource_name": "ad",
-            "ordering": 4,
-            "parent_id": res_a.resource_id,
-        },
+        {"resource_id": 8, "resource_name": "ad", "ordering": 4, "parent_id": res_a.resource_id,},
         sqla_session=db_session,
     )
     res_b = create_entry(
-        {
-            "resource_id": 2,
-            "resource_name": "b",
-            "ordering": 2,
-            "parent_id": root.resource_id,
-        },
+        {"resource_id": 2, "resource_name": "b", "ordering": 2, "parent_id": root.resource_id,},
         sqla_session=db_session,
     )
     res_ba = create_entry(
-        {
-            "resource_id": 4,
-            "resource_name": "ba",
-            "ordering": 1,
-            "parent_id": res_b.resource_id,
-        },
+        {"resource_id": 4, "resource_name": "ba", "ordering": 1, "parent_id": res_b.resource_id,},
         sqla_session=db_session,
     )
     res_c = create_entry(
-        {
-            "resource_id": 3,
-            "resource_name": "c",
-            "ordering": 3,
-            "parent_id": root.resource_id,
-        },
+        {"resource_id": 3, "resource_name": "c", "ordering": 3, "parent_id": root.resource_id,},
         sqla_session=db_session,
     )
     res_d = create_entry(
-        {
-            "resource_id": 10,
-            "resource_name": "d",
-            "ordering": 4,
-            "parent_id": root.resource_id,
-        },
+        {"resource_id": 10, "resource_name": "d", "ordering": 4, "parent_id": root.resource_id,},
         sqla_session=db_session,
     )
     res_e = create_entry(
-        {
-            "resource_id": 11,
-            "resource_name": "e",
-            "ordering": 5,
-            "parent_id": root.resource_id,
-        },
+        {"resource_id": 11, "resource_name": "e", "ordering": 5, "parent_id": root.resource_id,},
         sqla_session=db_session,
     )
-    root_b = create_entry(
-        {"resource_id": -2, "resource_name": "root b", "ordering": 2},
-        sqla_session=db_session,
-    )
-    root_c = create_entry(
-        {"resource_id": -3, "resource_name": "root 3", "ordering": 3},
-        sqla_session=db_session,
-    )
+    root_b = create_entry({"resource_id": -2, "resource_name": "root b", "ordering": 2}, sqla_session=db_session,)
+    root_c = create_entry({"resource_id": -3, "resource_name": "root 3", "ordering": 3}, sqla_session=db_session,)
     return [root, root_b, root_c]
 
 
@@ -141,12 +72,10 @@ class TestFunctionalAPIEntries:
             admin, token = create_admin(session)
             for x in range(1, 51):
                 create_entry(
-                    {"resource_name": "entry-x{}".format(x), "note": "x{}".format(x)},
-                    sqla_session=session,
+                    {"resource_name": "entry-x{}".format(x), "note": "x{}".format(x)}, sqla_session=session,
                 )
                 create_entry(
-                    {"resource_name": "entry-y{}".format(x), "note": "y{}".format(x)},
-                    sqla_session=session,
+                    {"resource_name": "entry-y{}".format(x), "note": "y{}".format(x)}, sqla_session=session,
                 )
 
         url_path = "/api/0.1/entries"
@@ -178,9 +107,7 @@ class TestFunctionalAPIEntries:
             ({"parent_id": 5}, ["resource_name", "parent_id"]),
         ],
     )
-    def test_entry_create_bad_json(
-        self, full_app, sqla_session, test_input, error_keys
-    ):
+    def test_entry_create_bad_json(self, full_app, sqla_session, test_input, error_keys):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
 
@@ -211,16 +138,12 @@ class TestFunctionalAPIEntries:
     def test_entry_patch(self, full_app, sqla_session):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            entry = create_entry(
-                {"resource_name": "entry-x", "note": "x"}, sqla_session=session
-            )
+            entry = create_entry({"resource_name": "entry-x", "note": "x"}, sqla_session=session)
 
         url_path = "/api/0.1/entries/{}".format(entry.resource_id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"resource_id": -9, "resource_name": "CHANGED", "note": "CHANGED"}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         assert response.json["resource_id"] == entry.resource_id
         assert entry_dict["resource_name"] == response.json["resource_name"]
         assert entry_dict["note"] == response.json["note"]
@@ -230,9 +153,7 @@ class TestFunctionalAPIEntries:
 
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
-            entry = create_entry(
-                {"resource_name": "entry-x", "note": "x"}, sqla_session=session
-            )
+            entry = create_entry({"resource_name": "entry-x", "note": "x"}, sqla_session=session)
         url_path = "/api/0.1/entries/{}".format(entry.resource_id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         full_app.delete_json(url_path, status=200, headers=headers)
@@ -260,9 +181,7 @@ class TestFunctionalAPIEntries:
 
         root = create_default_tree(sqla_session)[0]
 
-        result = tree_service.from_resource_deeper(
-            root.resource_id, db_session=sqla_session
-        )
+        result = tree_service.from_resource_deeper(root.resource_id, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"][-1]
         pprint.pprint(tree_struct)
         assert tree_struct["node"].resource_id == -1
@@ -289,9 +208,7 @@ class TestFunctionalAPIEntries:
         response = full_app.post_json(url_path, entry_dict, status=200, headers=headers)
         from testscaffold.services.resource_tree_service import tree_service
 
-        result = tree_service.from_parent_deeper(
-            None, db_session=sqla_session, limit_depth=1
-        )
+        result = tree_service.from_parent_deeper(None, db_session=sqla_session, limit_depth=1)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
         assert response.json["resource_id"] > 0
@@ -315,9 +232,7 @@ class TestFunctionalAPIEntries:
         response = full_app.post_json(url_path, entry_dict, status=200, headers=headers)
         from testscaffold.services.resource_tree_service import tree_service
 
-        result = tree_service.from_parent_deeper(
-            None, db_session=sqla_session, limit_depth=1
-        )
+        result = tree_service.from_parent_deeper(None, db_session=sqla_session, limit_depth=1)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
 
@@ -342,9 +257,7 @@ class TestFunctionalAPIEntries:
             "ordering": 4,
         }
         response = full_app.post_json(url_path, entry_dict, status=200, headers=headers)
-        result = tree_service.from_parent_deeper(
-            None, db_session=sqla_session, limit_depth=1
-        )
+        result = tree_service.from_parent_deeper(None, db_session=sqla_session, limit_depth=1)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         assert response.json["resource_id"] > 0
         assert response.json["ordering"] == 4
@@ -352,9 +265,7 @@ class TestFunctionalAPIEntries:
         assert [i for i in tree_struct.keys()] == [-1, -2, -3, new_id]
 
     @pytest.mark.parametrize("ordering, expected", [(5, "4"), (0, "1"), (-1, "1")])
-    def test_root_entry_no_parent_wrong_order(
-        self, full_app, sqla_session, ordering, expected
-    ):
+    def test_root_entry_no_parent_wrong_order(self, full_app, sqla_session, ordering, expected):
         with session_context(sqla_session) as session:
             admin, token = create_admin(session)
             create_default_tree(db_session=sqla_session)
@@ -387,9 +298,7 @@ class TestFunctionalAPIEntries:
             "parent_id": 1,
         }
         response = full_app.post_json(url_path, entry_dict, status=200, headers=headers)
-        result = tree_service.from_parent_deeper(
-            1, db_session=sqla_session, limit_depth=1
-        )
+        result = tree_service.from_parent_deeper(1, db_session=sqla_session, limit_depth=1)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
         assert response.json["resource_id"] > 0
@@ -407,9 +316,7 @@ class TestFunctionalAPIEntries:
         url_path = "/api/0.1/entries/{}".format(1)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"parent_id": -1}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         result = tree_service.from_parent_deeper(None, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
@@ -425,9 +332,7 @@ class TestFunctionalAPIEntries:
         url_path = "/api/0.1/entries/{}".format(-2)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"ordering": 3}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         result = tree_service.from_parent_deeper(None, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
@@ -437,16 +342,9 @@ class TestFunctionalAPIEntries:
 
     @pytest.mark.parametrize(
         "node_id, position, ordered_elems",
-        [
-            (6, 3, [5, 7, 6, 8]),
-            (6, 1, [6, 5, 7, 8]),
-            (6, 2, [5, 6, 7, 8]),
-            (6, 4, [5, 7, 8, 6]),
-        ],
+        [(6, 3, [5, 7, 6, 8]), (6, 1, [6, 5, 7, 8]), (6, 2, [5, 6, 7, 8]), (6, 4, [5, 7, 8, 6]),],
     )
-    def test_entry_patch_order_same_branch_nested(
-        self, full_app, sqla_session, node_id, position, ordered_elems
-    ):
+    def test_entry_patch_order_same_branch_nested(self, full_app, sqla_session, node_id, position, ordered_elems):
         from testscaffold.services.resource_tree_service import tree_service
 
         with session_context(sqla_session) as session:
@@ -456,9 +354,7 @@ class TestFunctionalAPIEntries:
         url_path = "/api/0.1/entries/{}".format(node_id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"ordering": position}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         result = tree_service.from_parent_deeper(1, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
@@ -468,16 +364,9 @@ class TestFunctionalAPIEntries:
 
     @pytest.mark.parametrize(
         "node_id, position, ordered_elems",
-        [
-            (12, 3, [5, 6, 12, 7, 8]),
-            (12, 1, [12, 5, 6, 7, 8]),
-            (12, 2, [5, 12, 6, 7, 8]),
-            (12, 5, [5, 6, 7, 8, 12]),
-        ],
+        [(12, 3, [5, 6, 12, 7, 8]), (12, 1, [12, 5, 6, 7, 8]), (12, 2, [5, 12, 6, 7, 8]), (12, 5, [5, 6, 7, 8, 12]),],
     )
-    def test_entry_patch_order_upper_branch_nested(
-        self, full_app, sqla_session, node_id, position, ordered_elems
-    ):
+    def test_entry_patch_order_upper_branch_nested(self, full_app, sqla_session, node_id, position, ordered_elems):
         from testscaffold.services.resource_tree_service import tree_service
 
         with session_context(sqla_session) as session:
@@ -487,9 +376,7 @@ class TestFunctionalAPIEntries:
         url_path = "/api/0.1/entries/{}".format(node_id)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"ordering": position, "parent_id": 1}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         result = tree_service.from_parent_deeper(1, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
@@ -507,9 +394,7 @@ class TestFunctionalAPIEntries:
         url_path = "/api/0.1/entries/{}".format(12)
         headers = {str("x-testscaffold-auth-token"): str(token)}
         entry_dict = {"parent_id": 1}
-        response = full_app.patch_json(
-            url_path, entry_dict, status=200, headers=headers
-        )
+        response = full_app.patch_json(url_path, entry_dict, status=200, headers=headers)
         result = tree_service.from_parent_deeper(1, db_session=sqla_session)
         tree_struct = tree_service.build_subtree_strut(result)["children"]
         pprint.pprint(tree_struct)
