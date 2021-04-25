@@ -1,21 +1,20 @@
-testscaffold README
-===================
+# testscaffold README
 
-# install precommit
+# # install precommit
 
     curl https://pre-commit.com/install-local.py | python -
     pre-commit install
 
 The application should be visible under http://127.0.0.1:6543
 
-# docker dev start
+## docker dev start
     USER_UID=`id -u` USER_GID=`id -g` docker-compose up -d
 
-# running test suite
+## running test suite
 
     USER_UID=`id -u` USER_GID=`id -g` TEST_INI="config.ini" docker-compose run --rm app pytest ../application
 
-# update packages
+## update packages
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     cd ../application; /opt/venv/bin/pip-compile requirements.in
@@ -31,26 +30,26 @@ Finally fix permissions on generated files (sometimes they get generated as root
 
     chmod 664 requirements.txt requirements-dev.txt
 
-# to rebuild the image after packages updated
+## to rebuild the image after packages updated
 
     docker-compose build app
 
-# to add alembic migration files
+## to add alembic migration files
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     cd ../application; alembic -c ../rundir/config.ini revision -m "migration name"
 
-# to run db migrations
+## to run db migrations
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     migrate_testscaffold_db config.ini
 
-# to populate database with entries
+## to populate database with entries
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm app bash
     initialize_testscaffold_db config.ini
 
-# to access postgresql
+## to access postgresql
 
     USER_UID=`id -u` USER_GID=`id -g` docker-compose run --rm db psql -h db -U test #password: test
 
@@ -65,8 +64,7 @@ user: test
 password: test
 
 
-Working with Translations
--------------------------
+# Working with Translations
 
 First open up shell
 
@@ -81,7 +79,8 @@ Create pot file
 
 create new PO files for specific language:
 
-    msginit -l en -o testscaffold/locale/en/LC_MESSAGES/testscaffold.po
+    mkdir -p testscaffold/locale/nl/LC_MESSAGES
+    msginit -l nl -i testscaffold/locale/testscaffold.pot -o testscaffold/locale/nl/LC_MESSAGES/testscaffold.po
 
 update PO files for specific language:
 

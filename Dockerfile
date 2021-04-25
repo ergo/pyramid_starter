@@ -1,7 +1,7 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9.4-buster
 RUN apt-get update && apt-get install -y \
-    gosu \
+    gosu gettext \
  && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory to /opt/application
