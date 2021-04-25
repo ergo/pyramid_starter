@@ -110,7 +110,9 @@ pexpect==4.8.0
 pickleshare==0.7.5
     # via ipython
 plaster-pastedeploy==0.7
-    # via pyramid
+    # via
+    #   -r requirements.in
+    #   pyramid
 plaster==1.0
     # via
     #   plaster-pastedeploy
@@ -143,6 +145,8 @@ pyramid-mailer==0.15.1
     # via -r requirements.in
 pyramid-mako==1.1.0
     # via pyramid-debugtoolbar
+pyramid-retry==2.1.1
+    # via -r requirements.in
 pyramid-tm==2.4
     # via -r requirements.in
 pyramid==2.0
@@ -154,6 +158,7 @@ pyramid==2.0
     #   pyramid-jinja2
     #   pyramid-mailer
     #   pyramid-mako
+    #   pyramid-retry
     #   pyramid-tm
 python-dateutil==2.8.1
     # via alembic
@@ -237,6 +242,7 @@ zope.deprecation==4.4.0
 zope.interface==5.4.0
     # via
     #   pyramid
+    #   pyramid-retry
     #   repoze.sendmail
     #   transaction
     #   zope.sqlalchemy

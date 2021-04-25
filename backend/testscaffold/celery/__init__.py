@@ -9,6 +9,7 @@ from pyramid.paster import bootstrap
 from pyramid.scripting import prepare
 from pyramid.settings import asbool
 from pyramid.threadlocal import get_current_request, get_current_registry
+from transaction.interfaces import NoTransaction
 
 from testscaffold.celery.encoders import json_dumps, json_loads
 
