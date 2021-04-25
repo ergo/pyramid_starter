@@ -82,12 +82,12 @@ def full_app(request, app_settings):
 def with_migrations(app_settings):
     from alembic.config import Config
     from alembic import command
-
-    alembic_cfg = Config()
+    config_uri = os.environ.get("TESTING_INI")
+    alembic_cfg = Config(config_uri)
     alembic_cfg.set_main_option("script_location", "ziggurat_foundations:migrations")
     alembic_cfg.set_main_option("sqlalchemy.url", app_settings["sqlalchemy.url"])
     command.upgrade(alembic_cfg, "head")
-    alembic_cfg = Config()
+    alembic_cfg = Config(config_uri)
     alembic_cfg.set_main_option("script_location", "testscaffold:alembic")
     alembic_cfg.set_main_option("sqlalchemy.url", app_settings["sqlalchemy.url"])
     command.upgrade(alembic_cfg, "head")

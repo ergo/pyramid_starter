@@ -1,29 +1,16 @@
-from __future__ import with_statement
+"""Pyramid bootstrap environment. """
 from alembic import context
-from sqlalchemy import engine_from_config, pool
-from logging.config import fileConfig
-from testscaffold.models.meta import metadata
+from pyramid.paster import get_appsettings, setup_logging
+from sqlalchemy import engine_from_config
 
-# this is the Alembic Config object, which provides
-# access to the values within the .ini file in use.
+from testscaffold.models.meta import Base
+
 config = context.config
 
-# Interpret the config file for Python logging.
-# This line sets up loggers basically.
-if config.config_file_name:
-    fileConfig(config.config_file_name)
+setup_logging(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
-target_metadata = metadata
-
-# target_metadata = None
-
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+settings = get_appsettings(config.config_file_name, name="testscaffold")
+target_metadata = Base.metadata
 
 VERSION_TABLE = "alembic_testscaffold_version"
 
@@ -40,15 +27,9 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
-    context.configure(
-        url=url,
-        target_metadata=target_metadata,
-        literal_binds=True,
-        transaction_per_migration=True,
-        version_table=VERSION_TABLE,
-    )
-
+    context.configure(url=settings["sqlalchemy.url"],
+                      transaction_per_migration=True,
+                      version_table=VERSION_TABLE,)
     with context.begin_transaction():
         context.run_migrations()
 
@@ -60,20 +41,21 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section), prefix="sqlalchemy.", poolclass=pool.NullPool,
+    engine = engine_from_config(settings, prefix='sqlalchemy.')
+
+    connection = engine.connect()
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        transaction_per_migration=True,
+        version_table=VERSION_TABLE,
     )
 
-    with connectable.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=target_metadata,
-            transaction_per_migration=True,
-            version_table=VERSION_TABLE,
-        )
-
+    try:
         with context.begin_transaction():
             context.run_migrations()
+    finally:
+        connection.close()
 
 
 if context.is_offline_mode():
