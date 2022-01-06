@@ -8,7 +8,7 @@ alembic==1.5.8
     # via
     #   -r requirements.in
     #   ziggurat-foundations
-amqp==5.0.6
+amqp==5.0.9
     # via kombu
 apispec[yaml]==4.4.0
     # via pyramid-apispec
@@ -20,7 +20,7 @@ beaker==1.11.0
     # via pyramid-beaker
 billiard==3.6.4.0
     # via celery
-celery==5.0.5
+celery==5.2.2
     # via -r requirements.in
 certifi==2020.12.5
     # via
@@ -30,18 +30,18 @@ cffi==1.14.5
     # via cryptography
 chardet==4.0.0
     # via requests
-click-didyoumean==0.0.3
-    # via celery
-click-plugins==1.1.1
-    # via celery
-click-repl==0.1.6
-    # via celery
-click==7.1.2
+click==8.0.3
     # via
     #   celery
     #   click-didyoumean
     #   click-plugins
     #   click-repl
+click-didyoumean==0.0.3
+    # via celery
+click-plugins==1.1.1
+    # via celery
+click-repl==0.2.0
+    # via celery
 cryptography==3.4.7
     # via -r requirements.in
 datadog==0.41.0
@@ -65,15 +65,15 @@ idna==2.10
     # via
     #   email-validator
     #   requests
-ipython-genutils==0.2.0
-    # via traitlets
 ipython==7.22.0
     # via pyramid-ipython
+ipython-genutils==0.2.0
+    # via traitlets
 jedi==0.18.0
     # via ipython
 jinja2==2.11.3
     # via pyramid-jinja2
-kombu==5.0.2
+kombu==5.2.3
     # via celery
 mako==1.1.4
     # via
@@ -88,14 +88,14 @@ markupsafe==1.1.1
     #   wtforms
 marshmallow==3.11.1
     # via -r requirements.in
-paginate-sqlalchemy==0.3.1
-    # via
-    #   -r requirements.in
-    #   ziggurat-foundations
 paginate==0.5.6
     # via
     #   -r requirements.in
     #   paginate-sqlalchemy
+    #   ziggurat-foundations
+paginate-sqlalchemy==0.3.1
+    # via
+    #   -r requirements.in
     #   ziggurat-foundations
 parso==0.8.2
     # via jedi
@@ -109,13 +109,13 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-plaster-pastedeploy==0.7
-    # via
-    #   -r requirements.in
-    #   pyramid
 plaster==1.0
     # via
     #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==0.7
+    # via
+    #   -r requirements.in
     #   pyramid
 prompt-toolkit==3.0.18
     # via
@@ -131,6 +131,17 @@ pygments==2.8.1
     # via
     #   ipython
     #   pyramid-debugtoolbar
+pyramid==2.0
+    # via
+    #   -r requirements.in
+    #   pyramid-beaker
+    #   pyramid-debugtoolbar
+    #   pyramid-ipython
+    #   pyramid-jinja2
+    #   pyramid-mailer
+    #   pyramid-mako
+    #   pyramid-retry
+    #   pyramid-tm
 pyramid-apispec==0.4
     # via -r requirements.in
 pyramid-beaker==0.8
@@ -149,17 +160,6 @@ pyramid-retry==2.1.1
     # via -r requirements.in
 pyramid-tm==2.4
     # via -r requirements.in
-pyramid==2.0
-    # via
-    #   -r requirements.in
-    #   pyramid-beaker
-    #   pyramid-debugtoolbar
-    #   pyramid-ipython
-    #   pyramid-jinja2
-    #   pyramid-mailer
-    #   pyramid-mako
-    #   pyramid-retry
-    #   pyramid-tm
 python-dateutil==2.8.1
     # via alembic
 python-editor==1.0.4
@@ -220,14 +220,15 @@ vine==5.0.0
     # via
     #   amqp
     #   celery
+    #   kombu
 waitress==2.0.0
     # via -r requirements.in
 wcwidth==0.2.5
     # via prompt-toolkit
-webhelpers2-grid==0.9
-    # via -r requirements.in
 webhelpers2==2.0
     # via webhelpers2-grid
+webhelpers2-grid==0.9
+    # via -r requirements.in
 webob==1.8.7
     # via pyramid
 wtforms==2.3.3
